@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: cuppinglab-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cuppinglab
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - cuppinglab-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: cuppinglab-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - cuppinglab-network
+
+  # Backend API
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+      target: development
+    container_name: cuppinglab-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/cuppinglab
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev-jwt-secret-change-in-production
+      JWT_REFRESH_SECRET: dev-refresh-secret-change-in-production
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/api:/app
+      - ./packages:/packages
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cuppinglab-network
+    command: npm run dev
+
+  # Frontend Web App
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+      target: development
+    container_name: cuppinglab-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: dev-nextauth-secret-change-in-production
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/web:/app
+      - ./packages:/packages
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+    networks:
+      - cuppinglab-network
+    command: npm run dev
+
+  # Database Admin (Adminer)
+  adminer:
+    image: adminer:4.8.1
+    container_name: cuppinglab-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    depends_on:
+      - postgres
+    networks:
+      - cuppinglab-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  cuppinglab-network:
+    driver: bridge

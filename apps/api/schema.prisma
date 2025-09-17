@@ -1,0 +1,430 @@
+// CuppingLab Database Schema
+// Multi-tenant SaaS platform for professional coffee cupping
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// CORE TENANT & USER MODELS
+// ============================================================================
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  domain      String?  @unique
+  subdomain   String   @unique
+  description String?
+  logo        String?
+  website     String?
+
+  // Subscription & billing
+  subscriptionStatus SubscriptionStatus @default(TRIAL)
+  subscriptionPlan   SubscriptionPlan   @default(STARTER)
+  trialEndsAt        DateTime?
+  subscriptionEndsAt DateTime?
+  stripeCustomerId   String?            @unique
+
+  // Settings
+  settings Json @default("{}")
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users           User[]
+  cuppingSessions CuppingSession[]
+  samples         Sample[]
+  templates       CuppingTemplate[]
+  invitations     Invitation[]
+
+  @@map("organizations")
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  password String
+
+  // Profile
+  firstName String
+  lastName  String
+  avatar    String?
+  bio       String?
+
+  // Organization relationship
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           UserRole     @default(CUPPER)
+
+  // Authentication
+  emailVerified    Boolean   @default(false)
+  emailVerifiedAt  DateTime?
+  lastLoginAt      DateTime?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  // Preferences
+  preferences Json @default("{}")
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  cuppingSessions     CuppingSession[]
+  scores              Score[]
+  sessionParticipants SessionParticipant[]
+  createdTemplates    CuppingTemplate[]
+
+  @@map("users")
+}
+
+model Invitation {
+  id             String           @id @default(cuid())
+  email          String
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           UserRole         @default(CUPPER)
+  token          String           @unique
+  status         InvitationStatus @default(PENDING)
+  expiresAt      DateTime
+  invitedBy      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, organizationId])
+  @@map("invitations")
+}
+
+// ============================================================================
+// COFFEE CUPPING MODELS
+// ============================================================================
+
+model Sample {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Basic information
+  name        String
+  description String?
+  code        String? // Internal sample code
+
+  // Coffee details
+  origin      String
+  region      String?
+  farm        String?
+  producer    String?
+  variety     String?
+  altitude    Int?
+
+  // Processing
+  processingMethod ProcessingMethod?
+  harvestDate      DateTime?
+
+  // Roasting
+  roaster     String?
+  roastDate   DateTime?
+  roastLevel  RoastLevel?
+
+  // Physical attributes
+  moisture    Float?
+  density     Float?
+  screenSize  String?
+
+  // Metadata
+  notes       String?
+  imageUrl    String?
+  tags        String[] @default([])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  sessionSamples SessionSample[]
+  scores         Score[]
+
+  @@map("samples")
+}
+
+model CuppingTemplate {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy      String
+  creator        User         @relation(fields: [createdBy], references: [id])
+
+  // Template details
+  name        String
+  description String?
+  isDefault   Boolean @default(false)
+  isPublic    Boolean @default(false)
+
+  // Scoring configuration
+  scoringSystem ScoringSystem @default(SCA)
+  maxScore      Int           @default(100)
+
+  // Template structure
+  categories Json // Array of scoring categories with weights
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  cuppingSessions CuppingSession[]
+
+  @@map("cupping_templates")
+}
+
+model CuppingSession {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy      String
+  creator        User         @relation(fields: [createdBy], references: [id])
+
+  // Session details
+  name        String
+  description String?
+  location    String?
+
+  // Template and configuration
+  templateId String?
+  template   CuppingTemplate? @relation(fields: [templateId], references: [id])
+
+  // Session settings
+  blindTasting    Boolean @default(true)
+  allowComments   Boolean @default(true)
+  requireCalibration Boolean @default(false)
+
+  // Status and timing
+  status      SessionStatus @default(DRAFT)
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  // Metadata
+  notes    String?
+  tags     String[] @default([])
+  settings Json     @default("{}")
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  participants SessionParticipant[]
+  samples      SessionSample[]
+  scores       Score[]
+
+  @@map("cupping_sessions")
+}
+
+model SessionParticipant {
+  id        String @id @default(cuid())
+  sessionId String
+  session   CuppingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Participation details
+  role       ParticipantRole @default(CUPPER)
+  joinedAt   DateTime        @default(now())
+  leftAt     DateTime?
+  isActive   Boolean         @default(true)
+
+  // Calibration
+  isCalibrated Boolean @default(false)
+  calibratedAt DateTime?
+
+  @@unique([sessionId, userId])
+  @@map("session_participants")
+}
+
+model SessionSample {
+  id       String @id @default(cuid())
+  sessionId String
+  session   CuppingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sampleId  String
+  sample    Sample @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+
+  // Sample configuration for this session
+  position    Int     // Position in the cupping table
+  isBlind     Boolean @default(true)
+  blindCode   String? // Code shown to cuppers if blind
+
+  // Sample preparation
+  grindSize      String?
+  waterTemp      Float?
+  brewRatio      String?
+  steepTime      Int? // in seconds
+
+  // Timestamps
+  addedAt DateTime @default(now())
+
+  // Relations
+  scores Score[]
+
+  @@unique([sessionId, sampleId])
+  @@unique([sessionId, position])
+  @@map("session_samples")
+}
+
+model Score {
+  id              String        @id @default(cuid())
+  sessionId       String
+  session         CuppingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionSampleId String
+  sessionSample   SessionSample @relation(fields: [sessionSampleId], references: [id], onDelete: Cascade)
+  sampleId        String
+  sample          Sample        @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Scoring details
+  totalScore    Float
+  maxScore      Float   @default(100)
+
+  // Individual category scores
+  scores        Json    // Object with category scores
+
+  // Qualitative assessments
+  aroma         Float?
+  flavor        Float?
+  aftertaste    Float?
+  acidity       Float?
+  body          Float?
+  balance       Float?
+  sweetness     Float?
+  cleanliness   Float?
+  uniformity    Float?
+  overall       Float?
+
+  // Defects
+  defects       Json    @default("[]") // Array of defect objects
+
+  // Notes and comments
+  notes         String?
+  privateNotes  String?
+
+  // Voice transcription
+  voiceNotes    String?
+  voiceFileUrl  String?
+
+  // Status
+  isComplete    Boolean @default(false)
+  isSubmitted   Boolean @default(false)
+  submittedAt   DateTime?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([sessionId, sampleId, userId])
+  @@map("scores")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserRole {
+  ADMIN     // Full access to organization
+  MANAGER   // Can manage sessions and users
+  CUPPER    // Can participate in sessions
+  VIEWER    // Read-only access
+
+  @@map("user_role")
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+
+  @@map("subscription_status")
+}
+
+enum SubscriptionPlan {
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+  CUSTOM
+
+  @@map("subscription_plan")
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+
+  @@map("invitation_status")
+}
+
+enum ProcessingMethod {
+  WASHED
+  NATURAL
+  HONEY
+  SEMI_WASHED
+  WET_HULLED
+  ANAEROBIC
+  CARBONIC_MACERATION
+  OTHER
+
+  @@map("processing_method")
+}
+
+enum RoastLevel {
+  LIGHT
+  MEDIUM_LIGHT
+  MEDIUM
+  MEDIUM_DARK
+  DARK
+  FRENCH
+  ITALIAN
+
+  @@map("roast_level")
+}
+
+enum ScoringSystem {
+  SCA        // Specialty Coffee Association
+  COE        // Cup of Excellence
+  CUSTOM     // Custom scoring system
+
+  @@map("scoring_system")
+}
+
+enum SessionStatus {
+  DRAFT      // Being prepared
+  SCHEDULED  // Scheduled for future
+  ACTIVE     // Currently in progress
+  COMPLETED  // Finished
+  CANCELLED  // Cancelled
+  ARCHIVED   // Archived
+
+  @@map("session_status")
+}
+
+enum ParticipantRole {
+  CUPPER     // Regular cupper
+  HEAD_JUDGE // Lead cupper/judge
+  OBSERVER   // Observer only
+
+  @@map("participant_role")
+}
