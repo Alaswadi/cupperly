@@ -118,7 +118,7 @@ export const getSample = async (
 
     res.json({
       success: true,
-      data: { sample },
+      data: sample,
     });
   } catch (error) {
     next(error);
@@ -142,10 +142,15 @@ export const createSample = async (
       });
     }
 
+    // Transform numeric fields from strings to proper types
     const sampleData = {
       ...req.body,
       organizationId: req.user!.organizationId,
       tags: req.body.tags || [],
+      // Convert string numbers to proper types (handle empty strings)
+      altitude: req.body.altitude && req.body.altitude.trim() !== '' ? parseInt(req.body.altitude, 10) : null,
+      moisture: req.body.moisture && req.body.moisture.trim() !== '' ? parseFloat(req.body.moisture) : null,
+      density: req.body.density && req.body.density.trim() !== '' ? parseFloat(req.body.density) : null,
     };
 
     const sample = await prisma.sample.create({
@@ -154,7 +159,7 @@ export const createSample = async (
 
     res.status(201).json({
       success: true,
-      data: { sample },
+      data: sample,
       message: 'Sample created successfully',
     });
   } catch (error) {
@@ -198,14 +203,23 @@ export const updateSample = async (
       });
     }
 
+    // Transform numeric fields from strings to proper types
+    const updateData = {
+      ...req.body,
+      // Convert string numbers to proper types if they exist (handle empty strings)
+      ...(req.body.altitude !== undefined && { altitude: req.body.altitude && req.body.altitude.trim() !== '' ? parseInt(req.body.altitude, 10) : null }),
+      ...(req.body.moisture !== undefined && { moisture: req.body.moisture && req.body.moisture.trim() !== '' ? parseFloat(req.body.moisture) : null }),
+      ...(req.body.density !== undefined && { density: req.body.density && req.body.density.trim() !== '' ? parseFloat(req.body.density) : null }),
+    };
+
     const sample = await prisma.sample.update({
       where: { id },
-      data: req.body,
+      data: updateData,
     });
 
     res.json({
       success: true,
-      data: { sample },
+      data: sample,
       message: 'Sample updated successfully',
     });
   } catch (error) {

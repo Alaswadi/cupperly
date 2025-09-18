@@ -119,7 +119,7 @@ class ApiClient {
 
   // Sample endpoints
   async getSamples() {
-    return this.request<Sample[]>('GET', '/api/samples');
+    return this.request<{ samples: Sample[]; pagination: any }>('GET', '/api/samples');
   }
 
   async getSample(id: string) {
@@ -169,7 +169,7 @@ class ApiClient {
 
   // Template endpoints
   async getTemplates() {
-    return this.request<CuppingTemplate[]>('GET', '/api/templates');
+    return this.request<{ templates: CuppingTemplate[]; pagination: any }>('GET', '/api/templates');
   }
 
   async getTemplate(id: string) {

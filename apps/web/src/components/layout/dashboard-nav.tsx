@@ -18,12 +18,12 @@ import {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'Sessions', href: '/sessions', icon: Calendar },
-  { name: 'Samples', href: '/samples', icon: Coffee },
-  { name: 'Templates', href: '/templates', icon: Beaker },
-  { name: 'Reports', href: '/reports', icon: BarChart3 },
-  { name: 'Team', href: '/team', icon: Users },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Sessions', href: '/dashboard/sessions', icon: Calendar },
+  { name: 'Samples', href: '/dashboard/samples', icon: Coffee },
+  { name: 'Templates', href: '/dashboard/templates', icon: Beaker },
+  { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
+  { name: 'Team', href: '/dashboard/team', icon: Users },
+  { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
 
 export function DashboardNav() {

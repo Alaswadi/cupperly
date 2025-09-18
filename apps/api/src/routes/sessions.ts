@@ -22,13 +22,13 @@ const createSessionValidator = [
   body('name').trim().isLength({ min: 1, max: 100 }).withMessage('Name is required and must be less than 100 characters'),
   body('description').optional().trim().isLength({ max: 500 }).withMessage('Description must be less than 500 characters'),
   body('location').optional().trim().isLength({ max: 100 }).withMessage('Location must be less than 100 characters'),
-  body('templateId').optional().isUUID().withMessage('Template ID must be a valid UUID'),
+  body('templateId').optional().matches(/^c[a-z0-9]{24}$/).withMessage('Template ID must be a valid ID'),
   body('blindTasting').isBoolean().withMessage('Blind tasting must be a boolean'),
   body('allowComments').isBoolean().withMessage('Allow comments must be a boolean'),
   body('requireCalibration').isBoolean().withMessage('Require calibration must be a boolean'),
   body('scheduledAt').optional().isISO8601().withMessage('Scheduled date must be a valid ISO date'),
   body('sampleIds').isArray().withMessage('Sample IDs must be an array'),
-  body('sampleIds.*').isUUID().withMessage('Each sample ID must be a valid UUID'),
+  body('sampleIds.*').matches(/^c[a-z0-9]{24}$/).withMessage('Each sample ID must be a valid ID'),
   body('tags').optional().isArray().withMessage('Tags must be an array'),
 ];
 
@@ -36,16 +36,18 @@ const updateSessionValidator = [
   body('name').optional().trim().isLength({ min: 1, max: 100 }).withMessage('Name must be less than 100 characters'),
   body('description').optional().trim().isLength({ max: 500 }).withMessage('Description must be less than 500 characters'),
   body('location').optional().trim().isLength({ max: 100 }).withMessage('Location must be less than 100 characters'),
-  body('templateId').optional().isUUID().withMessage('Template ID must be a valid UUID'),
+  body('templateId').optional().matches(/^c[a-z0-9]{24}$/).withMessage('Template ID must be a valid ID'),
   body('blindTasting').optional().isBoolean().withMessage('Blind tasting must be a boolean'),
   body('allowComments').optional().isBoolean().withMessage('Allow comments must be a boolean'),
   body('requireCalibration').optional().isBoolean().withMessage('Require calibration must be a boolean'),
   body('scheduledAt').optional().isISO8601().withMessage('Scheduled date must be a valid ISO date'),
+  body('sampleIds').optional().isArray().withMessage('Sample IDs must be an array'),
+  body('sampleIds.*').optional().matches(/^c[a-z0-9]{24}$/).withMessage('Each sample ID must be a valid ID'),
   body('tags').optional().isArray().withMessage('Tags must be an array'),
 ];
 
 const addSampleValidator = [
-  body('sampleId').isUUID().withMessage('Sample ID must be a valid UUID'),
+  body('sampleId').matches(/^c[a-z0-9]{24}$/).withMessage('Sample ID must be a valid ID'),
   body('position').isInt({ min: 1 }).withMessage('Position must be a positive integer'),
   body('isBlind').isBoolean().withMessage('Is blind must be a boolean'),
   body('blindCode').optional().trim().isLength({ max: 10 }).withMessage('Blind code must be less than 10 characters'),

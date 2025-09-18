@@ -17,6 +17,7 @@ import authRoutes from './routes/auth';
 import healthRoutes from './routes/health';
 import samplesRoutes from './routes/samples';
 import sessionsRoutes from './routes/sessions';
+import templatesRoutes from './routes/templates';
 
 // Load environment variables
 dotenv.config();
@@ -78,6 +79,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/samples', samplesRoutes);
 app.use('/api/sessions', sessionsRoutes);
+app.use('/api/templates', templatesRoutes);
 
 // 404 handler
 app.use(notFound);

@@ -21,11 +21,12 @@ const createSampleValidator = [
   body('farm').optional().trim().isLength({ max: 100 }).withMessage('Farm must be less than 100 characters'),
   body('producer').optional().trim().isLength({ max: 100 }).withMessage('Producer must be less than 100 characters'),
   body('variety').optional().trim().isLength({ max: 100 }).withMessage('Variety must be less than 100 characters'),
-  body('altitude').optional().isInt({ min: 0, max: 10000 }).withMessage('Altitude must be between 0 and 10000 meters'),
+  body('altitude').optional({ values: 'falsy' }).isInt({ min: 0, max: 10000 }).withMessage('Altitude must be between 0 and 10000 meters'),
   body('processingMethod').optional().isIn(['WASHED', 'NATURAL', 'HONEY', 'SEMI_WASHED', 'WET_HULLED', 'ANAEROBIC', 'CARBONIC_MACERATION', 'OTHER']),
   body('roastLevel').optional().isIn(['LIGHT', 'MEDIUM_LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK', 'FRENCH', 'ITALIAN']),
-  body('moisture').optional().isFloat({ min: 0, max: 100 }).withMessage('Moisture must be between 0 and 100%'),
-  body('density').optional().isFloat({ min: 0 }).withMessage('Density must be a positive number'),
+  body('moisture').optional({ values: 'falsy' }).isFloat({ min: 0, max: 100 }).withMessage('Moisture must be between 0 and 100%'),
+  body('density').optional({ values: 'falsy' }).isFloat({ min: 0 }).withMessage('Density must be a positive number'),
+  body('screenSize').optional().trim().isLength({ max: 50 }).withMessage('Screen size must be less than 50 characters'),
   body('tags').optional().isArray().withMessage('Tags must be an array'),
 ];
 
@@ -38,11 +39,12 @@ const updateSampleValidator = [
   body('farm').optional().trim().isLength({ max: 100 }).withMessage('Farm must be less than 100 characters'),
   body('producer').optional().trim().isLength({ max: 100 }).withMessage('Producer must be less than 100 characters'),
   body('variety').optional().trim().isLength({ max: 100 }).withMessage('Variety must be less than 100 characters'),
-  body('altitude').optional().isInt({ min: 0, max: 10000 }).withMessage('Altitude must be between 0 and 10000 meters'),
+  body('altitude').optional({ values: 'falsy' }).isInt({ min: 0, max: 10000 }).withMessage('Altitude must be between 0 and 10000 meters'),
   body('processingMethod').optional().isIn(['WASHED', 'NATURAL', 'HONEY', 'SEMI_WASHED', 'WET_HULLED', 'ANAEROBIC', 'CARBONIC_MACERATION', 'OTHER']),
   body('roastLevel').optional().isIn(['LIGHT', 'MEDIUM_LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK', 'FRENCH', 'ITALIAN']),
-  body('moisture').optional().isFloat({ min: 0, max: 100 }).withMessage('Moisture must be between 0 and 100%'),
-  body('density').optional().isFloat({ min: 0 }).withMessage('Density must be a positive number'),
+  body('moisture').optional({ values: 'falsy' }).isFloat({ min: 0, max: 100 }).withMessage('Moisture must be between 0 and 100%'),
+  body('density').optional({ values: 'falsy' }).isFloat({ min: 0 }).withMessage('Density must be a positive number'),
+  body('screenSize').optional().trim().isLength({ max: 50 }).withMessage('Screen size must be less than 50 characters'),
   body('tags').optional().isArray().withMessage('Tags must be an array'),
 ];
 

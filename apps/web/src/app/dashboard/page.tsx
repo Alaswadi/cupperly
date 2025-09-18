@@ -123,13 +123,13 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Link href="/samples/new">
+          <Link href="/dashboard/samples/new">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
               Add Sample
             </Button>
           </Link>
-          <Link href="/sessions/new">
+          <Link href="/dashboard/sessions/new">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
               New Session
@@ -202,7 +202,7 @@ export default function DashboardPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Recent Sessions</CardTitle>
-              <Link href="/sessions">
+              <Link href="/dashboard/sessions">
                 <Button variant="outline" size="sm">
                   View All
                 </Button>
@@ -222,7 +222,7 @@ export default function DashboardPage() {
                 sessions.map((session) => (
                   <div key={session.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex-1">
-                      <Link href={`/sessions/${session.id}`}>
+                      <Link href={`/dashboard/sessions/${session.id}`}>
                         <h4 className="font-medium hover:text-primary-600 cursor-pointer">
                           {session.name}
                         </h4>
@@ -250,7 +250,7 @@ export default function DashboardPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Recent Samples</CardTitle>
-              <Link href="/samples">
+              <Link href="/dashboard/samples">
                 <Button variant="outline" size="sm">
                   View All
                 </Button>
@@ -270,7 +270,7 @@ export default function DashboardPage() {
                 samples.map((sample) => (
                   <div key={sample.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex-1">
-                      <Link href={`/samples/${sample.id}`}>
+                      <Link href={`/dashboard/samples/${sample.id}`}>
                         <h4 className="font-medium hover:text-primary-600 cursor-pointer">
                           {sample.name}
                         </h4>

@@ -201,9 +201,23 @@ export const getSession = async (
       });
     }
 
+    // Transform the session data to flatten the samples structure
+    const transformedSession = {
+      ...session,
+      samples: session.samples?.map(sessionSample => ({
+        id: sessionSample.sample.id,
+        name: sessionSample.sample.name,
+        origin: sessionSample.sample.origin,
+        variety: sessionSample.sample.variety,
+        position: sessionSample.position,
+        isBlind: sessionSample.isBlind,
+        blindCode: sessionSample.blindCode,
+      })) || [],
+    };
+
     res.json({
       success: true,
-      data: { session },
+      data: transformedSession,
     });
   } catch (error) {
     next(error);
@@ -218,6 +232,7 @@ export const createSession = async (
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+
       return res.status(400).json({
         success: false,
         error: {
@@ -289,7 +304,7 @@ export const createSession = async (
 
     res.status(201).json({
       success: true,
-      data: { session },
+      data: session,
       message: 'Session created successfully',
     });
   } catch (error) {
@@ -305,6 +320,7 @@ export const updateSession = async (
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.error('Validation errors:', errors.array());
       return res.status(400).json({
         success: false,
         error: {
@@ -343,14 +359,63 @@ export const updateSession = async (
       });
     }
 
-    const session = await prisma.cuppingSession.update({
-      where: { id },
-      data: req.body,
+    const { sampleIds, ...sessionData } = req.body;
+
+    // Update session and samples in a transaction
+    const session = await prisma.$transaction(async (tx) => {
+      // Update the session
+      const updatedSession = await tx.cuppingSession.update({
+        where: { id },
+        data: sessionData,
+      });
+
+      // Handle sample updates if sampleIds is provided
+      if (sampleIds !== undefined) {
+        // Verify all samples exist and belong to the organization
+        if (sampleIds.length > 0) {
+          const samples = await tx.sample.findMany({
+            where: {
+              id: { in: sampleIds },
+              organizationId: req.user!.organizationId,
+            },
+          });
+
+          if (samples.length !== sampleIds.length) {
+            throw new Error('One or more samples not found');
+          }
+        }
+
+        // Remove existing samples
+        await tx.sessionSample.deleteMany({
+          where: { sessionId: id },
+        });
+
+        // Add new samples
+        if (sampleIds.length > 0) {
+          await Promise.all(
+            sampleIds.map((sampleId: string, index: number) =>
+              tx.sessionSample.create({
+                data: {
+                  sessionId: id,
+                  sampleId,
+                  position: index + 1,
+                  isBlind: sessionData.blindTasting ?? existingSession.blindTasting,
+                  blindCode: (sessionData.blindTasting ?? existingSession.blindTasting)
+                    ? `Sample ${String.fromCharCode(65 + index)}`
+                    : undefined,
+                },
+              })
+            )
+          );
+        }
+      }
+
+      return updatedSession;
     });
 
     res.json({
       success: true,
-      data: { session },
+      data: session,
       message: 'Session updated successfully',
     });
   } catch (error) {
@@ -572,18 +637,18 @@ export const submitScore = async (
       });
     }
 
-    // Calculate SCAA total score
+    // Calculate SCAA total score - convert string values to floats
     const scaaScores = {
-      aroma: scoreData.aroma,
-      flavor: scoreData.flavor,
-      aftertaste: scoreData.aftertaste,
-      acidity: scoreData.acidity,
-      body: scoreData.body,
-      balance: scoreData.balance,
-      sweetness: scoreData.sweetness,
-      cleanliness: scoreData.cleanliness,
-      uniformity: scoreData.uniformity,
-      overall: scoreData.overall,
+      aroma: scoreData.aroma ? parseFloat(scoreData.aroma) : null,
+      flavor: scoreData.flavor ? parseFloat(scoreData.flavor) : null,
+      aftertaste: scoreData.aftertaste ? parseFloat(scoreData.aftertaste) : null,
+      acidity: scoreData.acidity ? parseFloat(scoreData.acidity) : null,
+      body: scoreData.body ? parseFloat(scoreData.body) : null,
+      balance: scoreData.balance ? parseFloat(scoreData.balance) : null,
+      sweetness: scoreData.sweetness ? parseFloat(scoreData.sweetness) : null,
+      cleanliness: scoreData.cleanliness ? parseFloat(scoreData.cleanliness) : null,
+      uniformity: scoreData.uniformity ? parseFloat(scoreData.uniformity) : null,
+      overall: scoreData.overall ? parseFloat(scoreData.overall) : null,
     };
 
     const totalScore = calculateScaaScore(scaaScores);
@@ -637,7 +702,7 @@ export const submitScore = async (
 
     res.json({
       success: true,
-      data: { score },
+      data: score,
       message: 'Score submitted successfully',
     });
   } catch (error) {
@@ -702,7 +767,7 @@ export const getSessionScores = async (
 
     res.json({
       success: true,
-      data: { scores },
+      data: scores,
     });
   } catch (error) {
     next(error);
@@ -776,13 +841,13 @@ export const addSampleToSession = async (
       data: {
         sessionId,
         sampleId,
-        position,
+        position: parseInt(position, 10),
         isBlind,
         blindCode,
         grindSize,
-        waterTemp,
+        waterTemp: waterTemp ? parseFloat(waterTemp) : null,
         brewRatio,
-        steepTime,
+        steepTime: steepTime ? parseInt(steepTime, 10) : null,
       },
       include: {
         sample: true,
@@ -791,7 +856,7 @@ export const addSampleToSession = async (
 
     res.status(201).json({
       success: true,
-      data: { sessionSample },
+      data: sessionSample,
       message: 'Sample added to session successfully',
     });
   } catch (error) {
