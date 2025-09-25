@@ -1,7 +1,7 @@
 {
-  "name": "@cuppinglab/database",
+  "name": "@cupperly/database",
   "version": "1.0.0",
-  "description": "Database schema and migrations for CuppingLab",
+  "description": "Database schema and migrations for Cupperly",
   "main": "index.js",
   "scripts": {
     "db:generate": "prisma generate",

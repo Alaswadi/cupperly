@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@cuppinglab/database/generated/client';
+import { PrismaClient } from '../generated/client';
 
 const router = Router();
 const prisma = new PrismaClient();

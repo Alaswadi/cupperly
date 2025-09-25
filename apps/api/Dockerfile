@@ -9,11 +9,10 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 COPY apps/api/package.json ./apps/api/
-COPY packages/database/package.json ./packages/database/
-COPY packages/types/package.json ./packages/types/
+COPY packages/*/package.json ./packages/*/
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install
 
 # Development stage
 FROM base AS development
@@ -21,10 +20,13 @@ WORKDIR /app
 
 # Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY --from=deps /app/apps/api/package.json ./apps/api/package.json
+COPY --from=deps /app/packages ./packages
 
 # Copy source code
-COPY . .
+COPY apps/api ./apps/api
+COPY packages ./packages
 
 # Set working directory to API
 WORKDIR /app/apps/api
@@ -41,10 +43,13 @@ WORKDIR /app
 
 # Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY --from=deps /app/apps/api/package.json ./apps/api/package.json
+COPY --from=deps /app/packages ./packages
 
 # Copy source code
-COPY . .
+COPY apps/api ./apps/api
+COPY packages ./packages
 
 # Build the application
 WORKDIR /app/apps/api

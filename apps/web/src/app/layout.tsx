@@ -4,13 +4,13 @@ import { Providers } from '@/components/providers';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: 'CuppingLab - Professional Coffee Cupping Platform',
+  title: 'Cupperly - Professional Coffee Cupping Platform',
   description: 'Professional coffee cupping and quality assessment platform for roasters and coffee professionals.',
   keywords: ['coffee', 'cupping', 'quality assessment', 'SCAA', 'specialty coffee'],
-  authors: [{ name: 'CuppingLab Team' }],
+  authors: [{ name: 'Cupperly Team' }],
   robots: 'index, follow',
   openGraph: {
-    title: 'CuppingLab - Professional Coffee Cupping Platform',
+    title: 'Cupperly - Professional Coffee Cupping Platform',
     description: 'Professional coffee cupping and quality assessment platform',
     type: 'website',
     locale: 'en_US',
@@ -29,6 +29,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+      </head>
       <body className="font-sans antialiased">
         <Providers>
           {children}

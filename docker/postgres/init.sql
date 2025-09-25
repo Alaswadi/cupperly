@@ -1,4 +1,4 @@
--- PostgreSQL initialization script for CuppingLab
+-- PostgreSQL initialization script for Cupperly
 -- This script sets up the database with necessary extensions and configurations
 
 -- Enable required extensions

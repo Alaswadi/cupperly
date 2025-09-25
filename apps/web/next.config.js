@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'cuppinglab.com'],
+    domains: ['localhost', 'cupperly.com'],
   },
   env: {
     CUSTOM_KEY: 'my-value',

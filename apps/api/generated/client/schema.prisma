@@ -1,4 +1,4 @@
-// CuppingLab Database Schema
+// Cupperly Database Schema
 // Multi-tenant SaaS platform for professional coffee cupping
 
 generator client {
@@ -40,11 +40,12 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   // Relations
-  users           User[]
-  cuppingSessions CuppingSession[]
-  samples         Sample[]
-  templates       CuppingTemplate[]
-  invitations     Invitation[]
+  users             User[]
+  cuppingSessions   CuppingSession[]
+  samples           Sample[]
+  templates         CuppingTemplate[]
+  invitations       Invitation[]
+  flavorDescriptors FlavorDescriptor[]
 
   @@map("organizations")
 }
@@ -80,10 +81,11 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  cuppingSessions     CuppingSession[]
-  scores              Score[]
-  sessionParticipants SessionParticipant[]
-  createdTemplates    CuppingTemplate[]
+  cuppingSessions          CuppingSession[]
+  scores                   Score[]
+  sessionParticipants      SessionParticipant[]
+  createdTemplates         CuppingTemplate[]
+  createdFlavorDescriptors FlavorDescriptor[]
 
   @@map("users")
 }
@@ -271,6 +273,10 @@ model SessionSample {
   brewRatio String?
   steepTime Int? // in seconds
 
+  // AI Analysis
+  aiSummary     String? // AI-generated summary of the cupping results
+  aiGeneratedAt DateTime? // When the AI summary was generated
+
   // Timestamps
   addedAt DateTime @default(now())
 
@@ -331,6 +337,9 @@ model Score {
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations
+  flavorDescriptors ScoreFlavorDescriptor[]
 
   @@unique([sessionId, sampleId, userId])
   @@map("scores")
@@ -427,4 +436,56 @@ enum ParticipantRole {
   OBSERVER // Observer only
 
   @@map("participant_role")
+}
+
+// ============================================================================
+// FLAVOR DESCRIPTOR MODELS
+// ============================================================================
+
+model FlavorDescriptor {
+  id             String         @id @default(cuid())
+  name           String
+  category       FlavorCategory // POSITIVE or NEGATIVE
+  description    String?
+  isDefault      Boolean        @default(false) // System-provided descriptors
+  organizationId String?
+  organization   Organization?  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // User who created this custom descriptor (null for default descriptors)
+  createdBy String?
+  creator   User?   @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  scoreDescriptors ScoreFlavorDescriptor[]
+
+  @@unique([name, organizationId]) // Unique within organization
+  @@map("flavor_descriptors")
+}
+
+model ScoreFlavorDescriptor {
+  id                 String           @id @default(cuid())
+  scoreId            String
+  score              Score            @relation(fields: [scoreId], references: [id], onDelete: Cascade)
+  flavorDescriptorId String
+  flavorDescriptor   FlavorDescriptor @relation(fields: [flavorDescriptorId], references: [id], onDelete: Cascade)
+
+  // Intensity of this flavor (1-5 scale)
+  intensity Int @default(3)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+
+  @@unique([scoreId, flavorDescriptorId])
+  @@map("score_flavor_descriptors")
+}
+
+enum FlavorCategory {
+  POSITIVE
+  NEGATIVE
+
+  @@map("flavor_category")
 }

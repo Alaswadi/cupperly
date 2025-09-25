@@ -15,6 +15,8 @@ import {
 
 class ApiClient {
   private client: AxiosInstance;
+  private isRefreshing = false;
+  private failedQueue: Array<{ resolve: Function; reject: Function }> = [];
 
   constructor() {
     this.client = axios.create({
@@ -30,16 +32,26 @@ class ApiClient {
       if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
         const parts = hostname.split('.');
-        
+
         let subdomain = null;
         if (parts.length > 2 && parts[0] !== 'www') {
           subdomain = parts[0];
         } else if (hostname === 'localhost' || hostname.startsWith('127.0.0.1')) {
           subdomain = 'demo'; // Default for development
         }
-        
+
         if (subdomain) {
           config.headers['X-Tenant-ID'] = subdomain;
+        }
+
+        // Debug logging for score submissions
+        if (config.url?.includes('/score')) {
+          console.log('🔍 Score submission request:', {
+            url: config.url,
+            method: config.method,
+            headers: config.headers,
+            data: config.data
+          });
         }
       }
       return config;
@@ -49,17 +61,66 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       async (error) => {
-        if (error.response?.status === 401) {
-          // Try to refresh token
+        // Debug logging for score submission errors
+        if (error.config?.url?.includes('/score')) {
+          console.error('❌ Score submission error:', {
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            url: error.config.url,
+            method: error.config.method
+          });
+        }
+
+        // Only try to refresh token if:
+        // 1. The error is 401
+        // 2. The failing request is NOT already a refresh token request
+        // 3. The request hasn't already been retried
+        if (error.response?.status === 401 &&
+            !error.config?.url?.includes('/auth/refresh') &&
+            !error.config?._retry) {
+
+          // Mark this request as retried to prevent infinite loops
+          error.config._retry = true;
+
+          // If already refreshing, queue this request
+          if (this.isRefreshing) {
+            return new Promise((resolve, reject) => {
+              this.failedQueue.push({ resolve, reject });
+            }).then(() => {
+              return this.client.request(error.config);
+            }).catch(err => {
+              return Promise.reject(err);
+            });
+          }
+
+          this.isRefreshing = true;
+
           try {
             await this.refreshToken();
+            this.isRefreshing = false;
+
+            // Process queued requests
+            this.failedQueue.forEach(({ resolve }) => resolve());
+            this.failedQueue = [];
+
             // Retry the original request
             return this.client.request(error.config);
           } catch (refreshError) {
-            // Redirect to login
+            this.isRefreshing = false;
+
+            // Reject all queued requests
+            this.failedQueue.forEach(({ reject }) => reject(refreshError));
+            this.failedQueue = [];
+
+            // Clear any stored auth state and redirect to login
             if (typeof window !== 'undefined') {
+              // Clear cookies if possible
+              document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+              document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
               window.location.href = '/auth/login';
             }
+            return Promise.reject(refreshError);
           }
         }
         return Promise.reject(error);
@@ -109,8 +170,20 @@ class ApiClient {
     return this.request<{ tokens: any }>('POST', '/api/auth/refresh');
   }
 
+  // Clear authentication state
+  clearAuth() {
+    if (typeof window !== 'undefined') {
+      document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+  }
+
   async getProfile() {
     return this.request<{ user: User; tenant: Organization }>('GET', '/api/auth/profile');
+  }
+
+  async updateProfile(data: { firstName?: string; lastName?: string; email?: string; bio?: string; avatar?: string }) {
+    return this.request<{ user: User }>('PUT', '/api/auth/profile', data);
   }
 
   async inviteUser(data: { email: string; role: string; firstName?: string; lastName?: string }) {
@@ -193,6 +266,23 @@ class ApiClient {
     return this.request<Score>('PUT', `/api/scores/${scoreId}`, data);
   }
 
+  // Flavor descriptor endpoints
+  async getFlavorDescriptors() {
+    return this.request<FlavorDescriptor[]>('GET', '/api/flavor-descriptors');
+  }
+
+  async createFlavorDescriptor(data: CreateFlavorDescriptorForm) {
+    return this.request<FlavorDescriptor>('POST', '/api/flavor-descriptors', data);
+  }
+
+  async updateFlavorDescriptor(id: string, data: Partial<CreateFlavorDescriptorForm>) {
+    return this.request<FlavorDescriptor>('PUT', `/api/flavor-descriptors/${id}`, data);
+  }
+
+  async deleteFlavorDescriptor(id: string) {
+    return this.request('DELETE', `/api/flavor-descriptors/${id}`);
+  }
+
   // Health check
   async healthCheck() {
     return this.request('GET', '/api/health');
@@ -209,6 +299,7 @@ export const authApi = {
   logout: api.logout.bind(api),
   refreshToken: api.refreshToken.bind(api),
   getProfile: api.getProfile.bind(api),
+  updateProfile: api.updateProfile.bind(api),
   inviteUser: api.inviteUser.bind(api),
 };
 
@@ -240,6 +331,23 @@ export const scoresApi = {
   getSessionScores: api.getSessionScores.bind(api),
   submitScore: api.submitScore.bind(api),
   updateScore: api.updateScore.bind(api),
+};
+
+export const flavorDescriptorsApi = {
+  getFlavorDescriptors: api.getFlavorDescriptors.bind(api),
+  createFlavorDescriptor: api.createFlavorDescriptor.bind(api),
+  updateFlavorDescriptor: api.updateFlavorDescriptor.bind(api),
+  deleteFlavorDescriptor: api.deleteFlavorDescriptor.bind(api),
+};
+
+export const settingsApi = {
+  getSettings: () => api.request<any>('GET', '/api/settings'),
+  updateSettings: (data: any) => api.request<any>('PUT', '/api/settings', data),
+};
+
+export const aiApi = {
+  generateSummary: (sessionId: string, sampleId: string) =>
+    api.request<{ aiSummary: string; generatedAt: string }>('POST', `/api/ai/sessions/${sessionId}/samples/${sampleId}/summary`),
 };
 
 export default api;

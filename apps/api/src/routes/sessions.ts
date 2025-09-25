@@ -57,20 +57,37 @@ const addSampleValidator = [
   body('steepTime').optional().isInt({ min: 0 }).withMessage('Steep time must be a positive integer'),
 ];
 
+// Custom validator for quarter-point increments
+const quarterPointValidator = (field: string) => {
+  return body(field)
+    .isFloat({ min: 0, max: 10 })
+    .withMessage(`${field} score must be between 0 and 10`)
+    .custom((value) => {
+      // Check if the value is a multiple of 0.25
+      if ((value * 4) % 1 !== 0) {
+        throw new Error(`${field} score must be in quarter-point increments (e.g., 5.00, 5.25, 5.50, 5.75)`);
+      }
+      return true;
+    });
+};
+
 const submitScoreValidator = [
-  body('aroma').isFloat({ min: 0, max: 10 }).withMessage('Aroma score must be between 0 and 10'),
-  body('flavor').isFloat({ min: 0, max: 10 }).withMessage('Flavor score must be between 0 and 10'),
-  body('aftertaste').isFloat({ min: 0, max: 10 }).withMessage('Aftertaste score must be between 0 and 10'),
-  body('acidity').isFloat({ min: 0, max: 10 }).withMessage('Acidity score must be between 0 and 10'),
-  body('body').isFloat({ min: 0, max: 10 }).withMessage('Body score must be between 0 and 10'),
-  body('balance').isFloat({ min: 0, max: 10 }).withMessage('Balance score must be between 0 and 10'),
-  body('sweetness').isFloat({ min: 0, max: 10 }).withMessage('Sweetness score must be between 0 and 10'),
-  body('cleanliness').isFloat({ min: 0, max: 10 }).withMessage('Cleanliness score must be between 0 and 10'),
-  body('uniformity').isFloat({ min: 0, max: 10 }).withMessage('Uniformity score must be between 0 and 10'),
-  body('overall').isFloat({ min: 0, max: 10 }).withMessage('Overall score must be between 0 and 10'),
+  quarterPointValidator('aroma'),
+  quarterPointValidator('flavor'),
+  quarterPointValidator('aftertaste'),
+  quarterPointValidator('acidity'),
+  quarterPointValidator('body'),
+  quarterPointValidator('balance'),
+  quarterPointValidator('sweetness'),
+  quarterPointValidator('cleanliness'),
+  quarterPointValidator('uniformity'),
+  quarterPointValidator('overall'),
   body('defects').optional().isArray().withMessage('Defects must be an array'),
   body('notes').optional().trim().isLength({ max: 1000 }).withMessage('Notes must be less than 1000 characters'),
   body('privateNotes').optional().trim().isLength({ max: 1000 }).withMessage('Private notes must be less than 1000 characters'),
+  body('flavorDescriptors').optional().isArray().withMessage('Flavor descriptors must be an array'),
+  body('flavorDescriptors.*.id').optional().matches(/^c[a-z0-9]{24}$/).withMessage('Each flavor descriptor ID must be a valid ID'),
+  body('flavorDescriptors.*.intensity').optional().isInt({ min: 1, max: 5 }).withMessage('Flavor intensity must be between 1 and 5'),
 ];
 
 // Session routes

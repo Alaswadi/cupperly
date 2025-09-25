@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const organizationSchema = z.object({
   organizationName: z.string().min(2, 'Organization name must be at least 2 characters'),
@@ -84,122 +85,141 @@ export default function RegisterOrganizationPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-coffee-light via-white to-coffee-cream/30 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23${encodeURIComponent('8B5A3C').substring(1)}' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+      </div>
+
+      <div className="max-w-md w-full space-y-8 relative z-10">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">CuppingLab</h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <div className="flex flex-col items-center mb-4">
+            <Image
+              src="/logo.png"
+              alt="Cupperly Logo"
+              width={200}
+              height={200}
+              className="mb-6"
+            />
+            <h1 className="text-4xl font-pacifico text-coffee-brown mb-2">Cupperly</h1>
+          </div>
+          <p className="text-coffee-dark/70 text-lg font-medium">
             Professional Coffee Cupping Platform
+          </p>
+          <p className="mt-2 text-sm text-coffee-dark/60">
+            Create your organization to get started
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Register Your Organization</CardTitle>
-            <CardDescription>
+        <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+          <CardHeader className="text-center pb-4">
+            <CardTitle className="text-2xl text-coffee-brown">Register Your Organization</CardTitle>
+            <CardDescription className="text-coffee-dark/70">
               Create a new organization to start using CuppingLab for your coffee cupping needs.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-button">
                   {error}
                 </div>
               )}
 
               <div>
-                <Label htmlFor="organizationName">Organization Name</Label>
+                <Label htmlFor="organizationName" className="text-coffee-dark font-medium">Organization Name</Label>
                 <Input
                   id="organizationName"
                   type="text"
                   {...register('organizationName')}
                   placeholder="Your Coffee Company"
-                  className="mt-1"
+                  className="mt-2 border-coffee-cream/50 focus:border-coffee-brown focus:ring-coffee-brown/20"
                 />
                 {errors.organizationName && (
-                  <p className="mt-1 text-sm text-red-600">{errors.organizationName.message}</p>
+                  <p className="mt-2 text-sm text-red-600">{errors.organizationName.message}</p>
                 )}
               </div>
 
               <div>
-                <Label htmlFor="subdomain">Organization Subdomain</Label>
+                <Label htmlFor="subdomain" className="text-coffee-dark font-medium">Organization Subdomain</Label>
                 <Input
                   id="subdomain"
                   type="text"
                   {...register('subdomain')}
                   placeholder={organizationName ? generateSubdomain(organizationName) : 'your-company'}
-                  className="mt-1"
+                  className="mt-2 border-coffee-cream/50 focus:border-coffee-brown focus:ring-coffee-brown/20"
                 />
-                <p className="mt-1 text-xs text-gray-500">
-                  This will be used in your organization's URL: {'{subdomain}'}.cuppinglab.com
+                <p className="mt-2 text-xs text-coffee-dark/60">
+                  This will be used in your organization's URL: {'{subdomain}'}.cupperly.com
                 </p>
                 {errors.subdomain && (
-                  <p className="mt-1 text-sm text-red-600">{errors.subdomain.message}</p>
+                  <p className="mt-2 text-sm text-red-600">{errors.subdomain.message}</p>
                 )}
               </div>
 
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Administrator Account</h3>
+              <div className="border-t border-coffee-cream/30 pt-6">
+                <h3 className="text-lg font-medium text-coffee-brown mb-4">Administrator Account</h3>
                 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="firstName">First Name</Label>
+                      <Label htmlFor="firstName" className="text-coffee-dark font-medium">First Name</Label>
                       <Input
                         id="firstName"
                         type="text"
                         {...register('firstName')}
                         placeholder="John"
-                        className="mt-1"
+                        className="mt-2 border-coffee-cream/50 focus:border-coffee-brown focus:ring-coffee-brown/20"
                       />
                       {errors.firstName && (
-                        <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
+                        <p className="mt-2 text-sm text-red-600">{errors.firstName.message}</p>
                       )}
                     </div>
                     <div>
-                      <Label htmlFor="lastName">Last Name</Label>
+                      <Label htmlFor="lastName" className="text-coffee-dark font-medium">Last Name</Label>
                       <Input
                         id="lastName"
                         type="text"
                         {...register('lastName')}
                         placeholder="Doe"
-                        className="mt-1"
+                        className="mt-2 border-coffee-cream/50 focus:border-coffee-brown focus:ring-coffee-brown/20"
                       />
                       {errors.lastName && (
-                        <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
+                        <p className="mt-2 text-sm text-red-600">{errors.lastName.message}</p>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="email">Email Address</Label>
+                    <Label htmlFor="email" className="text-coffee-dark font-medium">Email Address</Label>
                     <Input
                       id="email"
                       type="email"
                       {...register('email')}
                       placeholder="john@yourcompany.com"
-                      className="mt-1"
+                      className="mt-2 border-coffee-cream/50 focus:border-coffee-brown focus:ring-coffee-brown/20"
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                      <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
                     )}
                   </div>
 
                   <div>
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="text-coffee-dark font-medium">Password</Label>
                     <Input
                       id="password"
                       type="password"
                       {...register('password')}
                       placeholder="Min 8 chars, include A-Z, a-z, 0-9, @$!%*?&"
-                      className="mt-1"
+                      className="mt-2 border-coffee-cream/50 focus:border-coffee-brown focus:ring-coffee-brown/20"
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-2 text-xs text-coffee-dark/60">
                       Must contain uppercase, lowercase, number, and special character
                     </p>
                     {errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                      <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
                     )}
                   </div>
                 </div>
@@ -208,7 +228,7 @@ export default function RegisterOrganizationPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full btn-primary"
+                className="w-full bg-coffee-brown hover:bg-coffee-dark text-white font-medium py-3 rounded-button transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 {isLoading ? (
                   <>
@@ -221,10 +241,10 @@ export default function RegisterOrganizationPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+            <div className="mt-8 text-center">
+              <p className="text-sm text-coffee-dark/70">
                 Already have an account?{' '}
-                <Link href="/auth/login" className="font-medium text-orange-600 hover:text-orange-500">
+                <Link href="/auth/login" className="font-medium text-coffee-brown hover:text-coffee-dark transition-colors">
                   Sign in here
                 </Link>
               </p>

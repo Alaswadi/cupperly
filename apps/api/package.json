@@ -1,7 +1,7 @@
 {
-  "name": "@cuppinglab/api",
+  "name": "@cupperly/api",
   "version": "1.0.0",
-  "description": "CuppingLab API Backend",
+  "description": "Cupperly API Backend",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -14,7 +14,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.16.2",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",

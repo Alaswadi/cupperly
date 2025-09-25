@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Organization, ApiResponse } from '@/types';
-import { authApi } from '@/lib/api';
+import { authApi, api } from '@/lib/api';
 import { toast } from 'react-hot-toast';
 
 interface AuthContextType {
@@ -36,10 +36,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.success && response.data) {
         setUser(response.data.user);
         setOrganization(response.data.tenant);
+      } else {
+        // Clear any invalid auth state
+        setUser(null);
+        setOrganization(null);
       }
     } catch (error) {
-      // User is not authenticated
+      // User is not authenticated - clear auth state
       console.log('Not authenticated');
+      api.clearAuth();
+      setUser(null);
+      setOrganization(null);
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +80,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      // Clear auth state and cookies
+      api.clearAuth();
       setUser(null);
       setOrganization(null);
       toast.success('Logged out successfully');

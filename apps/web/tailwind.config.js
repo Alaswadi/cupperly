@@ -20,6 +20,7 @@ module.exports = {
           800: '#933619',
           900: '#762e17',
           950: '#40160b',
+          DEFAULT: '#8B5A3C', // Coffee brown from design
         },
         secondary: {
           50: '#f8fafc',
@@ -33,6 +34,7 @@ module.exports = {
           800: '#1e293b',
           900: '#0f172a',
           950: '#020617',
+          DEFAULT: '#D4A574', // Coffee cream from design
         },
         accent: {
           50: '#fefce8',
@@ -47,10 +49,29 @@ module.exports = {
           900: '#713f12',
           950: '#422006',
         },
+        coffee: {
+          brown: '#8B5A3C',
+          cream: '#D4A574',
+          light: '#F5E6D3',
+          dark: '#5D3A26',
+        },
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '4px',
+        DEFAULT: '8px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        '2xl': '24px',
+        '3xl': '32px',
+        'full': '9999px',
+        'button': '8px'
       },
       fontFamily: {
         sans: ['system-ui', 'sans-serif'],
         mono: ['monospace'],
+        pacifico: ['Pacifico', 'cursive'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

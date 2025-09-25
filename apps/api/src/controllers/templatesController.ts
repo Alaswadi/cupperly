@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '../generated/client';
+import { PrismaClient } from '../../generated/client';
 import { z } from 'zod';
 import { fixInvalidTemplates } from '../utils/fixTemplates';
 

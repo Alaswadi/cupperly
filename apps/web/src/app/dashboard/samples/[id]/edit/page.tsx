@@ -5,13 +5,17 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { samplesApi } from '@/lib/api';
 import { Sample } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import Link from 'next/link';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Coffee, MapPin, Package, Beaker } from 'lucide-react';
+import toast from 'react-hot-toast';
+import {
+  COFFEE_ORIGINS,
+  getRegionsByCountry,
+  getVarietiesByCountry,
+  getCountries,
+  PROCESSING_METHODS
+} from '@/data/coffee-origins';
 
 export default function EditSamplePage() {
   const params = useParams();
@@ -20,6 +24,9 @@ export default function EditSamplePage() {
   const [sample, setSample] = useState<Sample | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [availableRegions, setAvailableRegions] = useState<any[]>([]);
+  const [availableVarieties, setAvailableVarieties] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     origin: '',
@@ -33,9 +40,7 @@ export default function EditSamplePage() {
     moisture: '',
     density: '',
     screenSize: '',
-    code: '',
     description: '',
-    notes: '',
   });
 
   const sampleId = params.id as string;
@@ -45,6 +50,17 @@ export default function EditSamplePage() {
       loadSample();
     }
   }, [sampleId]);
+
+  useEffect(() => {
+    if (selectedCountry) {
+      const regions = getRegionsByCountry(selectedCountry);
+      const varieties = getVarietiesByCountry(selectedCountry);
+      
+      setAvailableRegions(regions);
+      setAvailableVarieties(varieties);
+      setFormData(prev => ({ ...prev, origin: selectedCountry }));
+    }
+  }, [selectedCountry]);
 
   const loadSample = async () => {
     try {
@@ -67,16 +83,16 @@ export default function EditSamplePage() {
           moisture: sampleData.moisture?.toString() || '',
           density: sampleData.density?.toString() || '',
           screenSize: sampleData.screenSize || '',
-          code: sampleData.code || '',
           description: sampleData.description || '',
-          notes: sampleData.notes || '',
         });
+        setSelectedCountry(sampleData.origin || '');
       } else {
-        console.error('Failed to load sample:', response.error);
+        toast.error('Failed to load sample');
         router.push('/dashboard/samples');
       }
     } catch (error) {
       console.error('Failed to load sample:', error);
+      toast.error('Failed to load sample');
       router.push('/dashboard/samples');
     } finally {
       setIsLoading(false);
@@ -84,27 +100,30 @@ export default function EditSamplePage() {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!sample) return;
-
-    setIsSaving(true);
+    
+    if (!formData.name || !formData.origin) {
+      toast.error('Please fill in required fields');
+      return;
+    }
 
     try {
-      const response = await samplesApi.updateSample(sample.id, formData);
+      setIsSaving(true);
+      const response = await samplesApi.updateSample(sampleId, formData);
+      
       if (response.success) {
-        router.push(`/dashboard/samples/${sample.id}`);
+        toast.success('Sample updated successfully!');
+        router.push(`/dashboard/samples/${sampleId}`);
       } else {
-        console.error('Failed to update sample:', response.error);
+        toast.error(response.error || 'Failed to update sample');
       }
     } catch (error) {
-      console.error('Failed to update sample:', error);
+      console.error('Error updating sample:', error);
+      toast.error('Failed to update sample');
     } finally {
       setIsSaving(false);
     }
@@ -112,8 +131,8 @@ export default function EditSamplePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingSpinner />
+      <div className="flex items-center justify-center py-12">
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
@@ -121,244 +140,276 @@ export default function EditSamplePage() {
   if (!sample) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Sample not found</h3>
-        <p className="text-gray-500 mb-6">The sample you're trying to edit doesn't exist or has been deleted.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Sample not found</h2>
+        <p className="text-gray-600 mb-4">The sample you're trying to edit doesn't exist.</p>
         <Link href="/dashboard/samples">
-          <Button>Back to Samples</Button>
+          <button className="px-4 py-2 bg-coffee-brown text-white rounded-lg hover:bg-coffee-dark">
+            Back to Samples
+          </button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <Link href={`/dashboard/samples/${sample.id}`}>
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Sample
-          </Button>
-        </Link>
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Edit Sample</h1>
-          <p className="text-gray-600 mt-2">Update the details for {sample.name}</p>
+      <div className="mb-8">
+        <div className="flex items-center gap-4 mb-4">
+          <Link href={`/dashboard/samples/${sampleId}`}>
+            <button className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
+              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            </button>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Edit Sample</h1>
+            <p className="text-gray-600 mt-1">Update coffee sample information</p>
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Information */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Sample Information</CardTitle>
-                <CardDescription>Basic details about the coffee sample</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name">Sample Name *</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
-                      placeholder="e.g., Ethiopian Yirgacheffe"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="code">Sample Code</Label>
-                    <Input
-                      id="code"
-                      value={formData.code}
-                      onChange={(e) => handleInputChange('code', e.target.value)}
-                      placeholder="e.g., SM-2024-001"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="origin">Origin *</Label>
-                    <Input
-                      id="origin"
-                      value={formData.origin}
-                      onChange={(e) => handleInputChange('origin', e.target.value)}
-                      placeholder="e.g., Ethiopia"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="region">Region</Label>
-                    <Input
-                      id="region"
-                      value={formData.region}
-                      onChange={(e) => handleInputChange('region', e.target.value)}
-                      placeholder="e.g., Yirgacheffe"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="variety">Variety</Label>
-                    <Input
-                      id="variety"
-                      value={formData.variety}
-                      onChange={(e) => handleInputChange('variety', e.target.value)}
-                      placeholder="e.g., Heirloom"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="altitude">Altitude (meters)</Label>
-                    <Input
-                      id="altitude"
-                      type="number"
-                      value={formData.altitude}
-                      onChange={(e) => handleInputChange('altitude', e.target.value)}
-                      placeholder="e.g., 2000"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="producer">Producer</Label>
-                    <Input
-                      id="producer"
-                      value={formData.producer}
-                      onChange={(e) => handleInputChange('producer', e.target.value)}
-                      placeholder="Producer name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="farm">Farm</Label>
-                    <Input
-                      id="farm"
-                      value={formData.farm}
-                      onChange={(e) => handleInputChange('farm', e.target.value)}
-                      placeholder="Farm name"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
-                    placeholder="Additional notes about the sample..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    rows={4}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Processing & Physical Attributes */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Processing & Roasting</CardTitle>
-                <CardDescription>Processing method and roast information</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="processingMethod">Processing Method</Label>
-                  <select
-                    id="processingMethod"
-                    value={formData.processingMethod}
-                    onChange={(e) => handleInputChange('processingMethod', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  >
-                    <option value="WASHED">Washed</option>
-                    <option value="NATURAL">Natural</option>
-                    <option value="HONEY">Honey</option>
-                    <option value="SEMI_WASHED">Semi-Washed</option>
-                    <option value="WET_HULLED">Wet Hulled</option>
-                    <option value="ANAEROBIC">Anaerobic</option>
-                    <option value="CARBONIC_MACERATION">Carbonic Maceration</option>
-                    <option value="OTHER">Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <Label htmlFor="roastLevel">Roast Level</Label>
-                  <select
-                    id="roastLevel"
-                    value={formData.roastLevel}
-                    onChange={(e) => handleInputChange('roastLevel', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  >
-                    <option value="LIGHT">Light</option>
-                    <option value="MEDIUM_LIGHT">Medium Light</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="MEDIUM_DARK">Medium Dark</option>
-                    <option value="DARK">Dark</option>
-                    <option value="FRENCH">French</option>
-                    <option value="ITALIAN">Italian</option>
-                  </select>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Physical Attributes</CardTitle>
-                <CardDescription>Measured characteristics</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="moisture">Moisture (%)</Label>
-                  <Input
-                    id="moisture"
-                    type="number"
-                    step="0.1"
-                    value={formData.moisture}
-                    onChange={(e) => handleInputChange('moisture', e.target.value)}
-                    placeholder="e.g., 11.5"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="density">Density (g/ml)</Label>
-                  <Input
-                    id="density"
-                    type="number"
-                    step="0.01"
-                    value={formData.density}
-                    onChange={(e) => handleInputChange('density', e.target.value)}
-                    placeholder="e.g., 0.75"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="screenSize">Screen Size</Label>
-                  <Input
-                    id="screenSize"
-                    value={formData.screenSize}
-                    onChange={(e) => handleInputChange('screenSize', e.target.value)}
-                    placeholder="e.g., 16/18"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="flex gap-3">
-              <Button type="submit" disabled={isSaving} className="flex-1">
-                <Save className="h-4 w-4 mr-2" />
-                {isSaving ? 'Saving...' : 'Save Changes'}
-              </Button>
-              <Link href={`/dashboard/samples/${sample.id}`}>
-                <Button type="button" variant="outline">
-                  Cancel
-                </Button>
-              </Link>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Basic Information */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-coffee-brown/10 rounded-lg flex items-center justify-center">
+                <Coffee className="h-5 w-5 text-coffee-brown" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
+                <p className="text-sm text-gray-600">Essential details about the coffee sample</p>
+              </div>
             </div>
           </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sample Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="e.g., Ethiopia Yirgacheffe G1"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Origin Country <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={selectedCountry}
+                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  required
+                >
+                  <option value="">Select Country</option>
+                  {getCountries().map(country => (
+                    <option key={country} value={country}>{country}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                <select
+                  value={formData.region}
+                  onChange={(e) => handleInputChange('region', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  disabled={!selectedCountry}
+                >
+                  <option value="">Select Region</option>
+                  {availableRegions.map(region => (
+                    <option key={region.name} value={region.name}>{region.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Variety</label>
+                <select
+                  value={formData.variety}
+                  onChange={(e) => handleInputChange('variety', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  disabled={!selectedCountry}
+                >
+                  <option value="">Select Variety</option>
+                  {availableVarieties.map(variety => (
+                    <option key={variety} value={variety}>{variety}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Processing & Production */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Package className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">Processing & Production</h2>
+                <p className="text-sm text-gray-600">Details about processing method and production</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Processing Method</label>
+                <select
+                  value={formData.processingMethod}
+                  onChange={(e) => handleInputChange('processingMethod', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                >
+                  {PROCESSING_METHODS.map(method => (
+                    <option key={method} value={method.toUpperCase().replace(/\s+/g, '_')}>{method}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Roast Level</label>
+                <select
+                  value={formData.roastLevel}
+                  onChange={(e) => handleInputChange('roastLevel', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                >
+                  <option value="LIGHT">Light</option>
+                  <option value="MEDIUM_LIGHT">Medium Light</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="MEDIUM_DARK">Medium Dark</option>
+                  <option value="DARK">Dark</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Producer</label>
+                <input
+                  type="text"
+                  value={formData.producer}
+                  onChange={(e) => handleInputChange('producer', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="Producer name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Farm</label>
+                <input
+                  type="text"
+                  value={formData.farm}
+                  onChange={(e) => handleInputChange('farm', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="Farm name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Technical Specifications */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Beaker className="h-5 w-5 text-purple-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">Technical Specifications</h2>
+                <p className="text-sm text-gray-600">Physical and technical characteristics</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Altitude (masl)</label>
+                <input
+                  type="number"
+                  value={formData.altitude}
+                  onChange={(e) => handleInputChange('altitude', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="1800"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Moisture (%)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={formData.moisture}
+                  onChange={(e) => handleInputChange('moisture', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="11.5"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Density (g/ml)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.density}
+                  onChange={(e) => handleInputChange('density', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="0.72"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Screen Size</label>
+                <input
+                  type="text"
+                  value={formData.screenSize}
+                  onChange={(e) => handleInputChange('screenSize', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="16+"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Description */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Description & Notes</h2>
+            <p className="text-sm text-gray-600">Additional information about the sample</p>
+          </div>
+          <div className="p-6">
+            <textarea
+              value={formData.description}
+              onChange={(e) => handleInputChange('description', e.target.value)}
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+              placeholder="Enter any additional notes about this sample..."
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-4 pb-8">
+          <Link href={`/dashboard/samples/${sampleId}`}>
+            <button
+              type="button"
+              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+          </Link>
+          <button
+            type="submit"
+            disabled={isSaving}
+            className="flex items-center gap-2 px-6 py-2 bg-coffee-brown text-white rounded-lg hover:bg-coffee-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSaving ? (
+              <LoadingSpinner size="sm" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
+            {isSaving ? 'Saving...' : 'Save Changes'}
+          </button>
         </div>
       </form>
     </div>

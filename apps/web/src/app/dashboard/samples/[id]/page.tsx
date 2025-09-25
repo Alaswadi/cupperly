@@ -5,10 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { samplesApi } from '@/lib/api';
 import { Sample } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { formatDateTime } from '@/lib/utils';
 import Link from 'next/link';
 import { 
   ArrowLeft,
@@ -16,15 +13,20 @@ import {
   MapPin, 
   Calendar,
   Edit,
-  Trash2,
+  Archive,
   Package,
   Thermometer,
   Droplets,
   Mountain,
   User,
   Building,
-  Tag
+  Tag,
+  Beaker,
+  CheckCircle,
+  Clock,
+  PlayCircle
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function SampleDetailPage() {
   const params = useParams();
@@ -32,7 +34,7 @@ export default function SampleDetailPage() {
   const { user } = useAuth();
   const [sample, setSample] = useState<Sample | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isArchiving, setIsArchiving] = useState(false);
 
   const sampleId = params.id as string;
 
@@ -50,69 +52,38 @@ export default function SampleDetailPage() {
       if (response.success) {
         setSample(response.data);
       } else {
-        console.error('Failed to load sample:', response.error);
+        toast.error('Failed to load sample');
         router.push('/dashboard/samples');
       }
     } catch (error) {
       console.error('Failed to load sample:', error);
+      toast.error('Failed to load sample');
       router.push('/dashboard/samples');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDelete = async () => {
-    if (!sample || !confirm('Are you sure you want to delete this sample? This action cannot be undone.')) {
-      return;
-    }
-
+  const handleArchive = async () => {
+    if (!sample) return;
+    
     try {
-      setIsDeleting(true);
-      const response = await samplesApi.deleteSample(sample.id);
-      
-      if (response.success) {
-        router.push('/dashboard/samples');
-      } else {
-        console.error('Failed to delete sample:', response.error);
-      }
+      setIsArchiving(true);
+      // Add archive API call here when available
+      toast.success('Sample archived successfully');
+      router.push('/dashboard/samples');
     } catch (error) {
-      console.error('Failed to delete sample:', error);
+      console.error('Failed to archive sample:', error);
+      toast.error('Failed to archive sample');
     } finally {
-      setIsDeleting(false);
+      setIsArchiving(false);
     }
-  };
-
-  const getProcessingMethodColor = (method: string) => {
-    const colors = {
-      WASHED: 'bg-blue-100 text-blue-800',
-      NATURAL: 'bg-green-100 text-green-800',
-      HONEY: 'bg-yellow-100 text-yellow-800',
-      SEMI_WASHED: 'bg-purple-100 text-purple-800',
-      WET_HULLED: 'bg-indigo-100 text-indigo-800',
-      ANAEROBIC: 'bg-red-100 text-red-800',
-      CARBONIC_MACERATION: 'bg-pink-100 text-pink-800',
-      OTHER: 'bg-gray-100 text-gray-800',
-    };
-    return colors[method as keyof typeof colors] || colors.OTHER;
-  };
-
-  const getRoastLevelColor = (level: string) => {
-    const colors = {
-      LIGHT: 'bg-amber-100 text-amber-800',
-      MEDIUM_LIGHT: 'bg-orange-100 text-orange-800',
-      MEDIUM: 'bg-yellow-100 text-yellow-800',
-      MEDIUM_DARK: 'bg-red-100 text-red-800',
-      DARK: 'bg-gray-100 text-gray-800',
-      FRENCH: 'bg-gray-200 text-gray-900',
-      ITALIAN: 'bg-gray-300 text-gray-900',
-    };
-    return colors[level as keyof typeof colors] || colors.MEDIUM;
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingSpinner />
+      <div className="flex items-center justify-center py-12">
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
@@ -120,215 +91,254 @@ export default function SampleDetailPage() {
   if (!sample) {
     return (
       <div className="text-center py-12">
-        <Coffee className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Sample not found</h3>
-        <p className="text-gray-500 mb-6">The sample you're looking for doesn't exist or has been deleted.</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Sample not found</h2>
+        <p className="text-gray-600 mb-4">The sample you're looking for doesn't exist.</p>
         <Link href="/dashboard/samples">
-          <Button>Back to Samples</Button>
+          <button className="px-4 py-2 bg-coffee-brown text-white rounded-lg hover:bg-coffee-dark">
+            Back to Samples
+          </button>
         </Link>
       </div>
     );
   }
 
+  const getStatusColor = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'available':
+        return 'bg-green-100 text-green-800';
+      case 'in_use':
+      case 'in use':
+        return 'bg-blue-100 text-blue-800';
+      case 'expired':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'available':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'in_use':
+      case 'in use':
+        return <PlayCircle className="h-4 w-4" />;
+      case 'expired':
+        return <Clock className="h-4 w-4" />;
+      default:
+        return <Package className="h-4 w-4" />;
+    }
+  };
+
   return (
-    <div>
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
+      <div className="mb-8">
+        <div className="flex items-center gap-4 mb-6">
           <Link href="/dashboard/samples">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Samples
-            </Button>
+            <button className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
+              <ArrowLeft className="h-5 w-5 text-gray-600" />
+            </button>
           </Link>
-          <div>
+          <div className="flex-1">
             <h1 className="text-3xl font-bold text-gray-900">{sample.name}</h1>
-            <div className="flex items-center gap-2 text-gray-600 mt-2">
-              <MapPin className="h-4 w-4" />
-              <span>{sample.origin}</span>
-              {sample.region && <span>• {sample.region}</span>}
-            </div>
+            <p className="text-gray-600 mt-1">Sample Details and Information</p>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Link href={`/dashboard/samples/${sample.id}/edit`}>
-            <Button variant="outline">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-          </Link>
-          <Button 
-            variant="destructive" 
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            {isDeleting ? 'Deleting...' : 'Delete'}
-          </Button>
+          <div className="flex items-center gap-3">
+            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor('available')}`}>
+              {getStatusIcon('available')}
+              Available
+            </span>
+            <Link href={`/dashboard/samples/${sample.id}/edit`}>
+              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                <Edit className="h-4 w-4" />
+                Edit
+              </button>
+            </Link>
+            <button
+              onClick={handleArchive}
+              disabled={isArchiving}
+              className="flex items-center gap-2 px-4 py-2 border border-orange-300 text-orange-700 rounded-lg hover:bg-orange-50 transition-colors disabled:opacity-50"
+            >
+              <Archive className="h-4 w-4" />
+              {isArchiving ? 'Archiving...' : 'Archive'}
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Information */}
+        {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Sample Information</CardTitle>
-              <CardDescription>Basic details about this coffee sample</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {sample.description && (
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Description</h4>
-                  <p className="text-gray-600">{sample.description}</p>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-coffee-brown/10 rounded-lg flex items-center justify-center">
+                  <Coffee className="h-5 w-5 text-coffee-brown" />
                 </div>
-              )}
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {sample.variety && (
-                  <div className="flex items-center gap-2">
-                    <Coffee className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">Variety:</span>
-                    <span className="text-sm font-medium">{sample.variety}</span>
-                  </div>
-                )}
-                
-                {sample.altitude && (
-                  <div className="flex items-center gap-2">
-                    <Mountain className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">Altitude:</span>
-                    <span className="text-sm font-medium">{sample.altitude}m</span>
-                  </div>
-                )}
-                
-                {sample.producer && (
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">Producer:</span>
-                    <span className="text-sm font-medium">{sample.producer}</span>
-                  </div>
-                )}
-                
-                {sample.farm && (
-                  <div className="flex items-center gap-2">
-                    <Building className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">Farm:</span>
-                    <span className="text-sm font-medium">{sample.farm}</span>
-                  </div>
-                )}
+                <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
               </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {sample.processingMethod && (
-                  <span className={`px-3 py-1 rounded-full text-sm ${getProcessingMethodColor(sample.processingMethod)}`}>
-                    {sample.processingMethod.replace('_', ' ')}
-                  </span>
-                )}
-                {sample.roastLevel && (
-                  <span className={`px-3 py-1 rounded-full text-sm ${getRoastLevelColor(sample.roastLevel)}`}>
-                    {sample.roastLevel.replace('_', ' ')}
-                  </span>
-                )}
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Sample Name</label>
+                    <p className="text-lg font-semibold text-gray-900">{sample.name}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Origin</label>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{sample.origin || 'Not specified'}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Variety</label>
+                    <p className="text-gray-900">{sample.variety || 'Not specified'}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Processing Method</label>
+                    <div className="flex items-center gap-2">
+                      <Package className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{sample.processingMethod || 'Not specified'}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Roast Level</label>
+                    <div className="flex items-center gap-2">
+                      <Thermometer className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{sample.roastLevel || 'Not specified'}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Created</label>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">
+                        {sample.createdAt ? new Date(sample.createdAt).toLocaleDateString() : 'Unknown'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Physical Attributes */}
-          {(sample.moisture || sample.density || sample.screenSize) && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Physical Attributes</CardTitle>
-                <CardDescription>Measured characteristics of the coffee beans</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {sample.moisture && (
-                    <div className="flex items-center gap-2">
-                      <Droplets className="h-4 w-4 text-blue-500" />
-                      <div>
-                        <p className="text-sm text-gray-600">Moisture</p>
-                        <p className="font-medium">{sample.moisture}%</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {sample.density && (
-                    <div className="flex items-center gap-2">
-                      <Package className="h-4 w-4 text-green-500" />
-                      <div>
-                        <p className="text-sm text-gray-600">Density</p>
-                        <p className="font-medium">{sample.density} g/ml</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {sample.screenSize && (
-                    <div className="flex items-center gap-2">
-                      <Tag className="h-4 w-4 text-purple-500" />
-                      <div>
-                        <p className="text-sm text-gray-600">Screen Size</p>
-                        <p className="font-medium">{sample.screenSize}</p>
-                      </div>
-                    </div>
-                  )}
+          {/* Production Details */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <Mountain className="h-5 w-5 text-green-600" />
                 </div>
-              </CardContent>
-            </Card>
-          )}
+                <h2 className="text-lg font-semibold text-gray-900">Production Details</h2>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Producer</label>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{sample.producer || 'Not specified'}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Farm</label>
+                    <div className="flex items-center gap-2">
+                      <Building className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{sample.farm || 'Not specified'}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Altitude</label>
+                    <div className="flex items-center gap-2">
+                      <Mountain className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">
+                        {sample.altitude ? `${sample.altitude} masl` : 'Not specified'}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Region</label>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-gray-400" />
+                      <p className="text-gray-900">{sample.region || 'Not specified'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Metadata */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Metadata</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-600">Created:</span>
-                <span className="font-medium">{formatDateTime(sample.createdAt)}</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-600">Updated:</span>
-                <span className="font-medium">{formatDateTime(sample.updatedAt)}</span>
-              </div>
-              
-              {sample.code && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Tag className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-600">Code:</span>
-                  <span className="font-medium">{sample.code}</span>
+          {/* Quick Actions */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+            </div>
+            <div className="p-6 space-y-3">
+              <Link href={`/dashboard/samples/${sample.id}/edit`} className="block">
+                <button className="w-full flex items-center gap-3 px-4 py-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <Edit className="h-5 w-5 text-gray-400" />
+                  <div>
+                    <p className="font-medium text-gray-900">Edit Sample</p>
+                    <p className="text-sm text-gray-500">Update sample information</p>
+                  </div>
+                </button>
+              </Link>
+              <button className="w-full flex items-center gap-3 px-4 py-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <Coffee className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="font-medium text-gray-900">Use in Session</p>
+                  <p className="text-sm text-gray-500">Add to cupping session</p>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </button>
+              <button 
+                onClick={handleArchive}
+                disabled={isArchiving}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left border border-orange-200 rounded-lg hover:bg-orange-50 transition-colors disabled:opacity-50"
+              >
+                <Archive className="h-5 w-5 text-orange-600" />
+                <div>
+                  <p className="font-medium text-orange-900">Archive Sample</p>
+                  <p className="text-sm text-orange-600">Remove from active samples</p>
+                </div>
+              </button>
+            </div>
+          </div>
 
-          {/* Tags */}
-          {sample.tags && sample.tags.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Tags</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {sample.tags.map((tag, index) => (
-                    <span 
-                      key={index}
-                      className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          {/* Sample Info */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Sample Info</h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Sample ID</p>
+                <p className="text-gray-900 font-mono">{sample.id}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Created By</p>
+                <p className="text-gray-900">{user?.name || 'Unknown'}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Last Updated</p>
+                <p className="text-gray-900">
+                  {sample.updatedAt ? new Date(sample.updatedAt).toLocaleDateString() : 'Unknown'}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -18,6 +18,9 @@ import healthRoutes from './routes/health';
 import samplesRoutes from './routes/samples';
 import sessionsRoutes from './routes/sessions';
 import templatesRoutes from './routes/templates';
+import flavorDescriptorsRoutes from './routes/flavorDescriptors';
+import settingsRoutes from './routes/settings';
+import aiRoutes from './routes/ai';
 
 // Load environment variables
 dotenv.config();
@@ -40,8 +43,8 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.WEB_URL!, /\.cuppinglab\.com$/]
+  origin: process.env.NODE_ENV === 'production'
+    ? [process.env.WEB_URL!, /\.cupperly\.com$/]
     : ['http://localhost:3000', 'http://127.0.0.1:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -51,10 +54,14 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // limit each IP
+  max: process.env.NODE_ENV === 'production' ? 100 : 10000, // much higher limit for dev
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting for health checks in development
+    return process.env.NODE_ENV !== 'production' && req.path === '/api/health';
+  },
 });
 app.use(limiter);
 
@@ -75,11 +82,23 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(tenantMiddleware);
 
 // Routes
+console.log('🔧 Registering routes...');
 app.use('/api/health', healthRoutes);
+console.log('✅ Health routes registered');
 app.use('/api/auth', authRoutes);
+console.log('✅ Auth routes registered');
 app.use('/api/samples', samplesRoutes);
+console.log('✅ Samples routes registered');
 app.use('/api/sessions', sessionsRoutes);
+console.log('✅ Sessions routes registered');
 app.use('/api/templates', templatesRoutes);
+console.log('✅ Templates routes registered');
+app.use('/api/flavor-descriptors', flavorDescriptorsRoutes);
+console.log('✅ Flavor descriptors routes registered');
+app.use('/api/settings', settingsRoutes);
+console.log('✅ Settings routes registered');
+app.use('/api/ai', aiRoutes);
+console.log('✅ AI routes registered');
 
 // 404 handler
 app.use(notFound);
@@ -89,8 +108,8 @@ app.use(errorHandler);
 
 // Start server
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`🚀 CuppingLab API server running on port ${PORT}`);
+  app.listen(PORT, 'localhost', () => {
+    console.log(`🚀 Cupperly API server running on port ${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
   });

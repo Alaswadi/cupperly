@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { PrismaClient } from '../generated/client';
+import { PrismaClient } from '../../generated/client';
 import { AuthRequest } from '../middleware/auth';
 
 const prisma = new PrismaClient();
@@ -85,8 +85,19 @@ export const getSessions = async (
                   id: true,
                   name: true,
                   origin: true,
+                  region: true,
+                  variety: true,
                 },
               },
+            },
+          },
+          scores: {
+            select: {
+              id: true,
+              totalScore: true,
+              isSubmitted: true,
+              isComplete: true,
+              userId: true,
             },
           },
           _count: {
@@ -201,18 +212,11 @@ export const getSession = async (
       });
     }
 
-    // Transform the session data to flatten the samples structure
+    // Keep the original session structure for reports
     const transformedSession = {
       ...session,
-      samples: session.samples?.map(sessionSample => ({
-        id: sessionSample.sample.id,
-        name: sessionSample.sample.name,
-        origin: sessionSample.sample.origin,
-        variety: sessionSample.sample.variety,
-        position: sessionSample.position,
-        isBlind: sessionSample.isBlind,
-        blindCode: sessionSample.blindCode,
-      })) || [],
+      // Keep samples as SessionSample objects with full sample data
+      samples: session.samples || [],
     };
 
     res.json({
@@ -653,52 +657,85 @@ export const submitScore = async (
 
     const totalScore = calculateScaaScore(scaaScores);
 
-    // Create or update score
-    const score = await prisma.score.upsert({
-      where: {
-        sessionId_sampleId_userId: {
-          sessionId,
-          sampleId,
-          userId: req.user!.id,
-        },
-      },
-      update: {
-        ...scaaScores,
-        totalScore,
-        scores: scaaScores,
-        defects: scoreData.defects || [],
-        notes: scoreData.notes,
-        privateNotes: scoreData.privateNotes,
-        isComplete: true,
-        isSubmitted: scoreData.isSubmitted || false,
-        submittedAt: scoreData.isSubmitted ? new Date() : null,
-      },
-      create: {
-        sessionId,
-        sessionSampleId: sessionSample.id,
-        sampleId,
-        userId: req.user!.id,
-        ...scaaScores,
-        totalScore,
-        maxScore: 100,
-        scores: scaaScores,
-        defects: scoreData.defects || [],
-        notes: scoreData.notes,
-        privateNotes: scoreData.privateNotes,
-        isComplete: true,
-        isSubmitted: scoreData.isSubmitted || false,
-        submittedAt: scoreData.isSubmitted ? new Date() : null,
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
+    // Handle flavor descriptors
+    const flavorDescriptors = scoreData.flavorDescriptors || [];
+
+    // Create or update score in a transaction to handle flavor descriptors
+    const score = await prisma.$transaction(async (tx) => {
+      // Create or update the score
+      const updatedScore = await tx.score.upsert({
+        where: {
+          sessionId_sampleId_userId: {
+            sessionId,
+            sampleId,
+            userId: req.user!.id,
           },
         },
-      },
+        update: {
+          ...scaaScores,
+          totalScore,
+          scores: scaaScores,
+          defects: scoreData.defects || [],
+          notes: scoreData.notes,
+          privateNotes: scoreData.privateNotes,
+          isComplete: true,
+          isSubmitted: scoreData.isSubmitted || false,
+          submittedAt: scoreData.isSubmitted ? new Date() : null,
+        },
+        create: {
+          sessionId,
+          sessionSampleId: sessionSample.id,
+          sampleId,
+          userId: req.user!.id,
+          ...scaaScores,
+          totalScore,
+          maxScore: 100,
+          scores: scaaScores,
+          defects: scoreData.defects || [],
+          notes: scoreData.notes,
+          privateNotes: scoreData.privateNotes,
+          isComplete: true,
+          isSubmitted: scoreData.isSubmitted || false,
+          submittedAt: scoreData.isSubmitted ? new Date() : null,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      });
+
+      // Handle flavor descriptors
+      if (flavorDescriptors.length > 0) {
+        // Delete existing flavor descriptors for this score
+        await tx.scoreFlavorDescriptor.deleteMany({
+          where: { scoreId: updatedScore.id },
+        });
+
+        // Create new flavor descriptor associations
+        for (const descriptor of flavorDescriptors) {
+          await tx.scoreFlavorDescriptor.create({
+            data: {
+              scoreId: updatedScore.id,
+              flavorDescriptorId: descriptor.id,
+              intensity: descriptor.intensity || 3,
+            },
+          });
+        }
+      }
+
+      return updatedScore;
     });
+
+    // Check if all participants have submitted scores for all samples
+    // If so, automatically complete the session
+    if (scoreData.isSubmitted) {
+      await checkAndCompleteSession(sessionId);
+    }
 
     res.json({
       success: true,
@@ -756,6 +793,11 @@ export const getSessionScores = async (
                 origin: true,
               },
             },
+          },
+        },
+        flavorDescriptors: {
+          include: {
+            flavorDescriptor: true,
           },
         },
       },
@@ -929,3 +971,49 @@ export const removeSampleFromSession = async (
     next(error);
   }
 };
+
+// Helper function to check if all participants have submitted scores for all samples
+// and automatically complete the session if so
+async function checkAndCompleteSession(sessionId: string) {
+  try {
+    // Get session with participants and samples
+    const session = await prisma.cuppingSession.findUnique({
+      where: { id: sessionId },
+      include: {
+        participants: true,
+        samples: true,
+      },
+    });
+
+    if (!session || session.status !== 'ACTIVE') {
+      return;
+    }
+
+    // Count total expected scores (participants × samples)
+    const totalExpectedScores = session.participants.length * session.samples.length;
+
+    // Count actual submitted scores
+    const submittedScoresCount = await prisma.score.count({
+      where: {
+        sessionId,
+        isSubmitted: true,
+      },
+    });
+
+    // If all scores are submitted, complete the session
+    if (submittedScoresCount >= totalExpectedScores) {
+      await prisma.cuppingSession.update({
+        where: { id: sessionId },
+        data: {
+          status: 'COMPLETED',
+          completedAt: new Date(),
+        },
+      });
+
+      console.log(`✅ Session ${sessionId} automatically completed - all scores submitted`);
+    }
+  } catch (error) {
+    console.error('Error checking session completion:', error);
+    // Don't throw error to avoid breaking the score submission
+  }
+}

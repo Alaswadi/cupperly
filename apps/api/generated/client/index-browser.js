@@ -259,6 +259,8 @@ exports.Prisma.SessionSampleScalarFieldEnum = {
   waterTemp: 'waterTemp',
   brewRatio: 'brewRatio',
   steepTime: 'steepTime',
+  aiSummary: 'aiSummary',
+  aiGeneratedAt: 'aiGeneratedAt',
   addedAt: 'addedAt'
 };
 
@@ -291,6 +293,26 @@ exports.Prisma.ScoreScalarFieldEnum = {
   submittedAt: 'submittedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FlavorDescriptorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  isDefault: 'isDefault',
+  organizationId: 'organizationId',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ScoreFlavorDescriptorScalarFieldEnum = {
+  id: 'id',
+  scoreId: 'scoreId',
+  flavorDescriptorId: 'flavorDescriptorId',
+  intensity: 'intensity',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -388,6 +410,11 @@ exports.ParticipantRole = exports.$Enums.ParticipantRole = {
   OBSERVER: 'OBSERVER'
 };
 
+exports.FlavorCategory = exports.$Enums.FlavorCategory = {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE'
+};
+
 exports.Prisma.ModelName = {
   Organization: 'Organization',
   User: 'User',
@@ -397,7 +424,9 @@ exports.Prisma.ModelName = {
   CuppingSession: 'CuppingSession',
   SessionParticipant: 'SessionParticipant',
   SessionSample: 'SessionSample',
-  Score: 'Score'
+  Score: 'Score',
+  FlavorDescriptor: 'FlavorDescriptor',
+  ScoreFlavorDescriptor: 'ScoreFlavorDescriptor'
 };
 
 /**

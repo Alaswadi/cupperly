@@ -1,4 +1,4 @@
-# CuppingLab - Professional Coffee Cupping SaaS Platform
+# Cupperly - Professional Coffee Cupping SaaS Platform
 
 A comprehensive multi-tenant SaaS platform for professional coffee cupping, quality assessment, and analytics.
 
@@ -100,7 +100,7 @@ Copy `.env.example` to `.env` and configure:
 
 ```env
 # Database
-DATABASE_URL="postgresql://postgres:password@localhost:5432/cuppinglab"
+DATABASE_URL="postgresql://postgres:password@localhost:5432/cupperly"
 
 # Redis
 REDIS_URL="redis://localhost:6379"
@@ -117,7 +117,7 @@ STRIPE_WEBHOOK_SECRET="whsec_..."
 AWS_ACCESS_KEY_ID="your-access-key"
 AWS_SECRET_ACCESS_KEY="your-secret-key"
 AWS_REGION="us-east-1"
-AWS_S3_BUCKET="cuppinglab-files"
+AWS_S3_BUCKET="cupperly-files"
 ```
 
 ## 🚀 Deployment
@@ -206,5 +206,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support and questions:
 - Create an issue on GitHub
-- Contact: support@cuppinglab.com
-- Documentation: https://docs.cuppinglab.com
+- Contact: support@cupperly.com
+- Documentation: https://docs.cupperly.com

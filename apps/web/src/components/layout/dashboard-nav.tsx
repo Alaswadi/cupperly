@@ -4,17 +4,16 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { 
+import {
   Home,
   Coffee,
-  Users,
   Calendar,
   BarChart3,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Beaker
 } from 'lucide-react';
+import Image from 'next/image';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -22,8 +21,6 @@ const navigation = [
   { name: 'Samples', href: '/dashboard/samples', icon: Coffee },
   { name: 'Templates', href: '/dashboard/templates', icon: Beaker },
   { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
-  { name: 'Team', href: '/dashboard/team', icon: Users },
-  { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
 
 export function DashboardNav() {
@@ -40,8 +37,13 @@ export function DashboardNav() {
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           {!collapsed && (
             <div className="flex items-center">
-              <Coffee className="h-8 w-8 text-primary-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">CuppingLab</span>
+              <Image
+                src="/logo.png"
+                alt="Cupperly Logo"
+                width={32}
+                height={32}
+              />
+              <span className="ml-2 text-xl font-pacifico text-coffee-brown">Cupperly</span>
             </div>
           )}
           <button

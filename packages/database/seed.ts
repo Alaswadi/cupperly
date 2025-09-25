@@ -14,7 +14,7 @@ async function main() {
       name: 'Demo Coffee Roastery',
       slug: 'demo-roastery',
       subdomain: 'demo',
-      description: 'A demonstration coffee roastery for CuppingLab',
+      description: 'A demonstration coffee roastery for Cupperly',
       subscriptionStatus: 'TRIAL',
       subscriptionPlan: 'PROFESSIONAL',
       trialEndsAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
@@ -26,10 +26,10 @@ async function main() {
   // Create demo admin user
   const hashedPassword = await bcrypt.hash('demo123', 12);
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@demo.cuppinglab.com' },
+    where: { email: 'admin@demo.cupperly.com' },
     update: {},
     create: {
-      email: 'admin@demo.cuppinglab.com',
+      email: 'admin@demo.cupperly.com',
       password: hashedPassword,
       firstName: 'Demo',
       lastName: 'Admin',
@@ -45,10 +45,10 @@ async function main() {
   // Create demo cupper users
   const cupperUsers = await Promise.all([
     prisma.user.upsert({
-      where: { email: 'cupper1@demo.cuppinglab.com' },
+      where: { email: 'cupper1@demo.cupperly.com' },
       update: {},
       create: {
-        email: 'cupper1@demo.cuppinglab.com',
+        email: 'cupper1@demo.cupperly.com',
         password: hashedPassword,
         firstName: 'Alice',
         lastName: 'Johnson',
@@ -59,10 +59,10 @@ async function main() {
       },
     }),
     prisma.user.upsert({
-      where: { email: 'cupper2@demo.cuppinglab.com' },
+      where: { email: 'cupper2@demo.cupperly.com' },
       update: {},
       create: {
-        email: 'cupper2@demo.cuppinglab.com',
+        email: 'cupper2@demo.cupperly.com',
         password: hashedPassword,
         firstName: 'Bob',
         lastName: 'Smith',

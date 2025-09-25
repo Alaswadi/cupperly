@@ -58,6 +58,16 @@ export type SessionSample = $Result.DefaultSelection<Prisma.$SessionSamplePayloa
  * 
  */
 export type Score = $Result.DefaultSelection<Prisma.$ScorePayload>
+/**
+ * Model FlavorDescriptor
+ * 
+ */
+export type FlavorDescriptor = $Result.DefaultSelection<Prisma.$FlavorDescriptorPayload>
+/**
+ * Model ScoreFlavorDescriptor
+ * 
+ */
+export type ScoreFlavorDescriptor = $Result.DefaultSelection<Prisma.$ScoreFlavorDescriptorPayload>
 
 /**
  * Enums
@@ -160,6 +170,14 @@ export const ParticipantRole: {
 
 export type ParticipantRole = (typeof ParticipantRole)[keyof typeof ParticipantRole]
 
+
+export const FlavorCategory: {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE'
+};
+
+export type FlavorCategory = (typeof FlavorCategory)[keyof typeof FlavorCategory]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -197,6 +215,10 @@ export const SessionStatus: typeof $Enums.SessionStatus
 export type ParticipantRole = $Enums.ParticipantRole
 
 export const ParticipantRole: typeof $Enums.ParticipantRole
+
+export type FlavorCategory = $Enums.FlavorCategory
+
+export const FlavorCategory: typeof $Enums.FlavorCategory
 
 /**
  * ##  Prisma Client ʲˢ
@@ -405,6 +427,26 @@ export class PrismaClient<
     * ```
     */
   get score(): Prisma.ScoreDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.flavorDescriptor`: Exposes CRUD operations for the **FlavorDescriptor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FlavorDescriptors
+    * const flavorDescriptors = await prisma.flavorDescriptor.findMany()
+    * ```
+    */
+  get flavorDescriptor(): Prisma.FlavorDescriptorDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.scoreFlavorDescriptor`: Exposes CRUD operations for the **ScoreFlavorDescriptor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ScoreFlavorDescriptors
+    * const scoreFlavorDescriptors = await prisma.scoreFlavorDescriptor.findMany()
+    * ```
+    */
+  get scoreFlavorDescriptor(): Prisma.ScoreFlavorDescriptorDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -853,7 +895,9 @@ export namespace Prisma {
     CuppingSession: 'CuppingSession',
     SessionParticipant: 'SessionParticipant',
     SessionSample: 'SessionSample',
-    Score: 'Score'
+    Score: 'Score',
+    FlavorDescriptor: 'FlavorDescriptor',
+    ScoreFlavorDescriptor: 'ScoreFlavorDescriptor'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -872,7 +916,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "user" | "invitation" | "sample" | "cuppingTemplate" | "cuppingSession" | "sessionParticipant" | "sessionSample" | "score"
+      modelProps: "organization" | "user" | "invitation" | "sample" | "cuppingTemplate" | "cuppingSession" | "sessionParticipant" | "sessionSample" | "score" | "flavorDescriptor" | "scoreFlavorDescriptor"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1542,6 +1586,154 @@ export namespace Prisma {
           }
         }
       }
+      FlavorDescriptor: {
+        payload: Prisma.$FlavorDescriptorPayload<ExtArgs>
+        fields: Prisma.FlavorDescriptorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FlavorDescriptorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          findFirst: {
+            args: Prisma.FlavorDescriptorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FlavorDescriptorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          findMany: {
+            args: Prisma.FlavorDescriptorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>[]
+          }
+          create: {
+            args: Prisma.FlavorDescriptorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          createMany: {
+            args: Prisma.FlavorDescriptorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlavorDescriptorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>[]
+          }
+          delete: {
+            args: Prisma.FlavorDescriptorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          update: {
+            args: Prisma.FlavorDescriptorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          deleteMany: {
+            args: Prisma.FlavorDescriptorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FlavorDescriptorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FlavorDescriptorUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>[]
+          }
+          upsert: {
+            args: Prisma.FlavorDescriptorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          aggregate: {
+            args: Prisma.FlavorDescriptorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFlavorDescriptor>
+          }
+          groupBy: {
+            args: Prisma.FlavorDescriptorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FlavorDescriptorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FlavorDescriptorCountArgs<ExtArgs>
+            result: $Utils.Optional<FlavorDescriptorCountAggregateOutputType> | number
+          }
+        }
+      }
+      ScoreFlavorDescriptor: {
+        payload: Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>
+        fields: Prisma.ScoreFlavorDescriptorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScoreFlavorDescriptorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScoreFlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          findFirst: {
+            args: Prisma.ScoreFlavorDescriptorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScoreFlavorDescriptorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          findMany: {
+            args: Prisma.ScoreFlavorDescriptorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>[]
+          }
+          create: {
+            args: Prisma.ScoreFlavorDescriptorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          createMany: {
+            args: Prisma.ScoreFlavorDescriptorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScoreFlavorDescriptorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>[]
+          }
+          delete: {
+            args: Prisma.ScoreFlavorDescriptorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          update: {
+            args: Prisma.ScoreFlavorDescriptorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          deleteMany: {
+            args: Prisma.ScoreFlavorDescriptorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScoreFlavorDescriptorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ScoreFlavorDescriptorUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>[]
+          }
+          upsert: {
+            args: Prisma.ScoreFlavorDescriptorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          aggregate: {
+            args: Prisma.ScoreFlavorDescriptorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScoreFlavorDescriptor>
+          }
+          groupBy: {
+            args: Prisma.ScoreFlavorDescriptorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScoreFlavorDescriptorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScoreFlavorDescriptorCountArgs<ExtArgs>
+            result: $Utils.Optional<ScoreFlavorDescriptorCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1647,6 +1839,8 @@ export namespace Prisma {
     sessionParticipant?: SessionParticipantOmit
     sessionSample?: SessionSampleOmit
     score?: ScoreOmit
+    flavorDescriptor?: FlavorDescriptorOmit
+    scoreFlavorDescriptor?: ScoreFlavorDescriptorOmit
   }
 
   /* Types for Logging */
@@ -1732,6 +1926,7 @@ export namespace Prisma {
     samples: number
     templates: number
     invitations: number
+    flavorDescriptors: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1740,6 +1935,7 @@ export namespace Prisma {
     samples?: boolean | OrganizationCountOutputTypeCountSamplesArgs
     templates?: boolean | OrganizationCountOutputTypeCountTemplatesArgs
     invitations?: boolean | OrganizationCountOutputTypeCountInvitationsArgs
+    flavorDescriptors?: boolean | OrganizationCountOutputTypeCountFlavorDescriptorsArgs
   }
 
   // Custom InputTypes
@@ -1788,6 +1984,13 @@ export namespace Prisma {
     where?: InvitationWhereInput
   }
 
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlavorDescriptorWhereInput
+  }
+
 
   /**
    * Count Type UserCountOutputType
@@ -1798,6 +2001,7 @@ export namespace Prisma {
     scores: number
     sessionParticipants: number
     createdTemplates: number
+    createdFlavorDescriptors: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1805,6 +2009,7 @@ export namespace Prisma {
     scores?: boolean | UserCountOutputTypeCountScoresArgs
     sessionParticipants?: boolean | UserCountOutputTypeCountSessionParticipantsArgs
     createdTemplates?: boolean | UserCountOutputTypeCountCreatedTemplatesArgs
+    createdFlavorDescriptors?: boolean | UserCountOutputTypeCountCreatedFlavorDescriptorsArgs
   }
 
   // Custom InputTypes
@@ -1844,6 +2049,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCreatedTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CuppingTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlavorDescriptorWhereInput
   }
 
 
@@ -1995,6 +2207,68 @@ export namespace Prisma {
    */
   export type SessionSampleCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ScoreWhereInput
+  }
+
+
+  /**
+   * Count Type ScoreCountOutputType
+   */
+
+  export type ScoreCountOutputType = {
+    flavorDescriptors: number
+  }
+
+  export type ScoreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flavorDescriptors?: boolean | ScoreCountOutputTypeCountFlavorDescriptorsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ScoreCountOutputType without action
+   */
+  export type ScoreCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreCountOutputType
+     */
+    select?: ScoreCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ScoreCountOutputType without action
+   */
+  export type ScoreCountOutputTypeCountFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreFlavorDescriptorWhereInput
+  }
+
+
+  /**
+   * Count Type FlavorDescriptorCountOutputType
+   */
+
+  export type FlavorDescriptorCountOutputType = {
+    scoreDescriptors: number
+  }
+
+  export type FlavorDescriptorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    scoreDescriptors?: boolean | FlavorDescriptorCountOutputTypeCountScoreDescriptorsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FlavorDescriptorCountOutputType without action
+   */
+  export type FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptorCountOutputType
+     */
+    select?: FlavorDescriptorCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FlavorDescriptorCountOutputType without action
+   */
+  export type FlavorDescriptorCountOutputTypeCountScoreDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreFlavorDescriptorWhereInput
   }
 
 
@@ -2255,6 +2529,7 @@ export namespace Prisma {
     samples?: boolean | Organization$samplesArgs<ExtArgs>
     templates?: boolean | Organization$templatesArgs<ExtArgs>
     invitations?: boolean | Organization$invitationsArgs<ExtArgs>
+    flavorDescriptors?: boolean | Organization$flavorDescriptorsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -2322,6 +2597,7 @@ export namespace Prisma {
     samples?: boolean | Organization$samplesArgs<ExtArgs>
     templates?: boolean | Organization$templatesArgs<ExtArgs>
     invitations?: boolean | Organization$invitationsArgs<ExtArgs>
+    flavorDescriptors?: boolean | Organization$flavorDescriptorsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2335,6 +2611,7 @@ export namespace Prisma {
       samples: Prisma.$SamplePayload<ExtArgs>[]
       templates: Prisma.$CuppingTemplatePayload<ExtArgs>[]
       invitations: Prisma.$InvitationPayload<ExtArgs>[]
+      flavorDescriptors: Prisma.$FlavorDescriptorPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2752,6 +3029,7 @@ export namespace Prisma {
     samples<T extends Organization$samplesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$samplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     templates<T extends Organization$templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invitations<T extends Organization$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    flavorDescriptors<T extends Organization$flavorDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$flavorDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3305,6 +3583,30 @@ export namespace Prisma {
   }
 
   /**
+   * Organization.flavorDescriptors
+   */
+  export type Organization$flavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    where?: FlavorDescriptorWhereInput
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    cursor?: FlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
    * Organization without action
    */
   export type OrganizationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3584,6 +3886,7 @@ export namespace Prisma {
     scores?: boolean | User$scoresArgs<ExtArgs>
     sessionParticipants?: boolean | User$sessionParticipantsArgs<ExtArgs>
     createdTemplates?: boolean | User$createdTemplatesArgs<ExtArgs>
+    createdFlavorDescriptors?: boolean | User$createdFlavorDescriptorsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3656,6 +3959,7 @@ export namespace Prisma {
     scores?: boolean | User$scoresArgs<ExtArgs>
     sessionParticipants?: boolean | User$sessionParticipantsArgs<ExtArgs>
     createdTemplates?: boolean | User$createdTemplatesArgs<ExtArgs>
+    createdFlavorDescriptors?: boolean | User$createdFlavorDescriptorsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3673,6 +3977,7 @@ export namespace Prisma {
       scores: Prisma.$ScorePayload<ExtArgs>[]
       sessionParticipants: Prisma.$SessionParticipantPayload<ExtArgs>[]
       createdTemplates: Prisma.$CuppingTemplatePayload<ExtArgs>[]
+      createdFlavorDescriptors: Prisma.$FlavorDescriptorPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4091,6 +4396,7 @@ export namespace Prisma {
     scores<T extends User$scoresArgs<ExtArgs> = {}>(args?: Subset<T, User$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessionParticipants<T extends User$sessionParticipantsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionParticipantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdTemplates<T extends User$createdTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdFlavorDescriptors<T extends User$createdFlavorDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdFlavorDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4626,6 +4932,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CuppingTemplateScalarFieldEnum | CuppingTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdFlavorDescriptors
+   */
+  export type User$createdFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    where?: FlavorDescriptorWhereInput
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    cursor?: FlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
   }
 
   /**
@@ -10894,6 +11224,8 @@ export namespace Prisma {
     waterTemp: number | null
     brewRatio: string | null
     steepTime: number | null
+    aiSummary: string | null
+    aiGeneratedAt: Date | null
     addedAt: Date | null
   }
 
@@ -10908,6 +11240,8 @@ export namespace Prisma {
     waterTemp: number | null
     brewRatio: string | null
     steepTime: number | null
+    aiSummary: string | null
+    aiGeneratedAt: Date | null
     addedAt: Date | null
   }
 
@@ -10922,6 +11256,8 @@ export namespace Prisma {
     waterTemp: number
     brewRatio: number
     steepTime: number
+    aiSummary: number
+    aiGeneratedAt: number
     addedAt: number
     _all: number
   }
@@ -10950,6 +11286,8 @@ export namespace Prisma {
     waterTemp?: true
     brewRatio?: true
     steepTime?: true
+    aiSummary?: true
+    aiGeneratedAt?: true
     addedAt?: true
   }
 
@@ -10964,6 +11302,8 @@ export namespace Prisma {
     waterTemp?: true
     brewRatio?: true
     steepTime?: true
+    aiSummary?: true
+    aiGeneratedAt?: true
     addedAt?: true
   }
 
@@ -10978,6 +11318,8 @@ export namespace Prisma {
     waterTemp?: true
     brewRatio?: true
     steepTime?: true
+    aiSummary?: true
+    aiGeneratedAt?: true
     addedAt?: true
     _all?: true
   }
@@ -11079,6 +11421,8 @@ export namespace Prisma {
     waterTemp: number | null
     brewRatio: string | null
     steepTime: number | null
+    aiSummary: string | null
+    aiGeneratedAt: Date | null
     addedAt: Date
     _count: SessionSampleCountAggregateOutputType | null
     _avg: SessionSampleAvgAggregateOutputType | null
@@ -11112,6 +11456,8 @@ export namespace Prisma {
     waterTemp?: boolean
     brewRatio?: boolean
     steepTime?: boolean
+    aiSummary?: boolean
+    aiGeneratedAt?: boolean
     addedAt?: boolean
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
@@ -11130,6 +11476,8 @@ export namespace Prisma {
     waterTemp?: boolean
     brewRatio?: boolean
     steepTime?: boolean
+    aiSummary?: boolean
+    aiGeneratedAt?: boolean
     addedAt?: boolean
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
@@ -11146,6 +11494,8 @@ export namespace Prisma {
     waterTemp?: boolean
     brewRatio?: boolean
     steepTime?: boolean
+    aiSummary?: boolean
+    aiGeneratedAt?: boolean
     addedAt?: boolean
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
@@ -11162,10 +11512,12 @@ export namespace Prisma {
     waterTemp?: boolean
     brewRatio?: boolean
     steepTime?: boolean
+    aiSummary?: boolean
+    aiGeneratedAt?: boolean
     addedAt?: boolean
   }
 
-  export type SessionSampleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "sampleId" | "position" | "isBlind" | "blindCode" | "grindSize" | "waterTemp" | "brewRatio" | "steepTime" | "addedAt", ExtArgs["result"]["sessionSample"]>
+  export type SessionSampleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "sampleId" | "position" | "isBlind" | "blindCode" | "grindSize" | "waterTemp" | "brewRatio" | "steepTime" | "aiSummary" | "aiGeneratedAt" | "addedAt", ExtArgs["result"]["sessionSample"]>
   export type SessionSampleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
@@ -11199,6 +11551,8 @@ export namespace Prisma {
       waterTemp: number | null
       brewRatio: string | null
       steepTime: number | null
+      aiSummary: string | null
+      aiGeneratedAt: Date | null
       addedAt: Date
     }, ExtArgs["result"]["sessionSample"]>
     composites: {}
@@ -11636,6 +11990,8 @@ export namespace Prisma {
     readonly waterTemp: FieldRef<"SessionSample", 'Float'>
     readonly brewRatio: FieldRef<"SessionSample", 'String'>
     readonly steepTime: FieldRef<"SessionSample", 'Int'>
+    readonly aiSummary: FieldRef<"SessionSample", 'String'>
+    readonly aiGeneratedAt: FieldRef<"SessionSample", 'DateTime'>
     readonly addedAt: FieldRef<"SessionSample", 'DateTime'>
   }
     
@@ -12497,6 +12853,8 @@ export namespace Prisma {
     sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    flavorDescriptors?: boolean | Score$flavorDescriptorsArgs<ExtArgs>
+    _count?: boolean | ScoreCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["score"]>
 
   export type ScoreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12606,6 +12964,8 @@ export namespace Prisma {
     sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    flavorDescriptors?: boolean | Score$flavorDescriptorsArgs<ExtArgs>
+    _count?: boolean | ScoreCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ScoreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
@@ -12627,6 +12987,7 @@ export namespace Prisma {
       sessionSample: Prisma.$SessionSamplePayload<ExtArgs>
       sample: Prisma.$SamplePayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
+      flavorDescriptors: Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13055,6 +13416,7 @@ export namespace Prisma {
     sessionSample<T extends SessionSampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SessionSampleDefaultArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    flavorDescriptors<T extends Score$flavorDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, Score$flavorDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13508,6 +13870,30 @@ export namespace Prisma {
   }
 
   /**
+   * Score.flavorDescriptors
+   */
+  export type Score$flavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    where?: ScoreFlavorDescriptorWhereInput
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
    * Score without action
    */
   export type ScoreDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13523,6 +13909,2292 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FlavorDescriptor
+   */
+
+  export type AggregateFlavorDescriptor = {
+    _count: FlavorDescriptorCountAggregateOutputType | null
+    _min: FlavorDescriptorMinAggregateOutputType | null
+    _max: FlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  export type FlavorDescriptorMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    category: $Enums.FlavorCategory | null
+    description: string | null
+    isDefault: boolean | null
+    organizationId: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FlavorDescriptorMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    category: $Enums.FlavorCategory | null
+    description: string | null
+    isDefault: boolean | null
+    organizationId: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FlavorDescriptorCountAggregateOutputType = {
+    id: number
+    name: number
+    category: number
+    description: number
+    isDefault: number
+    organizationId: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FlavorDescriptorMinAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    isDefault?: true
+    organizationId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FlavorDescriptorMaxAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    isDefault?: true
+    organizationId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FlavorDescriptorCountAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    isDefault?: true
+    organizationId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FlavorDescriptorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlavorDescriptor to aggregate.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FlavorDescriptors
+    **/
+    _count?: true | FlavorDescriptorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FlavorDescriptorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FlavorDescriptorMaxAggregateInputType
+  }
+
+  export type GetFlavorDescriptorAggregateType<T extends FlavorDescriptorAggregateArgs> = {
+        [P in keyof T & keyof AggregateFlavorDescriptor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFlavorDescriptor[P]>
+      : GetScalarType<T[P], AggregateFlavorDescriptor[P]>
+  }
+
+
+
+
+  export type FlavorDescriptorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlavorDescriptorWhereInput
+    orderBy?: FlavorDescriptorOrderByWithAggregationInput | FlavorDescriptorOrderByWithAggregationInput[]
+    by: FlavorDescriptorScalarFieldEnum[] | FlavorDescriptorScalarFieldEnum
+    having?: FlavorDescriptorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FlavorDescriptorCountAggregateInputType | true
+    _min?: FlavorDescriptorMinAggregateInputType
+    _max?: FlavorDescriptorMaxAggregateInputType
+  }
+
+  export type FlavorDescriptorGroupByOutputType = {
+    id: string
+    name: string
+    category: $Enums.FlavorCategory
+    description: string | null
+    isDefault: boolean
+    organizationId: string | null
+    createdBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FlavorDescriptorCountAggregateOutputType | null
+    _min: FlavorDescriptorMinAggregateOutputType | null
+    _max: FlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  type GetFlavorDescriptorGroupByPayload<T extends FlavorDescriptorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FlavorDescriptorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FlavorDescriptorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FlavorDescriptorGroupByOutputType[P]>
+            : GetScalarType<T[P], FlavorDescriptorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FlavorDescriptorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+    scoreDescriptors?: boolean | FlavorDescriptor$scoreDescriptorsArgs<ExtArgs>
+    _count?: boolean | FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flavorDescriptor"]>
+
+  export type FlavorDescriptorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+  }, ExtArgs["result"]["flavorDescriptor"]>
+
+  export type FlavorDescriptorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+  }, ExtArgs["result"]["flavorDescriptor"]>
+
+  export type FlavorDescriptorSelectScalar = {
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FlavorDescriptorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "description" | "isDefault" | "organizationId" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["flavorDescriptor"]>
+  export type FlavorDescriptorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+    scoreDescriptors?: boolean | FlavorDescriptor$scoreDescriptorsArgs<ExtArgs>
+    _count?: boolean | FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FlavorDescriptorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+  }
+  export type FlavorDescriptorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+  }
+
+  export type $FlavorDescriptorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FlavorDescriptor"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs> | null
+      creator: Prisma.$UserPayload<ExtArgs> | null
+      scoreDescriptors: Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      category: $Enums.FlavorCategory
+      description: string | null
+      isDefault: boolean
+      organizationId: string | null
+      createdBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["flavorDescriptor"]>
+    composites: {}
+  }
+
+  type FlavorDescriptorGetPayload<S extends boolean | null | undefined | FlavorDescriptorDefaultArgs> = $Result.GetResult<Prisma.$FlavorDescriptorPayload, S>
+
+  type FlavorDescriptorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FlavorDescriptorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FlavorDescriptorCountAggregateInputType | true
+    }
+
+  export interface FlavorDescriptorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FlavorDescriptor'], meta: { name: 'FlavorDescriptor' } }
+    /**
+     * Find zero or one FlavorDescriptor that matches the filter.
+     * @param {FlavorDescriptorFindUniqueArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FlavorDescriptorFindUniqueArgs>(args: SelectSubset<T, FlavorDescriptorFindUniqueArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FlavorDescriptor that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FlavorDescriptorFindUniqueOrThrowArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FlavorDescriptorFindUniqueOrThrowArgs>(args: SelectSubset<T, FlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlavorDescriptor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorFindFirstArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FlavorDescriptorFindFirstArgs>(args?: SelectSubset<T, FlavorDescriptorFindFirstArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FlavorDescriptor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorFindFirstOrThrowArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FlavorDescriptorFindFirstOrThrowArgs>(args?: SelectSubset<T, FlavorDescriptorFindFirstOrThrowArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FlavorDescriptors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FlavorDescriptors
+     * const flavorDescriptors = await prisma.flavorDescriptor.findMany()
+     * 
+     * // Get first 10 FlavorDescriptors
+     * const flavorDescriptors = await prisma.flavorDescriptor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const flavorDescriptorWithIdOnly = await prisma.flavorDescriptor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FlavorDescriptorFindManyArgs>(args?: SelectSubset<T, FlavorDescriptorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FlavorDescriptor.
+     * @param {FlavorDescriptorCreateArgs} args - Arguments to create a FlavorDescriptor.
+     * @example
+     * // Create one FlavorDescriptor
+     * const FlavorDescriptor = await prisma.flavorDescriptor.create({
+     *   data: {
+     *     // ... data to create a FlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlavorDescriptorCreateArgs>(args: SelectSubset<T, FlavorDescriptorCreateArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FlavorDescriptors.
+     * @param {FlavorDescriptorCreateManyArgs} args - Arguments to create many FlavorDescriptors.
+     * @example
+     * // Create many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlavorDescriptorCreateManyArgs>(args?: SelectSubset<T, FlavorDescriptorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlavorDescriptors and returns the data saved in the database.
+     * @param {FlavorDescriptorCreateManyAndReturnArgs} args - Arguments to create many FlavorDescriptors.
+     * @example
+     * // Create many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlavorDescriptors and only return the `id`
+     * const flavorDescriptorWithIdOnly = await prisma.flavorDescriptor.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlavorDescriptorCreateManyAndReturnArgs>(args?: SelectSubset<T, FlavorDescriptorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FlavorDescriptor.
+     * @param {FlavorDescriptorDeleteArgs} args - Arguments to delete one FlavorDescriptor.
+     * @example
+     * // Delete one FlavorDescriptor
+     * const FlavorDescriptor = await prisma.flavorDescriptor.delete({
+     *   where: {
+     *     // ... filter to delete one FlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FlavorDescriptorDeleteArgs>(args: SelectSubset<T, FlavorDescriptorDeleteArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FlavorDescriptor.
+     * @param {FlavorDescriptorUpdateArgs} args - Arguments to update one FlavorDescriptor.
+     * @example
+     * // Update one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FlavorDescriptorUpdateArgs>(args: SelectSubset<T, FlavorDescriptorUpdateArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FlavorDescriptors.
+     * @param {FlavorDescriptorDeleteManyArgs} args - Arguments to filter FlavorDescriptors to delete.
+     * @example
+     * // Delete a few FlavorDescriptors
+     * const { count } = await prisma.flavorDescriptor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FlavorDescriptorDeleteManyArgs>(args?: SelectSubset<T, FlavorDescriptorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FlavorDescriptorUpdateManyArgs>(args: SelectSubset<T, FlavorDescriptorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlavorDescriptors and returns the data updated in the database.
+     * @param {FlavorDescriptorUpdateManyAndReturnArgs} args - Arguments to update many FlavorDescriptors.
+     * @example
+     * // Update many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FlavorDescriptors and only return the `id`
+     * const flavorDescriptorWithIdOnly = await prisma.flavorDescriptor.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FlavorDescriptorUpdateManyAndReturnArgs>(args: SelectSubset<T, FlavorDescriptorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FlavorDescriptor.
+     * @param {FlavorDescriptorUpsertArgs} args - Arguments to update or create a FlavorDescriptor.
+     * @example
+     * // Update or create a FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.upsert({
+     *   create: {
+     *     // ... data to create a FlavorDescriptor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlavorDescriptor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlavorDescriptorUpsertArgs>(args: SelectSubset<T, FlavorDescriptorUpsertArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorCountArgs} args - Arguments to filter FlavorDescriptors to count.
+     * @example
+     * // Count the number of FlavorDescriptors
+     * const count = await prisma.flavorDescriptor.count({
+     *   where: {
+     *     // ... the filter for the FlavorDescriptors we want to count
+     *   }
+     * })
+    **/
+    count<T extends FlavorDescriptorCountArgs>(
+      args?: Subset<T, FlavorDescriptorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FlavorDescriptorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FlavorDescriptorAggregateArgs>(args: Subset<T, FlavorDescriptorAggregateArgs>): Prisma.PrismaPromise<GetFlavorDescriptorAggregateType<T>>
+
+    /**
+     * Group by FlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FlavorDescriptorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FlavorDescriptorGroupByArgs['orderBy'] }
+        : { orderBy?: FlavorDescriptorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FlavorDescriptorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFlavorDescriptorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FlavorDescriptor model
+   */
+  readonly fields: FlavorDescriptorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FlavorDescriptor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FlavorDescriptorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends FlavorDescriptor$organizationArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptor$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    creator<T extends FlavorDescriptor$creatorArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptor$creatorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    scoreDescriptors<T extends FlavorDescriptor$scoreDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptor$scoreDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FlavorDescriptor model
+   */
+  interface FlavorDescriptorFieldRefs {
+    readonly id: FieldRef<"FlavorDescriptor", 'String'>
+    readonly name: FieldRef<"FlavorDescriptor", 'String'>
+    readonly category: FieldRef<"FlavorDescriptor", 'FlavorCategory'>
+    readonly description: FieldRef<"FlavorDescriptor", 'String'>
+    readonly isDefault: FieldRef<"FlavorDescriptor", 'Boolean'>
+    readonly organizationId: FieldRef<"FlavorDescriptor", 'String'>
+    readonly createdBy: FieldRef<"FlavorDescriptor", 'String'>
+    readonly createdAt: FieldRef<"FlavorDescriptor", 'DateTime'>
+    readonly updatedAt: FieldRef<"FlavorDescriptor", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FlavorDescriptor findUnique
+   */
+  export type FlavorDescriptorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor findUniqueOrThrow
+   */
+  export type FlavorDescriptorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor findFirst
+   */
+  export type FlavorDescriptorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlavorDescriptors.
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlavorDescriptors.
+     */
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor findFirstOrThrow
+   */
+  export type FlavorDescriptorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlavorDescriptors.
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlavorDescriptors.
+     */
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor findMany
+   */
+  export type FlavorDescriptorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptors to fetch.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FlavorDescriptors.
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor create
+   */
+  export type FlavorDescriptorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlavorDescriptor.
+     */
+    data: XOR<FlavorDescriptorCreateInput, FlavorDescriptorUncheckedCreateInput>
+  }
+
+  /**
+   * FlavorDescriptor createMany
+   */
+  export type FlavorDescriptorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlavorDescriptors.
+     */
+    data: FlavorDescriptorCreateManyInput | FlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlavorDescriptor createManyAndReturn
+   */
+  export type FlavorDescriptorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * The data used to create many FlavorDescriptors.
+     */
+    data: FlavorDescriptorCreateManyInput | FlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlavorDescriptor update
+   */
+  export type FlavorDescriptorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FlavorDescriptor.
+     */
+    data: XOR<FlavorDescriptorUpdateInput, FlavorDescriptorUncheckedUpdateInput>
+    /**
+     * Choose, which FlavorDescriptor to update.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor updateMany
+   */
+  export type FlavorDescriptorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FlavorDescriptors.
+     */
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyInput>
+    /**
+     * Filter which FlavorDescriptors to update
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * Limit how many FlavorDescriptors to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlavorDescriptor updateManyAndReturn
+   */
+  export type FlavorDescriptorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * The data used to update FlavorDescriptors.
+     */
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyInput>
+    /**
+     * Filter which FlavorDescriptors to update
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * Limit how many FlavorDescriptors to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlavorDescriptor upsert
+   */
+  export type FlavorDescriptorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlavorDescriptor to update in case it exists.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+    /**
+     * In case the FlavorDescriptor found by the `where` argument doesn't exist, create a new FlavorDescriptor with this data.
+     */
+    create: XOR<FlavorDescriptorCreateInput, FlavorDescriptorUncheckedCreateInput>
+    /**
+     * In case the FlavorDescriptor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlavorDescriptorUpdateInput, FlavorDescriptorUncheckedUpdateInput>
+  }
+
+  /**
+   * FlavorDescriptor delete
+   */
+  export type FlavorDescriptorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter which FlavorDescriptor to delete.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor deleteMany
+   */
+  export type FlavorDescriptorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlavorDescriptors to delete
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * Limit how many FlavorDescriptors to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FlavorDescriptor.organization
+   */
+  export type FlavorDescriptor$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    where?: OrganizationWhereInput
+  }
+
+  /**
+   * FlavorDescriptor.creator
+   */
+  export type FlavorDescriptor$creatorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FlavorDescriptor.scoreDescriptors
+   */
+  export type FlavorDescriptor$scoreDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    where?: ScoreFlavorDescriptorWhereInput
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor without action
+   */
+  export type FlavorDescriptorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlavorDescriptor
+     */
+    omit?: FlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ScoreFlavorDescriptor
+   */
+
+  export type AggregateScoreFlavorDescriptor = {
+    _count: ScoreFlavorDescriptorCountAggregateOutputType | null
+    _avg: ScoreFlavorDescriptorAvgAggregateOutputType | null
+    _sum: ScoreFlavorDescriptorSumAggregateOutputType | null
+    _min: ScoreFlavorDescriptorMinAggregateOutputType | null
+    _max: ScoreFlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  export type ScoreFlavorDescriptorAvgAggregateOutputType = {
+    intensity: number | null
+  }
+
+  export type ScoreFlavorDescriptorSumAggregateOutputType = {
+    intensity: number | null
+  }
+
+  export type ScoreFlavorDescriptorMinAggregateOutputType = {
+    id: string | null
+    scoreId: string | null
+    flavorDescriptorId: string | null
+    intensity: number | null
+    createdAt: Date | null
+  }
+
+  export type ScoreFlavorDescriptorMaxAggregateOutputType = {
+    id: string | null
+    scoreId: string | null
+    flavorDescriptorId: string | null
+    intensity: number | null
+    createdAt: Date | null
+  }
+
+  export type ScoreFlavorDescriptorCountAggregateOutputType = {
+    id: number
+    scoreId: number
+    flavorDescriptorId: number
+    intensity: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ScoreFlavorDescriptorAvgAggregateInputType = {
+    intensity?: true
+  }
+
+  export type ScoreFlavorDescriptorSumAggregateInputType = {
+    intensity?: true
+  }
+
+  export type ScoreFlavorDescriptorMinAggregateInputType = {
+    id?: true
+    scoreId?: true
+    flavorDescriptorId?: true
+    intensity?: true
+    createdAt?: true
+  }
+
+  export type ScoreFlavorDescriptorMaxAggregateInputType = {
+    id?: true
+    scoreId?: true
+    flavorDescriptorId?: true
+    intensity?: true
+    createdAt?: true
+  }
+
+  export type ScoreFlavorDescriptorCountAggregateInputType = {
+    id?: true
+    scoreId?: true
+    flavorDescriptorId?: true
+    intensity?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ScoreFlavorDescriptorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScoreFlavorDescriptor to aggregate.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ScoreFlavorDescriptors
+    **/
+    _count?: true | ScoreFlavorDescriptorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ScoreFlavorDescriptorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScoreFlavorDescriptorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScoreFlavorDescriptorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScoreFlavorDescriptorMaxAggregateInputType
+  }
+
+  export type GetScoreFlavorDescriptorAggregateType<T extends ScoreFlavorDescriptorAggregateArgs> = {
+        [P in keyof T & keyof AggregateScoreFlavorDescriptor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScoreFlavorDescriptor[P]>
+      : GetScalarType<T[P], AggregateScoreFlavorDescriptor[P]>
+  }
+
+
+
+
+  export type ScoreFlavorDescriptorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreFlavorDescriptorWhereInput
+    orderBy?: ScoreFlavorDescriptorOrderByWithAggregationInput | ScoreFlavorDescriptorOrderByWithAggregationInput[]
+    by: ScoreFlavorDescriptorScalarFieldEnum[] | ScoreFlavorDescriptorScalarFieldEnum
+    having?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScoreFlavorDescriptorCountAggregateInputType | true
+    _avg?: ScoreFlavorDescriptorAvgAggregateInputType
+    _sum?: ScoreFlavorDescriptorSumAggregateInputType
+    _min?: ScoreFlavorDescriptorMinAggregateInputType
+    _max?: ScoreFlavorDescriptorMaxAggregateInputType
+  }
+
+  export type ScoreFlavorDescriptorGroupByOutputType = {
+    id: string
+    scoreId: string
+    flavorDescriptorId: string
+    intensity: number
+    createdAt: Date
+    _count: ScoreFlavorDescriptorCountAggregateOutputType | null
+    _avg: ScoreFlavorDescriptorAvgAggregateOutputType | null
+    _sum: ScoreFlavorDescriptorSumAggregateOutputType | null
+    _min: ScoreFlavorDescriptorMinAggregateOutputType | null
+    _max: ScoreFlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  type GetScoreFlavorDescriptorGroupByPayload<T extends ScoreFlavorDescriptorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScoreFlavorDescriptorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScoreFlavorDescriptorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScoreFlavorDescriptorGroupByOutputType[P]>
+            : GetScalarType<T[P], ScoreFlavorDescriptorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScoreFlavorDescriptorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+
+  export type ScoreFlavorDescriptorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+
+  export type ScoreFlavorDescriptorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+
+  export type ScoreFlavorDescriptorSelectScalar = {
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+  }
+
+  export type ScoreFlavorDescriptorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "scoreId" | "flavorDescriptorId" | "intensity" | "createdAt", ExtArgs["result"]["scoreFlavorDescriptor"]>
+  export type ScoreFlavorDescriptorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+  }
+  export type ScoreFlavorDescriptorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+  }
+  export type ScoreFlavorDescriptorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+  }
+
+  export type $ScoreFlavorDescriptorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ScoreFlavorDescriptor"
+    objects: {
+      score: Prisma.$ScorePayload<ExtArgs>
+      flavorDescriptor: Prisma.$FlavorDescriptorPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      scoreId: string
+      flavorDescriptorId: string
+      intensity: number
+      createdAt: Date
+    }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+    composites: {}
+  }
+
+  type ScoreFlavorDescriptorGetPayload<S extends boolean | null | undefined | ScoreFlavorDescriptorDefaultArgs> = $Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload, S>
+
+  type ScoreFlavorDescriptorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ScoreFlavorDescriptorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ScoreFlavorDescriptorCountAggregateInputType | true
+    }
+
+  export interface ScoreFlavorDescriptorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScoreFlavorDescriptor'], meta: { name: 'ScoreFlavorDescriptor' } }
+    /**
+     * Find zero or one ScoreFlavorDescriptor that matches the filter.
+     * @param {ScoreFlavorDescriptorFindUniqueArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScoreFlavorDescriptorFindUniqueArgs>(args: SelectSubset<T, ScoreFlavorDescriptorFindUniqueArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ScoreFlavorDescriptor that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScoreFlavorDescriptorFindUniqueOrThrowArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScoreFlavorDescriptorFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreFlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScoreFlavorDescriptor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorFindFirstArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScoreFlavorDescriptorFindFirstArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorFindFirstArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScoreFlavorDescriptor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorFindFirstOrThrowArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScoreFlavorDescriptorFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ScoreFlavorDescriptors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ScoreFlavorDescriptors
+     * const scoreFlavorDescriptors = await prisma.scoreFlavorDescriptor.findMany()
+     * 
+     * // Get first 10 ScoreFlavorDescriptors
+     * const scoreFlavorDescriptors = await prisma.scoreFlavorDescriptor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const scoreFlavorDescriptorWithIdOnly = await prisma.scoreFlavorDescriptor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ScoreFlavorDescriptorFindManyArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorCreateArgs} args - Arguments to create a ScoreFlavorDescriptor.
+     * @example
+     * // Create one ScoreFlavorDescriptor
+     * const ScoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.create({
+     *   data: {
+     *     // ... data to create a ScoreFlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScoreFlavorDescriptorCreateArgs>(args: SelectSubset<T, ScoreFlavorDescriptorCreateArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ScoreFlavorDescriptors.
+     * @param {ScoreFlavorDescriptorCreateManyArgs} args - Arguments to create many ScoreFlavorDescriptors.
+     * @example
+     * // Create many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScoreFlavorDescriptorCreateManyArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ScoreFlavorDescriptors and returns the data saved in the database.
+     * @param {ScoreFlavorDescriptorCreateManyAndReturnArgs} args - Arguments to create many ScoreFlavorDescriptors.
+     * @example
+     * // Create many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ScoreFlavorDescriptors and only return the `id`
+     * const scoreFlavorDescriptorWithIdOnly = await prisma.scoreFlavorDescriptor.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScoreFlavorDescriptorCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorDeleteArgs} args - Arguments to delete one ScoreFlavorDescriptor.
+     * @example
+     * // Delete one ScoreFlavorDescriptor
+     * const ScoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.delete({
+     *   where: {
+     *     // ... filter to delete one ScoreFlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScoreFlavorDescriptorDeleteArgs>(args: SelectSubset<T, ScoreFlavorDescriptorDeleteArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorUpdateArgs} args - Arguments to update one ScoreFlavorDescriptor.
+     * @example
+     * // Update one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScoreFlavorDescriptorUpdateArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpdateArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ScoreFlavorDescriptors.
+     * @param {ScoreFlavorDescriptorDeleteManyArgs} args - Arguments to filter ScoreFlavorDescriptors to delete.
+     * @example
+     * // Delete a few ScoreFlavorDescriptors
+     * const { count } = await prisma.scoreFlavorDescriptor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScoreFlavorDescriptorDeleteManyArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScoreFlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScoreFlavorDescriptorUpdateManyArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScoreFlavorDescriptors and returns the data updated in the database.
+     * @param {ScoreFlavorDescriptorUpdateManyAndReturnArgs} args - Arguments to update many ScoreFlavorDescriptors.
+     * @example
+     * // Update many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ScoreFlavorDescriptors and only return the `id`
+     * const scoreFlavorDescriptorWithIdOnly = await prisma.scoreFlavorDescriptor.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ScoreFlavorDescriptorUpdateManyAndReturnArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorUpsertArgs} args - Arguments to update or create a ScoreFlavorDescriptor.
+     * @example
+     * // Update or create a ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.upsert({
+     *   create: {
+     *     // ... data to create a ScoreFlavorDescriptor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ScoreFlavorDescriptor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScoreFlavorDescriptorUpsertArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpsertArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ScoreFlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorCountArgs} args - Arguments to filter ScoreFlavorDescriptors to count.
+     * @example
+     * // Count the number of ScoreFlavorDescriptors
+     * const count = await prisma.scoreFlavorDescriptor.count({
+     *   where: {
+     *     // ... the filter for the ScoreFlavorDescriptors we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScoreFlavorDescriptorCountArgs>(
+      args?: Subset<T, ScoreFlavorDescriptorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScoreFlavorDescriptorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ScoreFlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScoreFlavorDescriptorAggregateArgs>(args: Subset<T, ScoreFlavorDescriptorAggregateArgs>): Prisma.PrismaPromise<GetScoreFlavorDescriptorAggregateType<T>>
+
+    /**
+     * Group by ScoreFlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScoreFlavorDescriptorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScoreFlavorDescriptorGroupByArgs['orderBy'] }
+        : { orderBy?: ScoreFlavorDescriptorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScoreFlavorDescriptorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScoreFlavorDescriptorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ScoreFlavorDescriptor model
+   */
+  readonly fields: ScoreFlavorDescriptorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ScoreFlavorDescriptor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScoreFlavorDescriptorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    score<T extends ScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ScoreDefaultArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    flavorDescriptor<T extends FlavorDescriptorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptorDefaultArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ScoreFlavorDescriptor model
+   */
+  interface ScoreFlavorDescriptorFieldRefs {
+    readonly id: FieldRef<"ScoreFlavorDescriptor", 'String'>
+    readonly scoreId: FieldRef<"ScoreFlavorDescriptor", 'String'>
+    readonly flavorDescriptorId: FieldRef<"ScoreFlavorDescriptor", 'String'>
+    readonly intensity: FieldRef<"ScoreFlavorDescriptor", 'Int'>
+    readonly createdAt: FieldRef<"ScoreFlavorDescriptor", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ScoreFlavorDescriptor findUnique
+   */
+  export type ScoreFlavorDescriptorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor findUniqueOrThrow
+   */
+  export type ScoreFlavorDescriptorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor findFirst
+   */
+  export type ScoreFlavorDescriptorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScoreFlavorDescriptors.
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScoreFlavorDescriptors.
+     */
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * ScoreFlavorDescriptor findFirstOrThrow
+   */
+  export type ScoreFlavorDescriptorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScoreFlavorDescriptors.
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScoreFlavorDescriptors.
+     */
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * ScoreFlavorDescriptor findMany
+   */
+  export type ScoreFlavorDescriptorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptors to fetch.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ScoreFlavorDescriptors.
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * ScoreFlavorDescriptor create
+   */
+  export type ScoreFlavorDescriptorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ScoreFlavorDescriptor.
+     */
+    data: XOR<ScoreFlavorDescriptorCreateInput, ScoreFlavorDescriptorUncheckedCreateInput>
+  }
+
+  /**
+   * ScoreFlavorDescriptor createMany
+   */
+  export type ScoreFlavorDescriptorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ScoreFlavorDescriptors.
+     */
+    data: ScoreFlavorDescriptorCreateManyInput | ScoreFlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ScoreFlavorDescriptor createManyAndReturn
+   */
+  export type ScoreFlavorDescriptorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * The data used to create many ScoreFlavorDescriptors.
+     */
+    data: ScoreFlavorDescriptorCreateManyInput | ScoreFlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScoreFlavorDescriptor update
+   */
+  export type ScoreFlavorDescriptorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ScoreFlavorDescriptor.
+     */
+    data: XOR<ScoreFlavorDescriptorUpdateInput, ScoreFlavorDescriptorUncheckedUpdateInput>
+    /**
+     * Choose, which ScoreFlavorDescriptor to update.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor updateMany
+   */
+  export type ScoreFlavorDescriptorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ScoreFlavorDescriptors.
+     */
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyInput>
+    /**
+     * Filter which ScoreFlavorDescriptors to update
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * Limit how many ScoreFlavorDescriptors to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScoreFlavorDescriptor updateManyAndReturn
+   */
+  export type ScoreFlavorDescriptorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * The data used to update ScoreFlavorDescriptors.
+     */
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyInput>
+    /**
+     * Filter which ScoreFlavorDescriptors to update
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * Limit how many ScoreFlavorDescriptors to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScoreFlavorDescriptor upsert
+   */
+  export type ScoreFlavorDescriptorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ScoreFlavorDescriptor to update in case it exists.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * In case the ScoreFlavorDescriptor found by the `where` argument doesn't exist, create a new ScoreFlavorDescriptor with this data.
+     */
+    create: XOR<ScoreFlavorDescriptorCreateInput, ScoreFlavorDescriptorUncheckedCreateInput>
+    /**
+     * In case the ScoreFlavorDescriptor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScoreFlavorDescriptorUpdateInput, ScoreFlavorDescriptorUncheckedUpdateInput>
+  }
+
+  /**
+   * ScoreFlavorDescriptor delete
+   */
+  export type ScoreFlavorDescriptorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter which ScoreFlavorDescriptor to delete.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor deleteMany
+   */
+  export type ScoreFlavorDescriptorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScoreFlavorDescriptors to delete
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * Limit how many ScoreFlavorDescriptors to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScoreFlavorDescriptor without action
+   */
+  export type ScoreFlavorDescriptorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScoreFlavorDescriptor
+     */
+    omit?: ScoreFlavorDescriptorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
   }
 
 
@@ -13700,6 +16372,8 @@ export namespace Prisma {
     waterTemp: 'waterTemp',
     brewRatio: 'brewRatio',
     steepTime: 'steepTime',
+    aiSummary: 'aiSummary',
+    aiGeneratedAt: 'aiGeneratedAt',
     addedAt: 'addedAt'
   };
 
@@ -13738,6 +16412,32 @@ export namespace Prisma {
   };
 
   export type ScoreScalarFieldEnum = (typeof ScoreScalarFieldEnum)[keyof typeof ScoreScalarFieldEnum]
+
+
+  export const FlavorDescriptorScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    category: 'category',
+    description: 'description',
+    isDefault: 'isDefault',
+    organizationId: 'organizationId',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FlavorDescriptorScalarFieldEnum = (typeof FlavorDescriptorScalarFieldEnum)[keyof typeof FlavorDescriptorScalarFieldEnum]
+
+
+  export const ScoreFlavorDescriptorScalarFieldEnum: {
+    id: 'id',
+    scoreId: 'scoreId',
+    flavorDescriptorId: 'flavorDescriptorId',
+    intensity: 'intensity',
+    createdAt: 'createdAt'
+  };
+
+  export type ScoreFlavorDescriptorScalarFieldEnum = (typeof ScoreFlavorDescriptorScalarFieldEnum)[keyof typeof ScoreFlavorDescriptorScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -13986,6 +16686,20 @@ export namespace Prisma {
    */
   export type ListEnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole[]'>
     
+
+
+  /**
+   * Reference to a field of type 'FlavorCategory'
+   */
+  export type EnumFlavorCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlavorCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlavorCategory[]'
+   */
+  export type ListEnumFlavorCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlavorCategory[]'>
+    
   /**
    * Deep Input Types
    */
@@ -14016,6 +16730,7 @@ export namespace Prisma {
     samples?: SampleListRelationFilter
     templates?: CuppingTemplateListRelationFilter
     invitations?: InvitationListRelationFilter
+    flavorDescriptors?: FlavorDescriptorListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -14040,6 +16755,7 @@ export namespace Prisma {
     samples?: SampleOrderByRelationAggregateInput
     templates?: CuppingTemplateOrderByRelationAggregateInput
     invitations?: InvitationOrderByRelationAggregateInput
+    flavorDescriptors?: FlavorDescriptorOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -14067,6 +16783,7 @@ export namespace Prisma {
     samples?: SampleListRelationFilter
     templates?: CuppingTemplateListRelationFilter
     invitations?: InvitationListRelationFilter
+    flavorDescriptors?: FlavorDescriptorListRelationFilter
   }, "id" | "slug" | "domain" | "subdomain" | "stripeCustomerId">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -14139,6 +16856,7 @@ export namespace Prisma {
     scores?: ScoreListRelationFilter
     sessionParticipants?: SessionParticipantListRelationFilter
     createdTemplates?: CuppingTemplateListRelationFilter
+    createdFlavorDescriptors?: FlavorDescriptorListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14164,6 +16882,7 @@ export namespace Prisma {
     scores?: ScoreOrderByRelationAggregateInput
     sessionParticipants?: SessionParticipantOrderByRelationAggregateInput
     createdTemplates?: CuppingTemplateOrderByRelationAggregateInput
+    createdFlavorDescriptors?: FlavorDescriptorOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14192,6 +16911,7 @@ export namespace Prisma {
     scores?: ScoreListRelationFilter
     sessionParticipants?: SessionParticipantListRelationFilter
     createdTemplates?: CuppingTemplateListRelationFilter
+    createdFlavorDescriptors?: FlavorDescriptorListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14810,6 +17530,8 @@ export namespace Prisma {
     waterTemp?: FloatNullableFilter<"SessionSample"> | number | null
     brewRatio?: StringNullableFilter<"SessionSample"> | string | null
     steepTime?: IntNullableFilter<"SessionSample"> | number | null
+    aiSummary?: StringNullableFilter<"SessionSample"> | string | null
+    aiGeneratedAt?: DateTimeNullableFilter<"SessionSample"> | Date | string | null
     addedAt?: DateTimeFilter<"SessionSample"> | Date | string
     session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
     sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
@@ -14827,6 +17549,8 @@ export namespace Prisma {
     waterTemp?: SortOrderInput | SortOrder
     brewRatio?: SortOrderInput | SortOrder
     steepTime?: SortOrderInput | SortOrder
+    aiSummary?: SortOrderInput | SortOrder
+    aiGeneratedAt?: SortOrderInput | SortOrder
     addedAt?: SortOrder
     session?: CuppingSessionOrderByWithRelationInput
     sample?: SampleOrderByWithRelationInput
@@ -14849,6 +17573,8 @@ export namespace Prisma {
     waterTemp?: FloatNullableFilter<"SessionSample"> | number | null
     brewRatio?: StringNullableFilter<"SessionSample"> | string | null
     steepTime?: IntNullableFilter<"SessionSample"> | number | null
+    aiSummary?: StringNullableFilter<"SessionSample"> | string | null
+    aiGeneratedAt?: DateTimeNullableFilter<"SessionSample"> | Date | string | null
     addedAt?: DateTimeFilter<"SessionSample"> | Date | string
     session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
     sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
@@ -14866,6 +17592,8 @@ export namespace Prisma {
     waterTemp?: SortOrderInput | SortOrder
     brewRatio?: SortOrderInput | SortOrder
     steepTime?: SortOrderInput | SortOrder
+    aiSummary?: SortOrderInput | SortOrder
+    aiGeneratedAt?: SortOrderInput | SortOrder
     addedAt?: SortOrder
     _count?: SessionSampleCountOrderByAggregateInput
     _avg?: SessionSampleAvgOrderByAggregateInput
@@ -14888,6 +17616,8 @@ export namespace Prisma {
     waterTemp?: FloatNullableWithAggregatesFilter<"SessionSample"> | number | null
     brewRatio?: StringNullableWithAggregatesFilter<"SessionSample"> | string | null
     steepTime?: IntNullableWithAggregatesFilter<"SessionSample"> | number | null
+    aiSummary?: StringNullableWithAggregatesFilter<"SessionSample"> | string | null
+    aiGeneratedAt?: DateTimeNullableWithAggregatesFilter<"SessionSample"> | Date | string | null
     addedAt?: DateTimeWithAggregatesFilter<"SessionSample"> | Date | string
   }
 
@@ -14927,6 +17657,7 @@ export namespace Prisma {
     sessionSample?: XOR<SessionSampleScalarRelationFilter, SessionSampleWhereInput>
     sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    flavorDescriptors?: ScoreFlavorDescriptorListRelationFilter
   }
 
   export type ScoreOrderByWithRelationInput = {
@@ -14962,6 +17693,7 @@ export namespace Prisma {
     sessionSample?: SessionSampleOrderByWithRelationInput
     sample?: SampleOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    flavorDescriptors?: ScoreFlavorDescriptorOrderByRelationAggregateInput
   }
 
   export type ScoreWhereUniqueInput = Prisma.AtLeast<{
@@ -15001,6 +17733,7 @@ export namespace Prisma {
     sessionSample?: XOR<SessionSampleScalarRelationFilter, SessionSampleWhereInput>
     sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    flavorDescriptors?: ScoreFlavorDescriptorListRelationFilter
   }, "id" | "sessionId_sampleId_userId">
 
   export type ScoreOrderByWithAggregationInput = {
@@ -15073,6 +17806,149 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Score"> | Date | string
   }
 
+  export type FlavorDescriptorWhereInput = {
+    AND?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    OR?: FlavorDescriptorWhereInput[]
+    NOT?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    id?: StringFilter<"FlavorDescriptor"> | string
+    name?: StringFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
+    creator?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    scoreDescriptors?: ScoreFlavorDescriptorListRelationFilter
+  }
+
+  export type FlavorDescriptorOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    creator?: UserOrderByWithRelationInput
+    scoreDescriptors?: ScoreFlavorDescriptorOrderByRelationAggregateInput
+  }
+
+  export type FlavorDescriptorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name_organizationId?: FlavorDescriptorNameOrganizationIdCompoundUniqueInput
+    AND?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    OR?: FlavorDescriptorWhereInput[]
+    NOT?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    name?: StringFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
+    creator?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    scoreDescriptors?: ScoreFlavorDescriptorListRelationFilter
+  }, "id" | "name_organizationId">
+
+  export type FlavorDescriptorOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FlavorDescriptorCountOrderByAggregateInput
+    _max?: FlavorDescriptorMaxOrderByAggregateInput
+    _min?: FlavorDescriptorMinOrderByAggregateInput
+  }
+
+  export type FlavorDescriptorScalarWhereWithAggregatesInput = {
+    AND?: FlavorDescriptorScalarWhereWithAggregatesInput | FlavorDescriptorScalarWhereWithAggregatesInput[]
+    OR?: FlavorDescriptorScalarWhereWithAggregatesInput[]
+    NOT?: FlavorDescriptorScalarWhereWithAggregatesInput | FlavorDescriptorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FlavorDescriptor"> | string
+    name?: StringWithAggregatesFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryWithAggregatesFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableWithAggregatesFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolWithAggregatesFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableWithAggregatesFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableWithAggregatesFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FlavorDescriptor"> | Date | string
+  }
+
+  export type ScoreFlavorDescriptorWhereInput = {
+    AND?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    OR?: ScoreFlavorDescriptorWhereInput[]
+    NOT?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    id?: StringFilter<"ScoreFlavorDescriptor"> | string
+    scoreId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeFilter<"ScoreFlavorDescriptor"> | Date | string
+    score?: XOR<ScoreScalarRelationFilter, ScoreWhereInput>
+    flavorDescriptor?: XOR<FlavorDescriptorScalarRelationFilter, FlavorDescriptorWhereInput>
+  }
+
+  export type ScoreFlavorDescriptorOrderByWithRelationInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+    score?: ScoreOrderByWithRelationInput
+    flavorDescriptor?: FlavorDescriptorOrderByWithRelationInput
+  }
+
+  export type ScoreFlavorDescriptorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    scoreId_flavorDescriptorId?: ScoreFlavorDescriptorScoreIdFlavorDescriptorIdCompoundUniqueInput
+    AND?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    OR?: ScoreFlavorDescriptorWhereInput[]
+    NOT?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    scoreId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeFilter<"ScoreFlavorDescriptor"> | Date | string
+    score?: XOR<ScoreScalarRelationFilter, ScoreWhereInput>
+    flavorDescriptor?: XOR<FlavorDescriptorScalarRelationFilter, FlavorDescriptorWhereInput>
+  }, "id" | "scoreId_flavorDescriptorId">
+
+  export type ScoreFlavorDescriptorOrderByWithAggregationInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+    _count?: ScoreFlavorDescriptorCountOrderByAggregateInput
+    _avg?: ScoreFlavorDescriptorAvgOrderByAggregateInput
+    _max?: ScoreFlavorDescriptorMaxOrderByAggregateInput
+    _min?: ScoreFlavorDescriptorMinOrderByAggregateInput
+    _sum?: ScoreFlavorDescriptorSumOrderByAggregateInput
+  }
+
+  export type ScoreFlavorDescriptorScalarWhereWithAggregatesInput = {
+    AND?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput | ScoreFlavorDescriptorScalarWhereWithAggregatesInput[]
+    OR?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput[]
+    NOT?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput | ScoreFlavorDescriptorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ScoreFlavorDescriptor"> | string
+    scoreId?: StringWithAggregatesFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringWithAggregatesFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntWithAggregatesFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ScoreFlavorDescriptor"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -15095,6 +17971,7 @@ export namespace Prisma {
     samples?: SampleCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -15119,6 +17996,7 @@ export namespace Prisma {
     samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -15143,6 +18021,7 @@ export namespace Prisma {
     samples?: SampleUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -15167,6 +18046,7 @@ export namespace Prisma {
     samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -15248,6 +18128,7 @@ export namespace Prisma {
     scores?: ScoreCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15272,6 +18153,7 @@ export namespace Prisma {
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUpdateInput = {
@@ -15296,6 +18178,7 @@ export namespace Prisma {
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15320,6 +18203,7 @@ export namespace Prisma {
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -16028,6 +18912,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     session: CuppingSessionCreateNestedOneWithoutSamplesInput
     sample: SampleCreateNestedOneWithoutSessionSamplesInput
@@ -16045,6 +18931,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     scores?: ScoreUncheckedCreateNestedManyWithoutSessionSampleInput
   }
@@ -16058,6 +18946,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
     sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
@@ -16075,6 +18965,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     scores?: ScoreUncheckedUpdateManyWithoutSessionSampleNestedInput
   }
@@ -16090,6 +18982,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
   }
 
@@ -16102,6 +18996,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16116,6 +19012,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16148,6 +19046,7 @@ export namespace Prisma {
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
     sample: SampleCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUncheckedCreateInput = {
@@ -16179,6 +19078,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUpdateInput = {
@@ -16210,6 +19110,7 @@ export namespace Prisma {
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
     sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateInput = {
@@ -16241,6 +19142,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreCreateManyInput = {
@@ -16330,6 +19232,146 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlavorDescriptorCreateInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization?: OrganizationCreateNestedOneWithoutFlavorDescriptorsInput
+    creator?: UserCreateNestedOneWithoutCreatedFlavorDescriptorsInput
+    scoreDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput
+    creator?: UserUpdateOneWithoutCreatedFlavorDescriptorsNestedInput
+    scoreDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorCreateManyInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateInput = {
+    id?: string
+    intensity?: number
+    createdAt?: Date | string
+    score: ScoreCreateNestedOneWithoutFlavorDescriptorsInput
+    flavorDescriptor: FlavorDescriptorCreateNestedOneWithoutScoreDescriptorsInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateInput = {
+    id?: string
+    scoreId: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: ScoreUpdateOneRequiredWithoutFlavorDescriptorsNestedInput
+    flavorDescriptor?: FlavorDescriptorUpdateOneRequiredWithoutScoreDescriptorsNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateManyInput = {
+    id?: string
+    scoreId: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -16451,6 +19493,12 @@ export namespace Prisma {
     none?: InvitationWhereInput
   }
 
+  export type FlavorDescriptorListRelationFilter = {
+    every?: FlavorDescriptorWhereInput
+    some?: FlavorDescriptorWhereInput
+    none?: FlavorDescriptorWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -16473,6 +19521,10 @@ export namespace Prisma {
   }
 
   export type InvitationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlavorDescriptorOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17285,6 +20337,8 @@ export namespace Prisma {
     waterTemp?: SortOrder
     brewRatio?: SortOrder
     steepTime?: SortOrder
+    aiSummary?: SortOrder
+    aiGeneratedAt?: SortOrder
     addedAt?: SortOrder
   }
 
@@ -17305,6 +20359,8 @@ export namespace Prisma {
     waterTemp?: SortOrder
     brewRatio?: SortOrder
     steepTime?: SortOrder
+    aiSummary?: SortOrder
+    aiGeneratedAt?: SortOrder
     addedAt?: SortOrder
   }
 
@@ -17319,6 +20375,8 @@ export namespace Prisma {
     waterTemp?: SortOrder
     brewRatio?: SortOrder
     steepTime?: SortOrder
+    aiSummary?: SortOrder
+    aiGeneratedAt?: SortOrder
     addedAt?: SortOrder
   }
 
@@ -17342,6 +20400,16 @@ export namespace Prisma {
   export type SessionSampleScalarRelationFilter = {
     is?: SessionSampleWhereInput
     isNot?: SessionSampleWhereInput
+  }
+
+  export type ScoreFlavorDescriptorListRelationFilter = {
+    every?: ScoreFlavorDescriptorWhereInput
+    some?: ScoreFlavorDescriptorWhereInput
+    none?: ScoreFlavorDescriptorWhereInput
+  }
+
+  export type ScoreFlavorDescriptorOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ScoreSessionIdSampleIdUserIdCompoundUniqueInput = {
@@ -17485,6 +20553,121 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type EnumFlavorCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryFilter<$PrismaModel> | $Enums.FlavorCategory
+  }
+
+  export type OrganizationNullableScalarRelationFilter = {
+    is?: OrganizationWhereInput | null
+    isNot?: OrganizationWhereInput | null
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type FlavorDescriptorNameOrganizationIdCompoundUniqueInput = {
+    name: string
+    organizationId: string
+  }
+
+  export type FlavorDescriptorCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlavorDescriptorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlavorDescriptorMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumFlavorCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryWithAggregatesFilter<$PrismaModel> | $Enums.FlavorCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+    _max?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+  }
+
+  export type ScoreScalarRelationFilter = {
+    is?: ScoreWhereInput
+    isNot?: ScoreWhereInput
+  }
+
+  export type FlavorDescriptorScalarRelationFilter = {
+    is?: FlavorDescriptorWhereInput
+    isNot?: FlavorDescriptorWhereInput
+  }
+
+  export type ScoreFlavorDescriptorScoreIdFlavorDescriptorIdCompoundUniqueInput = {
+    scoreId: string
+    flavorDescriptorId: string
+  }
+
+  export type ScoreFlavorDescriptorCountOrderByAggregateInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorAvgOrderByAggregateInput = {
+    intensity?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorMinOrderByAggregateInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorSumOrderByAggregateInput = {
+    intensity?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
@@ -17520,6 +20703,13 @@ export namespace Prisma {
     connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
   }
 
+  export type FlavorDescriptorCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
@@ -17553,6 +20743,13 @@ export namespace Prisma {
     connectOrCreate?: InvitationCreateOrConnectWithoutOrganizationInput | InvitationCreateOrConnectWithoutOrganizationInput[]
     createMany?: InvitationCreateManyOrganizationInputEnvelope
     connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -17649,6 +20846,20 @@ export namespace Prisma {
     deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
+  export type FlavorDescriptorUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput | FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
@@ -17719,6 +20930,20 @@ export namespace Prisma {
     deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
+  export type FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput | FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+  }
+
   export type OrganizationCreateNestedOneWithoutUsersInput = {
     create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
@@ -17753,6 +20978,13 @@ export namespace Prisma {
     connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
   }
 
+  export type FlavorDescriptorCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+  }
+
   export type CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput = {
     create?: XOR<CuppingSessionCreateWithoutCreatorInput, CuppingSessionUncheckedCreateWithoutCreatorInput> | CuppingSessionCreateWithoutCreatorInput[] | CuppingSessionUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutCreatorInput | CuppingSessionCreateOrConnectWithoutCreatorInput[]
@@ -17779,6 +21011,13 @@ export namespace Prisma {
     connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
     createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
     connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+  }
+
+  export type FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -17853,6 +21092,20 @@ export namespace Prisma {
     deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
   }
 
+  export type FlavorDescriptorUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput | FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+  }
+
   export type CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput = {
     create?: XOR<CuppingSessionCreateWithoutCreatorInput, CuppingSessionUncheckedCreateWithoutCreatorInput> | CuppingSessionCreateWithoutCreatorInput[] | CuppingSessionUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutCreatorInput | CuppingSessionCreateOrConnectWithoutCreatorInput[]
@@ -17907,6 +21160,20 @@ export namespace Prisma {
     update?: CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: CuppingTemplateUpdateManyWithWhereWithoutCreatorInput | CuppingTemplateUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput | FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutInvitationsInput = {
@@ -18449,6 +21716,20 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -18487,6 +21768,140 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutScoresInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutScoresInput, UserUpdateWithoutScoresInput>, UserUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutFlavorDescriptorsInput = {
+    create?: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutFlavorDescriptorsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedFlavorDescriptorsInput = {
+    create?: XOR<UserCreateWithoutCreatedFlavorDescriptorsInput, UserUncheckedCreateWithoutCreatedFlavorDescriptorsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedFlavorDescriptorsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
+  export type EnumFlavorCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.FlavorCategory
+  }
+
+  export type OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutFlavorDescriptorsInput
+    upsert?: OrganizationUpsertWithoutFlavorDescriptorsInput
+    disconnect?: OrganizationWhereInput | boolean
+    delete?: OrganizationWhereInput | boolean
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutFlavorDescriptorsInput, OrganizationUpdateWithoutFlavorDescriptorsInput>, OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type UserUpdateOneWithoutCreatedFlavorDescriptorsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedFlavorDescriptorsInput, UserUncheckedCreateWithoutCreatedFlavorDescriptorsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedFlavorDescriptorsInput
+    upsert?: UserUpsertWithoutCreatedFlavorDescriptorsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedFlavorDescriptorsInput, UserUpdateWithoutCreatedFlavorDescriptorsInput>, UserUncheckedUpdateWithoutCreatedFlavorDescriptorsInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type ScoreCreateNestedOneWithoutFlavorDescriptorsInput = {
+    create?: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: ScoreCreateOrConnectWithoutFlavorDescriptorsInput
+    connect?: ScoreWhereUniqueInput
+  }
+
+  export type FlavorDescriptorCreateNestedOneWithoutScoreDescriptorsInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutScoreDescriptorsInput
+    connect?: FlavorDescriptorWhereUniqueInput
+  }
+
+  export type ScoreUpdateOneRequiredWithoutFlavorDescriptorsNestedInput = {
+    create?: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: ScoreCreateOrConnectWithoutFlavorDescriptorsInput
+    upsert?: ScoreUpsertWithoutFlavorDescriptorsInput
+    connect?: ScoreWhereUniqueInput
+    update?: XOR<XOR<ScoreUpdateToOneWithWhereWithoutFlavorDescriptorsInput, ScoreUpdateWithoutFlavorDescriptorsInput>, ScoreUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type FlavorDescriptorUpdateOneRequiredWithoutScoreDescriptorsNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutScoreDescriptorsInput
+    upsert?: FlavorDescriptorUpsertWithoutScoreDescriptorsInput
+    connect?: FlavorDescriptorWhereUniqueInput
+    update?: XOR<XOR<FlavorDescriptorUpdateToOneWithWhereWithoutScoreDescriptorsInput, FlavorDescriptorUpdateWithoutScoreDescriptorsInput>, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -18898,6 +22313,23 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedEnumFlavorCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryFilter<$PrismaModel> | $Enums.FlavorCategory
+  }
+
+  export type NestedEnumFlavorCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryWithAggregatesFilter<$PrismaModel> | $Enums.FlavorCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+    _max?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutOrganizationInput = {
     id?: string
     email: string
@@ -18919,6 +22351,7 @@ export namespace Prisma {
     scores?: ScoreCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -18942,6 +22375,7 @@ export namespace Prisma {
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -19152,6 +22586,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FlavorDescriptorCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator?: UserCreateNestedOneWithoutCreatedFlavorDescriptorsInput
+    scoreDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorCreateOrConnectWithoutOrganizationInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    create: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorCreateManyOrganizationInputEnvelope = {
+    data: FlavorDescriptorCreateManyOrganizationInput | FlavorDescriptorCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
@@ -19344,6 +22812,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Invitation"> | Date | string
   }
 
+  export type FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    update: XOR<FlavorDescriptorUpdateWithoutOrganizationInput, FlavorDescriptorUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    data: XOR<FlavorDescriptorUpdateWithoutOrganizationInput, FlavorDescriptorUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput = {
+    where: FlavorDescriptorScalarWhereInput
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorScalarWhereInput = {
+    AND?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+    OR?: FlavorDescriptorScalarWhereInput[]
+    NOT?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+    id?: StringFilter<"FlavorDescriptor"> | string
+    name?: StringFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+  }
+
   export type OrganizationCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -19365,6 +22864,7 @@ export namespace Prisma {
     samples?: SampleCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -19388,6 +22888,7 @@ export namespace Prisma {
     samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -19481,6 +22982,7 @@ export namespace Prisma {
     session: CuppingSessionCreateNestedOneWithoutScoresInput
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
     sample: SampleCreateNestedOneWithoutScoresInput
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUncheckedCreateWithoutUserInput = {
@@ -19511,6 +23013,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutUserInput = {
@@ -19595,6 +23098,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FlavorDescriptorCreateWithoutCreatorInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization?: OrganizationCreateNestedOneWithoutFlavorDescriptorsInput
+    scoreDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorCreateOrConnectWithoutCreatorInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    create: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorCreateManyCreatorInputEnvelope = {
+    data: FlavorDescriptorCreateManyCreatorInput | FlavorDescriptorCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganizationUpsertWithoutUsersInput = {
     update: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
     create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
@@ -19627,6 +23164,7 @@ export namespace Prisma {
     samples?: SampleUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -19650,6 +23188,7 @@ export namespace Prisma {
     samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type CuppingSessionUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -19765,6 +23304,22 @@ export namespace Prisma {
     data: XOR<CuppingTemplateUpdateManyMutationInput, CuppingTemplateUncheckedUpdateManyWithoutCreatorInput>
   }
 
+  export type FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    update: XOR<FlavorDescriptorUpdateWithoutCreatorInput, FlavorDescriptorUncheckedUpdateWithoutCreatorInput>
+    create: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    data: XOR<FlavorDescriptorUpdateWithoutCreatorInput, FlavorDescriptorUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput = {
+    where: FlavorDescriptorScalarWhereInput
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyWithoutCreatorInput>
+  }
+
   export type OrganizationCreateWithoutInvitationsInput = {
     id?: string
     name: string
@@ -19786,6 +23341,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
     samples?: SampleCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -19809,6 +23365,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
     samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -19848,6 +23405,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
     samples?: SampleUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -19871,6 +23429,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
     samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutSamplesInput = {
@@ -19894,6 +23453,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSamplesInput = {
@@ -19917,6 +23477,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSamplesInput = {
@@ -19933,6 +23494,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     session: CuppingSessionCreateNestedOneWithoutSamplesInput
     scores?: ScoreCreateNestedManyWithoutSessionSampleInput
@@ -19948,6 +23511,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     scores?: ScoreUncheckedCreateNestedManyWithoutSessionSampleInput
   }
@@ -19990,6 +23555,7 @@ export namespace Prisma {
     session: CuppingSessionCreateNestedOneWithoutScoresInput
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUncheckedCreateWithoutSampleInput = {
@@ -20020,6 +23586,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutSampleInput = {
@@ -20064,6 +23631,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSamplesInput = {
@@ -20087,6 +23655,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type SessionSampleUpsertWithWhereUniqueWithoutSampleInput = {
@@ -20119,6 +23688,8 @@ export namespace Prisma {
     waterTemp?: FloatNullableFilter<"SessionSample"> | number | null
     brewRatio?: StringNullableFilter<"SessionSample"> | string | null
     steepTime?: IntNullableFilter<"SessionSample"> | number | null
+    aiSummary?: StringNullableFilter<"SessionSample"> | string | null
+    aiGeneratedAt?: DateTimeNullableFilter<"SessionSample"> | Date | string | null
     addedAt?: DateTimeFilter<"SessionSample"> | Date | string
   }
 
@@ -20159,6 +23730,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
     samples?: SampleCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTemplatesInput = {
@@ -20182,6 +23754,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
     samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTemplatesInput = {
@@ -20210,6 +23783,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
     scores?: ScoreCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
+    createdFlavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTemplatesInput = {
@@ -20233,6 +23807,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTemplatesInput = {
@@ -20330,6 +23905,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
     samples?: SampleUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTemplatesInput = {
@@ -20353,6 +23929,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
     samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCreatedTemplatesInput = {
@@ -20387,6 +23964,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTemplatesInput = {
@@ -20410,6 +23988,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CuppingSessionUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -20449,6 +24028,7 @@ export namespace Prisma {
     samples?: SampleCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCuppingSessionsInput = {
@@ -20472,6 +24052,7 @@ export namespace Prisma {
     samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCuppingSessionsInput = {
@@ -20500,6 +24081,7 @@ export namespace Prisma {
     scores?: ScoreCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutCuppingSessionsInput = {
@@ -20523,6 +24105,7 @@ export namespace Prisma {
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCuppingSessionsInput = {
@@ -20606,6 +24189,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     sample: SampleCreateNestedOneWithoutSessionSamplesInput
     scores?: ScoreCreateNestedManyWithoutSessionSampleInput
@@ -20621,6 +24206,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     scores?: ScoreUncheckedCreateNestedManyWithoutSessionSampleInput
   }
@@ -20663,6 +24250,7 @@ export namespace Prisma {
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
     sample: SampleCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUncheckedCreateWithoutSessionInput = {
@@ -20693,6 +24281,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutSessionInput = {
@@ -20737,6 +24326,7 @@ export namespace Prisma {
     samples?: SampleUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCuppingSessionsInput = {
@@ -20760,6 +24350,7 @@ export namespace Prisma {
     samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCuppingSessionsInput = {
@@ -20794,6 +24385,7 @@ export namespace Prisma {
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCuppingSessionsInput = {
@@ -20817,6 +24409,7 @@ export namespace Prisma {
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CuppingTemplateUpsertWithoutCuppingSessionsInput = {
@@ -20982,6 +24575,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
     scores?: ScoreCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutSessionParticipantsInput = {
@@ -21005,6 +24599,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutSessionParticipantsInput = {
@@ -21103,6 +24698,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionParticipantsInput = {
@@ -21126,6 +24722,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CuppingSessionCreateWithoutSamplesInput = {
@@ -21270,6 +24867,7 @@ export namespace Prisma {
     session: CuppingSessionCreateNestedOneWithoutScoresInput
     sample: SampleCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUncheckedCreateWithoutSessionSampleInput = {
@@ -21300,6 +24898,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutSessionSampleInput = {
@@ -21516,6 +25115,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
     session: CuppingSessionCreateNestedOneWithoutSamplesInput
     sample: SampleCreateNestedOneWithoutSessionSamplesInput
@@ -21532,6 +25133,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
   }
 
@@ -21622,6 +25225,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutScoresInput = {
@@ -21645,11 +25249,36 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutScoresInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutScoresInput, UserUncheckedCreateWithoutScoresInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateWithoutScoreInput = {
+    id?: string
+    intensity?: number
+    createdAt?: Date | string
+    flavorDescriptor: FlavorDescriptorCreateNestedOneWithoutScoreDescriptorsInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput = {
+    id?: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    create: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateManyScoreInputEnvelope = {
+    data: ScoreFlavorDescriptorCreateManyScoreInput | ScoreFlavorDescriptorCreateManyScoreInput[]
+    skipDuplicates?: boolean
   }
 
   export type CuppingSessionUpsertWithoutScoresInput = {
@@ -21731,6 +25360,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
     sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
@@ -21747,6 +25378,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -21849,6 +25482,7 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutScoresInput = {
@@ -21872,6 +25506,502 @@ export namespace Prisma {
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    update: XOR<ScoreFlavorDescriptorUpdateWithoutScoreInput, ScoreFlavorDescriptorUncheckedUpdateWithoutScoreInput>
+    create: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    data: XOR<ScoreFlavorDescriptorUpdateWithoutScoreInput, ScoreFlavorDescriptorUncheckedUpdateWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput = {
+    where: ScoreFlavorDescriptorScalarWhereInput
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorScalarWhereInput = {
+    AND?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+    OR?: ScoreFlavorDescriptorScalarWhereInput[]
+    NOT?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+    id?: StringFilter<"ScoreFlavorDescriptor"> | string
+    scoreId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeFilter<"ScoreFlavorDescriptor"> | Date | string
+  }
+
+  export type OrganizationCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
+    templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
+    templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutFlavorDescriptorsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+  }
+
+  export type UserCreateWithoutCreatedFlavorDescriptorsInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutUsersInput
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
+    scores?: ScoreCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
+    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedFlavorDescriptorsInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    organizationId: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
+    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedFlavorDescriptorsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedFlavorDescriptorsInput, UserUncheckedCreateWithoutCreatedFlavorDescriptorsInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput = {
+    id?: string
+    intensity?: number
+    createdAt?: Date | string
+    score: ScoreCreateNestedOneWithoutFlavorDescriptorsInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput = {
+    id?: string
+    scoreId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    create: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope = {
+    data: ScoreFlavorDescriptorCreateManyFlavorDescriptorInput | ScoreFlavorDescriptorCreateManyFlavorDescriptorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganizationUpsertWithoutFlavorDescriptorsInput = {
+    update: XOR<OrganizationUpdateWithoutFlavorDescriptorsInput, OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput>
+    create: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutFlavorDescriptorsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutFlavorDescriptorsInput, OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type OrganizationUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+    templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
+    templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedFlavorDescriptorsInput = {
+    update: XOR<UserUpdateWithoutCreatedFlavorDescriptorsInput, UserUncheckedUpdateWithoutCreatedFlavorDescriptorsInput>
+    create: XOR<UserCreateWithoutCreatedFlavorDescriptorsInput, UserUncheckedCreateWithoutCreatedFlavorDescriptorsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedFlavorDescriptorsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedFlavorDescriptorsInput, UserUncheckedUpdateWithoutCreatedFlavorDescriptorsInput>
+  }
+
+  export type UserUpdateWithoutCreatedFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
+    cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUpdateManyWithoutUserNestedInput
+    sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
+    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
+    sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
+    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    update: XOR<ScoreFlavorDescriptorUpdateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedUpdateWithoutFlavorDescriptorInput>
+    create: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    data: XOR<ScoreFlavorDescriptorUpdateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedUpdateWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorScalarWhereInput
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    totalScore: number
+    maxScore?: number
+    scores: JsonNullValueInput | InputJsonValue
+    aroma?: number | null
+    flavor?: number | null
+    aftertaste?: number | null
+    acidity?: number | null
+    body?: number | null
+    balance?: number | null
+    sweetness?: number | null
+    cleanliness?: number | null
+    uniformity?: number | null
+    overall?: number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    privateNotes?: string | null
+    voiceNotes?: string | null
+    voiceFileUrl?: string | null
+    isComplete?: boolean
+    isSubmitted?: boolean
+    submittedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    session: CuppingSessionCreateNestedOneWithoutScoresInput
+    sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
+    sample: SampleCreateNestedOneWithoutScoresInput
+    user: UserCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    sessionId: string
+    sessionSampleId: string
+    sampleId: string
+    userId: string
+    totalScore: number
+    maxScore?: number
+    scores: JsonNullValueInput | InputJsonValue
+    aroma?: number | null
+    flavor?: number | null
+    aftertaste?: number | null
+    acidity?: number | null
+    body?: number | null
+    balance?: number | null
+    sweetness?: number | null
+    cleanliness?: number | null
+    uniformity?: number | null
+    overall?: number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    privateNotes?: string | null
+    voiceNotes?: string | null
+    voiceFileUrl?: string | null
+    isComplete?: boolean
+    isSubmitted?: boolean
+    submittedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScoreCreateOrConnectWithoutFlavorDescriptorsInput = {
+    where: ScoreWhereUniqueInput
+    create: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+  }
+
+  export type FlavorDescriptorCreateWithoutScoreDescriptorsInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization?: OrganizationCreateNestedOneWithoutFlavorDescriptorsInput
+    creator?: UserCreateNestedOneWithoutCreatedFlavorDescriptorsInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorCreateOrConnectWithoutScoreDescriptorsInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    create: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+  }
+
+  export type ScoreUpsertWithoutFlavorDescriptorsInput = {
+    update: XOR<ScoreUpdateWithoutFlavorDescriptorsInput, ScoreUncheckedUpdateWithoutFlavorDescriptorsInput>
+    create: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+    where?: ScoreWhereInput
+  }
+
+  export type ScoreUpdateToOneWithWhereWithoutFlavorDescriptorsInput = {
+    where?: ScoreWhereInput
+    data: XOR<ScoreUpdateWithoutFlavorDescriptorsInput, ScoreUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type ScoreUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
+    sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
+    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
+    user?: UserUpdateOneRequiredWithoutScoresNestedInput
+  }
+
+  export type ScoreUncheckedUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    sessionSampleId?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlavorDescriptorUpsertWithoutScoreDescriptorsInput = {
+    update: XOR<FlavorDescriptorUpdateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
+    create: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+    where?: FlavorDescriptorWhereInput
+  }
+
+  export type FlavorDescriptorUpdateToOneWithWhereWithoutScoreDescriptorsInput = {
+    where?: FlavorDescriptorWhereInput
+    data: XOR<FlavorDescriptorUpdateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
+  }
+
+  export type FlavorDescriptorUpdateWithoutScoreDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput
+    creator?: UserUpdateOneWithoutCreatedFlavorDescriptorsNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateManyOrganizationInput = {
@@ -21966,6 +26096,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type FlavorDescriptorCreateManyOrganizationInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -21987,6 +26128,7 @@ export namespace Prisma {
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -22010,6 +26152,7 @@ export namespace Prisma {
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    createdFlavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -22262,6 +26405,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FlavorDescriptorUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneWithoutCreatedFlavorDescriptorsNestedInput
+    scoreDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CuppingSessionCreateManyCreatorInput = {
     id?: string
     organizationId: string
@@ -22334,6 +26512,17 @@ export namespace Prisma {
     scoringSystem?: $Enums.ScoringSystem
     maxScore?: number
     categories: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorCreateManyCreatorInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22435,6 +26624,7 @@ export namespace Prisma {
     session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
     sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateWithoutUserInput = {
@@ -22465,6 +26655,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutUserInput = {
@@ -22574,6 +26765,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FlavorDescriptorUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput
+    scoreDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SessionSampleCreateManySampleInput = {
     id?: string
     sessionId: string
@@ -22584,6 +26810,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
   }
 
@@ -22626,6 +26854,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
     scores?: ScoreUpdateManyWithoutSessionSampleNestedInput
@@ -22641,6 +26871,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     scores?: ScoreUncheckedUpdateManyWithoutSessionSampleNestedInput
   }
@@ -22655,6 +26887,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22686,6 +26920,7 @@ export namespace Prisma {
     session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateWithoutSampleInput = {
@@ -22716,6 +26951,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutSampleInput = {
@@ -22859,6 +27095,8 @@ export namespace Prisma {
     waterTemp?: number | null
     brewRatio?: string | null
     steepTime?: number | null
+    aiSummary?: string | null
+    aiGeneratedAt?: Date | string | null
     addedAt?: Date | string
   }
 
@@ -22934,6 +27172,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
     scores?: ScoreUpdateManyWithoutSessionSampleNestedInput
@@ -22949,6 +27189,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     scores?: ScoreUncheckedUpdateManyWithoutSessionSampleNestedInput
   }
@@ -22963,6 +27205,8 @@ export namespace Prisma {
     waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    aiSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    aiGeneratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22994,6 +27238,7 @@ export namespace Prisma {
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
     sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateWithoutSessionInput = {
@@ -23024,6 +27269,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutSessionInput = {
@@ -23114,6 +27360,7 @@ export namespace Prisma {
     session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateWithoutSessionSampleInput = {
@@ -23144,6 +27391,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutSessionSampleInput = {
@@ -23174,6 +27422,62 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateManyScoreInput = {
+    id?: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithoutScoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptor?: FlavorDescriptorUpdateOneRequiredWithoutScoreDescriptorsNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateWithoutScoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateManyFlavorDescriptorInput = {
+    id?: string
+    scoreId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithoutFlavorDescriptorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: ScoreUpdateOneRequiredWithoutFlavorDescriptorsNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateWithoutFlavorDescriptorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -1,4 +1,4 @@
-// CuppingLab Database Schema
+// Cupperly Database Schema
 // Multi-tenant SaaS platform for professional coffee cupping
 
 generator client {

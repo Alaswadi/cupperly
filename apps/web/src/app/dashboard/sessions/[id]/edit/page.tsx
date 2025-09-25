@@ -2,14 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Save, Loader2, Coffee, Settings, Calendar, MapPin, Users, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { sessionsApi, templatesApi, samplesApi } from '@/lib/api';
+import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 interface Session {
   id: string;
@@ -21,7 +18,14 @@ interface Session {
   allowComments: boolean;
   requireCalibration: boolean;
   scheduledAt?: string;
-  samples: Array<{ id: string; name: string; }>;
+  samples: Array<{
+    id: string; // SessionSample ID
+    sampleId: string; // Actual Sample ID
+    sample: {
+      id: string;
+      name: string;
+    };
+  }>;
   tags: string[];
 }
 
@@ -94,7 +98,7 @@ export default function EditSessionPage() {
           allowComments: sessionData.allowComments,
           requireCalibration: sessionData.requireCalibration,
           scheduledAt,
-          sampleIds: sessionData.samples?.map(s => s.id) || [],
+          sampleIds: sessionData.samples?.map(s => s.sampleId) || [],
           tags: sessionData.tags || [],
         });
       } else {
@@ -136,10 +140,15 @@ export default function EditSessionPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!formData.name.trim()) {
+      toast.error('Session name is required');
+      return;
+    }
+
     try {
       setSaving(true);
-      
+
       const submitData = {
         ...formData,
         templateId: formData.templateId || undefined,
@@ -148,15 +157,18 @@ export default function EditSessionPage() {
       };
 
       const response = await sessionsApi.updateSession(sessionId, submitData);
-      
+
       if (response.success) {
+        toast.success('Session updated successfully!');
         router.push(`/dashboard/sessions/${sessionId}`);
       } else {
         setError('Failed to update session');
+        toast.error('Failed to update session');
       }
     } catch (error) {
       console.error('Failed to update session:', error);
       setError('Failed to update session');
+      toast.error('Failed to update session');
     } finally {
       setSaving(false);
     }
@@ -192,114 +204,148 @@ export default function EditSessionPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            onClick={() => router.push(`/dashboard/sessions/${sessionId}`)}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Session
-          </Button>
+      <div className="flex items-center gap-4 mb-8">
+        <Link href={`/dashboard/sessions/${sessionId}`}>
+          <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to Session</span>
+          </button>
+        </Link>
+        <div>
           <h1 className="text-3xl font-bold text-gray-900">Edit Session</h1>
+          <p className="text-gray-600 mt-2">Update session details and configuration</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Form */}
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Basic Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-coffee-brown/10 rounded-lg flex items-center justify-center">
+                    <Coffee className="h-5 w-5 text-coffee-brown" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
+                    <p className="text-sm text-gray-600">Update session details</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 space-y-6">
                 <div>
-                  <Label htmlFor="name">Session Name *</Label>
-                  <Input
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    Session Name *
+                  </label>
+                  <input
                     id="name"
+                    type="text"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     placeholder="Enter session name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-brown focus:border-transparent"
                     required
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                  </label>
+                  <textarea
                     id="description"
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     placeholder="Enter session description"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-brown focus:border-transparent"
                     rows={3}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="location">Location</Label>
-                    <Input
-                      id="location"
-                      value={formData.location}
-                      onChange={(e) => handleInputChange('location', e.target.value)}
-                      placeholder="Enter location"
-                    />
+                    <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                      Location
+                    </label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        id="location"
+                        type="text"
+                        value={formData.location}
+                        onChange={(e) => handleInputChange('location', e.target.value)}
+                        placeholder="Enter location"
+                        className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-brown focus:border-transparent"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="scheduledAt">Scheduled Date & Time</Label>
-                    <Input
-                      id="scheduledAt"
-                      type="datetime-local"
-                      value={formData.scheduledAt}
-                      onChange={(e) => handleInputChange('scheduledAt', e.target.value)}
-                    />
+                    <label htmlFor="scheduledAt" className="block text-sm font-medium text-gray-700 mb-2">
+                      Scheduled Date & Time
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        id="scheduledAt"
+                        type="datetime-local"
+                        value={formData.scheduledAt}
+                        onChange={(e) => handleInputChange('scheduledAt', e.target.value)}
+                        className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-brown focus:border-transparent"
+                      />
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Sample Selection */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Sample Selection</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <Coffee className="h-5 w-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Sample Selection</h3>
+                    <p className="text-sm text-gray-600">Choose samples for this session</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
                 {samples.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
                     {samples.map((sample) => (
                       <div
                         key={sample.id}
-                        className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                        className={`border rounded-lg p-4 cursor-pointer transition-all ${
                           formData.sampleIds.includes(sample.id)
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-coffee-brown bg-coffee-brown/5'
+                            : 'border-gray-200 hover:border-coffee-brown/50'
                         }`}
                         onClick={() => handleSampleToggle(sample.id)}
                       >
-                        <div className="flex items-center justify-between">
-                          <div>
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                            formData.sampleIds.includes(sample.id)
+                              ? 'bg-coffee-brown border-coffee-brown'
+                              : 'border-gray-300'
+                          }`}>
+                            {formData.sampleIds.includes(sample.id) && (
+                              <CheckCircle className="w-3 h-3 text-white" />
+                            )}
+                          </div>
+                          <div className="flex-1">
                             <h4 className="font-medium text-gray-900">{sample.name}</h4>
                             {sample.origin && (
                               <p className="text-sm text-gray-600">{sample.origin}</p>
                             )}
                             {sample.variety && (
-                              <p className="text-sm text-gray-500">{sample.variety}</p>
-                            )}
-                          </div>
-                          <div className={`w-4 h-4 rounded border-2 ${
-                            formData.sampleIds.includes(sample.id)
-                              ? 'bg-blue-500 border-blue-500'
-                              : 'border-gray-300'
-                          }`}>
-                            {formData.sampleIds.includes(sample.id) && (
-                              <div className="w-full h-full flex items-center justify-center">
-                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                              </div>
+                              <p className="text-xs text-gray-500">{sample.variety}</p>
                             )}
                           </div>
                         </div>
@@ -307,26 +353,46 @@ export default function EditSessionPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500">No samples available. Create some samples first.</p>
+                  <div className="text-center py-8">
+                    <Coffee className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No samples available. Create some samples first.</p>
+                  </div>
                 )}
-              </CardContent>
-            </Card>
+                {formData.sampleIds.length > 0 && (
+                  <div className="mt-4 p-3 bg-coffee-brown/5 rounded-lg">
+                    <p className="text-sm text-coffee-brown font-medium">
+                      {formData.sampleIds.length} sample(s) selected for this session
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Template Selection */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Template</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Label htmlFor="template">Cupping Template</Label>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Settings className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Template</h3>
+                    <p className="text-sm text-gray-600">Choose cupping template</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <label htmlFor="template" className="block text-sm font-medium text-gray-700 mb-2">
+                  Cupping Template
+                </label>
                 <select
                   id="template"
                   value={formData.templateId}
                   onChange={(e) => handleInputChange('templateId', e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-brown focus:border-transparent pr-8"
                 >
                   <option value="">Select a template</option>
                   {templates.map((template) => (
@@ -335,77 +401,126 @@ export default function EditSessionPage() {
                     </option>
                   ))}
                 </select>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Session Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Session Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Settings className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Session Settings</h3>
+                    <p className="text-sm text-gray-600">Configure session behavior</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 space-y-6">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="blindTasting">Blind Tasting</Label>
-                  <Switch
-                    id="blindTasting"
-                    checked={formData.blindTasting}
-                    onCheckedChange={(checked) => handleInputChange('blindTasting', checked)}
-                  />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                      {formData.blindTasting ? <EyeOff className="h-4 w-4 text-gray-600" /> : <Eye className="h-4 w-4 text-gray-600" />}
+                    </div>
+                    <div>
+                      <label htmlFor="blindTasting" className="text-sm font-medium text-gray-900 cursor-pointer">Blind Tasting</label>
+                      <p className="text-sm text-gray-500">Hide sample information from cuppers</p>
+                    </div>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all ${
+                      formData.blindTasting
+                        ? 'bg-coffee-brown border-coffee-brown'
+                        : 'border-gray-300 hover:border-coffee-brown/50'
+                    }`}
+                    onClick={() => handleInputChange('blindTasting', !formData.blindTasting)}
+                  >
+                    {formData.blindTasting && (
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="allowComments">Allow Comments</Label>
-                  <Switch
-                    id="allowComments"
-                    checked={formData.allowComments}
-                    onCheckedChange={(checked) => handleInputChange('allowComments', checked)}
-                  />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <Users className="h-4 w-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <label htmlFor="allowComments" className="text-sm font-medium text-gray-900 cursor-pointer">Allow Comments</label>
+                      <p className="text-sm text-gray-500">Enable cupper notes and comments</p>
+                    </div>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all ${
+                      formData.allowComments
+                        ? 'bg-coffee-brown border-coffee-brown'
+                        : 'border-gray-300 hover:border-coffee-brown/50'
+                    }`}
+                    onClick={() => handleInputChange('allowComments', !formData.allowComments)}
+                  >
+                    {formData.allowComments && (
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="requireCalibration">Require Calibration</Label>
-                  <Switch
-                    id="requireCalibration"
-                    checked={formData.requireCalibration}
-                    onCheckedChange={(checked) => handleInputChange('requireCalibration', checked)}
-                  />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="h-4 w-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <label htmlFor="requireCalibration" className="text-sm font-medium text-gray-900 cursor-pointer">Require Calibration</label>
+                      <p className="text-sm text-gray-500">Mandatory calibration before scoring</p>
+                    </div>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all ${
+                      formData.requireCalibration
+                        ? 'bg-coffee-brown border-coffee-brown'
+                        : 'border-gray-300 hover:border-coffee-brown/50'
+                    }`}
+                    onClick={() => handleInputChange('requireCalibration', !formData.requireCalibration)}
+                  >
+                    {formData.requireCalibration && (
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    )}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Actions */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={saving}
-                  >
-                    {saving ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Updating...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Update Session
-                      </>
-                    )}
-                  </Button>
-                  
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => router.push(`/dashboard/sessions/${sessionId}`)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="mt-6 space-y-4">
+              <button
+                type="submit"
+                className="w-full bg-coffee-brown text-white px-6 py-3 rounded-lg font-medium hover:bg-coffee-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                disabled={saving}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Updating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Update Session</span>
+                  </>
+                )}
+              </button>
+
+              <Link href={`/dashboard/sessions/${sessionId}`}>
+                <button
+                  type="button"
+                  className="w-full border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </form>

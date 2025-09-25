@@ -133,6 +133,8 @@ export interface SessionSample {
   waterTemp?: number;
   brewRatio?: string;
   steepTime?: number;
+  aiSummary?: string;
+  aiGeneratedAt?: string;
   addedAt: string;
   scores: Score[];
 }
@@ -177,6 +179,42 @@ export interface Score {
   submittedAt?: string;
   createdAt: string;
   updatedAt: string;
+
+  // Flavor descriptors
+  flavorDescriptors?: ScoreFlavorDescriptor[];
+}
+
+// Flavor Descriptor types
+export interface FlavorDescriptor {
+  id: string;
+  name: string;
+  category: 'POSITIVE' | 'NEGATIVE';
+  description?: string;
+  isDefault: boolean;
+  organizationId?: string;
+  createdBy?: string;
+  creator?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScoreFlavorDescriptor {
+  id: string;
+  scoreId: string;
+  flavorDescriptorId: string;
+  flavorDescriptor: FlavorDescriptor;
+  intensity: number;
+  createdAt: string;
+}
+
+export interface CreateFlavorDescriptorForm {
+  name: string;
+  category: 'POSITIVE' | 'NEGATIVE';
+  description?: string;
 }
 
 // API Response types
