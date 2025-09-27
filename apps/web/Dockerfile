@@ -75,17 +75,11 @@ CMD ["node", "server.js"]
 FROM base AS development
 WORKDIR /app
 
-# Copy root package files for workspace setup
-COPY package.json package-lock.json* ./
-COPY apps/web/package.json ./apps/web/
-COPY packages/*/package.json ./packages/*/
-
-# Install dependencies
-RUN npm install
-
-# Copy source code
-COPY apps/web ./apps/web
-COPY packages ./packages
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY --from=deps /app/apps/web/package.json ./apps/web/package.json
+COPY --from=deps /app/packages ./packages
 
 # Set working directory to web app
 WORKDIR /app/apps/web

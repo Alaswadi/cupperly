@@ -18,15 +18,11 @@ RUN npm install
 FROM base AS development
 WORKDIR /app
 
-# Copy dependencies
+# Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json ./package.json
 COPY --from=deps /app/apps/api/package.json ./apps/api/package.json
 COPY --from=deps /app/packages ./packages
-
-# Copy source code
-COPY apps/api ./apps/api
-COPY packages ./packages
 
 # Set working directory to API
 WORKDIR /app/apps/api

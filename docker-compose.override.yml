@@ -1,0 +1,31 @@
+# Development overrides for faster builds and better caching
+services:
+  api:
+    build:
+      cache_from:
+        - cupping-api:latest
+        - node:18-alpine
+    volumes:
+      - ./apps/api:/app/apps/api:cached
+      - ./packages:/app/packages:cached
+      - api_node_modules:/app/node_modules
+      - api_app_node_modules:/app/apps/api/node_modules
+
+  web:
+    build:
+      cache_from:
+        - cupping-web:latest
+        - node:18-alpine
+    volumes:
+      - ./apps/web:/app/apps/web:cached
+      - ./packages:/app/packages:cached
+      - web_node_modules:/app/node_modules
+      - web_app_node_modules:/app/apps/web/node_modules
+      - web_next:/app/apps/web/.next
+
+volumes:
+  api_node_modules:
+  api_app_node_modules:
+  web_node_modules:
+  web_app_node_modules:
+  web_next:
