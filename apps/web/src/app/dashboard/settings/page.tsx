@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { toast } from 'react-hot-toast';
 import {
   Settings as SettingsIcon,
   User,
@@ -83,9 +84,13 @@ export default function SettingsPage() {
         if (settings.aiProvider === 'openrouter' && settings.openRouterApiKey) {
           loadOpenRouterModels(settings.openRouterApiKey);
         }
+      } else {
+        console.error('Failed to load settings:', response.error?.message);
+        toast.error('Failed to load settings');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load settings:', error);
+      toast.error('Failed to load settings');
     }
   };
 
@@ -126,9 +131,16 @@ export default function SettingsPage() {
         }));
 
         setAvailableModels(popularModels);
+        if (popularModels.length > 0) {
+          toast.success('Models loaded successfully!');
+        }
+      } else {
+        throw new Error(`Failed to load models: ${response.status}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load OpenRouter models:', error);
+      toast.error('Failed to load OpenRouter models. Please check your API key.');
+      setAvailableModels([]);
     } finally {
       setLoadingModels(false);
     }
@@ -150,6 +162,16 @@ export default function SettingsPage() {
     setIsLoading(true);
     try {
       if (section === 'ai') {
+        // Validate required fields
+        if (formData.aiProvider === 'gemini' && !formData.geminiApiKey) {
+          toast.error('Please enter your Gemini API key');
+          return;
+        }
+        if (formData.aiProvider === 'openrouter' && !formData.openRouterApiKey) {
+          toast.error('Please enter your OpenRouter API key');
+          return;
+        }
+
         const response = await settingsApi.updateSettings({
           aiProvider: formData.aiProvider,
           geminiApiKey: formData.geminiApiKey,
@@ -158,16 +180,20 @@ export default function SettingsPage() {
         });
 
         if (!response.success) {
-          throw new Error('Failed to save AI settings');
+          throw new Error(response.error?.message || 'Failed to save AI settings');
         }
+
+        toast.success('AI settings saved successfully!');
       } else {
         // TODO: Implement actual save functionality for other sections
         console.log(`Saving ${section}:`, formData);
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
+        toast.success(`${section} settings saved successfully!`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Failed to save ${section}:`, error);
+      toast.error(error.message || `Failed to save ${section} settings`);
     } finally {
       setIsLoading(false);
     }

@@ -45,7 +45,7 @@ class ApiClient {
         }
 
         // Debug logging for score submissions
-        if (config.url?.includes('/score')) {
+        if (config.url?.includes('/scores')) {
           console.log('🔍 Score submission request:', {
             url: config.url,
             method: config.method,
@@ -62,7 +62,7 @@ class ApiClient {
       (response) => response,
       async (error) => {
         // Debug logging for score submission errors
-        if (error.config?.url?.includes('/score')) {
+        if (error.config?.url?.includes('/scores')) {
           console.error('❌ Score submission error:', {
             status: error.response?.status,
             statusText: error.response?.statusText,
@@ -259,7 +259,7 @@ class ApiClient {
   }
 
   async submitScore(sessionId: string, sampleId: string, data: any) {
-    return this.request<Score>('POST', `/api/sessions/${sessionId}/samples/${sampleId}/score`, data);
+    return this.request<Score>('POST', `/api/sessions/${sessionId}/samples/${sampleId}/scores`, data);
   }
 
   async updateScore(scoreId: string, data: any) {

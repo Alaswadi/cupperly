@@ -63,7 +63,10 @@ export default function ProfilePage() {
         updateUser(response.data.user);
         toast.success('Profile updated successfully!');
       } else {
-        toast.error(response.error?.message || 'Failed to update profile');
+        const errorMessage = typeof response.error === 'string'
+          ? response.error
+          : response.error?.message || 'Failed to update profile';
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error('Profile update error:', error);

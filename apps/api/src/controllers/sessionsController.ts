@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { PrismaClient } from '../../generated/client';
+import { PrismaClient } from '../generated/client';
 import { AuthRequest } from '../middleware/auth';
 
 const prisma = new PrismaClient();
@@ -234,9 +234,10 @@ export const createSession = async (
   next: NextFunction
 ) => {
   try {
+    console.log('🎯 Create session request body:', req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-
+      console.error('❌ Session validation errors:', errors.array());
       return res.status(400).json({
         success: false,
         error: {

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import {
   registerOrganization,
   login,
@@ -18,20 +18,17 @@ import { authenticate, authorize } from '../middleware/auth';
 
 const router = Router();
 
-// Public routes (no tenant required)
+// Authentication routes
 router.post('/register-organization', registerOrganizationValidator, registerOrganization);
-
-// Tenant-specific routes
-router.post('/login', (req, res, next) => {
-  console.log('🔐 Login route hit:', req.body);
-  next();
-}, loginValidator, login);
-router.post('/logout', authenticate, logout);
+router.post('/login', loginValidator, login);
+router.post('/logout', logout);
 router.post('/refresh', refreshToken);
+
+// Protected routes
 router.get('/profile', authenticate, getProfile);
 router.put('/profile', authenticate, updateProfileValidator, updateProfile);
 
-// Admin/Manager only routes
-router.post('/invite', authenticate, authorize('ADMIN', 'MANAGER'), inviteUserValidator, inviteUser);
+// Admin routes
+router.post('/invite', authenticate, authorize('ADMIN', 'OWNER'), inviteUserValidator, inviteUser);
 
 export default router;

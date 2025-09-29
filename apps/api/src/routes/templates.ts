@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { authenticate } from '../middleware/auth';
 import { authorize } from '../middleware/authorize';
 import {
@@ -11,22 +11,14 @@ import {
 
 const router = Router();
 
-// All routes require authentication
+// Apply authentication to all routes
 router.use(authenticate);
 
-// Get all templates (accessible to all authenticated users)
+// Template routes
 router.get('/', getTemplates);
-
-// Get a specific template (accessible to all authenticated users)
 router.get('/:id', getTemplate);
-
-// Create a new template (requires MANAGER or ADMIN role)
-router.post('/', authorize(['ADMIN', 'MANAGER']), createTemplate);
-
-// Update a template (requires MANAGER or ADMIN role)
-router.put('/:id', authorize(['ADMIN', 'MANAGER']), updateTemplate);
-
-// Delete a template (requires ADMIN role)
-router.delete('/:id', authorize(['ADMIN']), deleteTemplate);
+router.post('/', authorize('ADMIN', 'OWNER'), createTemplate);
+router.put('/:id', authorize('ADMIN', 'OWNER'), updateTemplate);
+router.delete('/:id', authorize('ADMIN', 'OWNER'), deleteTemplate);
 
 export default router;

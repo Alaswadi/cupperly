@@ -68,14 +68,26 @@ export default function SessionsPage() {
           return sessionDate.getMonth() === now.getMonth() && sessionDate.getFullYear() === now.getFullYear();
         }).length;
 
-        // Calculate average score (mock for now)
-        const avgScore = 84.2;
+        // Calculate real average score from completed sessions
+        let totalScore = 0;
+        let scoreCount = 0;
+        sessionData.forEach(session => {
+          if (session.scores && session.scores.length > 0) {
+            session.scores.forEach(score => {
+              if (score.totalScore > 0) {
+                totalScore += score.totalScore;
+                scoreCount++;
+              }
+            });
+          }
+        });
+        const avgScore = scoreCount > 0 ? Number((totalScore / scoreCount).toFixed(1)) : 0;
 
         setStats({
-          totalSessions: sessionData.length || 247,
-          thisMonth: thisMonth || 32,
+          totalSessions: sessionData.length,
+          thisMonth: thisMonth,
           avgScore,
-          activeSessions: activeSessions || 8,
+          activeSessions: activeSessions,
         });
       }
     } catch (error) {

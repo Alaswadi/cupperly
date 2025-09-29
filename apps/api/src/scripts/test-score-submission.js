@@ -56,7 +56,7 @@ async function testScoreSubmission() {
     };
 
     const submissionResponse = await axios.post(
-      `${API_BASE}/sessions/${sessionId}/samples/${sampleId}/score`,
+      `${API_BASE}/sessions/${sessionId}/samples/${sampleId}/scores`,
       scoreData,
       {
         headers: {

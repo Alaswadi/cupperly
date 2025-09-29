@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
-import { tenantMiddleware } from './middleware/tenant';
+// import { tenantMiddleware } from './middleware/tenant';
 
 // Import routes
 import authRoutes from './routes/auth';
@@ -45,7 +45,7 @@ app.use(helmet({
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? [process.env.WEB_URL!, /\.cupperly\.com$/]
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3003', 'http://127.0.0.1:3003'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-ID'],
@@ -79,7 +79,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // Tenant middleware (extract tenant from subdomain or header)
-app.use(tenantMiddleware);
+// app.use(tenantMiddleware);
 
 // Routes
 console.log('🔧 Registering routes...');
@@ -108,7 +108,7 @@ app.use(errorHandler);
 
 // Start server
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, 'localhost', () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Cupperly API server running on port ${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);

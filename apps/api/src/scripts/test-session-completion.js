@@ -64,7 +64,7 @@ async function testSessionCompletion() {
 
     console.log('📝 Submitting final score...');
     const submissionResponse = await axios.post(
-      `${API_BASE}/sessions/${sessionId}/samples/${sampleId}/score`,
+      `${API_BASE}/sessions/${sessionId}/samples/${sampleId}/scores`,
       scoreData,
       {
         headers: {

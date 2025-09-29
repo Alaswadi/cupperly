@@ -274,8 +274,8 @@ model SessionSample {
   steepTime Int? // in seconds
 
   // AI Analysis
-  aiSummary     String? // AI-generated summary of the cupping results
-  aiGeneratedAt DateTime? // When the AI summary was generated
+  aiSummary     String?   @map("aisummary") // AI-generated summary of the cupping results
+  aiGeneratedAt DateTime? @map("aigeneratedat") // When the AI summary was generated
 
   // Timestamps
   addedAt DateTime @default(now())

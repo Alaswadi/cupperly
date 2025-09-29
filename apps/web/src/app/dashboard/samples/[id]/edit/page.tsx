@@ -7,7 +7,7 @@ import { samplesApi } from '@/lib/api';
 import { Sample } from '@/types';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import Link from 'next/link';
-import { ArrowLeft, Save, Coffee, MapPin, Package, Beaker } from 'lucide-react';
+import { ArrowLeft, Save, Coffee, MapPin, Package, Beaker, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   COFFEE_ORIGINS,
@@ -41,6 +41,10 @@ export default function EditSamplePage() {
     density: '',
     screenSize: '',
     description: '',
+    code: '',
+    harvestDate: '',
+    roaster: '',
+    roastDate: '',
   });
 
   const sampleId = params.id as string;
@@ -84,6 +88,10 @@ export default function EditSamplePage() {
           density: sampleData.density?.toString() || '',
           screenSize: sampleData.screenSize || '',
           description: sampleData.description || '',
+          code: sampleData.code || '',
+          harvestDate: sampleData.harvestDate ? sampleData.harvestDate.split('T')[0] : '',
+          roaster: sampleData.roaster || '',
+          roastDate: sampleData.roastDate ? sampleData.roastDate.split('T')[0] : '',
         });
         setSelectedCountry(sampleData.origin || '');
       } else {
@@ -119,7 +127,10 @@ export default function EditSamplePage() {
         toast.success('Sample updated successfully!');
         router.push(`/dashboard/samples/${sampleId}`);
       } else {
-        toast.error(response.error || 'Failed to update sample');
+        const errorMessage = typeof response.error === 'string'
+          ? response.error
+          : response.error?.message || 'Failed to update sample';
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error('Error updating sample:', error);
@@ -241,6 +252,16 @@ export default function EditSamplePage() {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Sample Code</label>
+                <input
+                  type="text"
+                  value={formData.code}
+                  onChange={(e) => handleInputChange('code', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="e.g., ETH-001, COL-2024-01"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -304,6 +325,53 @@ export default function EditSamplePage() {
                   onChange={(e) => handleInputChange('farm', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
                   placeholder="Farm name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Harvest & Roasting */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <Calendar className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">Harvest & Roasting</h2>
+                <p className="text-sm text-gray-600">Harvest and roasting information</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Harvest Date</label>
+                <input
+                  type="date"
+                  value={formData.harvestDate}
+                  onChange={(e) => handleInputChange('harvestDate', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Roaster</label>
+                <input
+                  type="text"
+                  value={formData.roaster}
+                  onChange={(e) => handleInputChange('roaster', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
+                  placeholder="Roaster name or company"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Roast Date</label>
+                <input
+                  type="date"
+                  value={formData.roastDate}
+                  onChange={(e) => handleInputChange('roastDate', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
                 />
               </div>
             </div>

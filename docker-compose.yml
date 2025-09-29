@@ -68,10 +68,10 @@ services:
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API_URL: http://localhost:3001
-      NEXTAUTH_URL: http://localhost:3002
+      NEXTAUTH_URL: http://localhost:3003
       NEXTAUTH_SECRET: dev-nextauth-secret-change-in-production
     ports:
-      - "3002:3000"
+      - "3003:3000"
     volumes:
       - ./apps/web:/app/apps/web:cached
       - ./packages:/app/packages:cached

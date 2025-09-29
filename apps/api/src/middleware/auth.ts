@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '../../generated/client';
+import { PrismaClient } from '../generated/client';
 import { TenantRequest } from './tenant';
 
 const prisma = new PrismaClient();

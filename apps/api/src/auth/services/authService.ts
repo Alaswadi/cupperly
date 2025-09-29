@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../../generated/client';
+import { PrismaClient } from '../../generated/client';
 import { hashPassword, comparePassword, validatePasswordStrength } from '../../utils/password';
 import { generateTokens, verifyRefreshToken } from '../../utils/jwt';
 import { v4 as uuidv4 } from 'uuid';

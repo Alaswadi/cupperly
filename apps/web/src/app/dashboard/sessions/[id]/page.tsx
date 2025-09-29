@@ -25,10 +25,17 @@ interface Session {
     description?: string;
   };
   samples: Array<{
-    id: string;
-    name: string;
-    origin?: string;
-    variety?: string;
+    id: string; // SessionSample ID
+    sampleId: string; // Actual Sample ID
+    position: number;
+    isBlind: boolean;
+    blindCode?: string;
+    sample: {
+      id: string;
+      name: string;
+      origin?: string;
+      variety?: string;
+    };
   }>;
   tags: string[];
   _count?: {
@@ -311,20 +318,20 @@ export default function SessionDetailPage() {
             <div className="p-6">
               {session.samples && session.samples.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {session.samples.map((sample) => (
-                    <Link key={sample.id} href={`/dashboard/samples/${sample.id}`}>
+                  {session.samples.map((sessionSample) => (
+                    <Link key={sessionSample.id} href={`/dashboard/samples/${sessionSample.sample.id}`}>
                       <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 hover:border-coffee-brown transition-all cursor-pointer">
                         <div className="flex items-start space-x-3">
                           <div className="w-8 h-8 bg-coffee-brown/10 rounded-lg flex items-center justify-center flex-shrink-0">
                             <Coffee className="h-4 w-4 text-coffee-brown" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 truncate">{sample.name}</h4>
-                            {sample.origin && (
-                              <p className="text-sm text-gray-600 mt-1">{sample.origin}</p>
+                            <h4 className="font-medium text-gray-900 truncate">{sessionSample.sample.name}</h4>
+                            {sessionSample.sample.origin && (
+                              <p className="text-sm text-gray-600 mt-1">{sessionSample.sample.origin}</p>
                             )}
-                            {sample.variety && (
-                              <p className="text-xs text-gray-500 mt-1">{sample.variety}</p>
+                            {sessionSample.sample.variety && (
+                              <p className="text-xs text-gray-500 mt-1">{sessionSample.sample.variety}</p>
                             )}
                           </div>
                         </div>

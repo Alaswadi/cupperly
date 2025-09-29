@@ -63,7 +63,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         toast.success('Login successful!');
         return true;
       } else {
-        toast.error(response.error?.message || 'Login failed');
+        const errorMessage = typeof response.error === 'string'
+          ? response.error
+          : response.error?.message || 'Login failed';
+        toast.error(errorMessage);
         return false;
       }
     } catch (error: any) {

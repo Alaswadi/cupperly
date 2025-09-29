@@ -155,7 +155,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Sessions</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalSessions || 247}</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.totalSessions}</p>
               <p className="text-sm text-green-600 mt-1">+{stats.monthlyGrowth}% this month</p>
             </div>
             <div className="w-12 h-12 bg-coffee-brown/10 rounded-lg flex items-center justify-center">
@@ -170,7 +170,7 @@ export default function DashboardPage() {
             <div>
               <p className="text-sm font-medium text-gray-600">Average Score</p>
               <p className="text-3xl font-bold text-gray-900">
-                {stats.avgScore > 0 ? stats.avgScore.toFixed(1) : '84.2'}
+                {stats.avgScore > 0 ? stats.avgScore.toFixed(1) : '0.0'}
               </p>
               <p className="text-sm text-blue-600 mt-1">SCA Protocol</p>
             </div>
@@ -185,7 +185,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Active Samples</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalSamples || 18}</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.totalSamples}</p>
               <p className="text-sm text-orange-600 mt-1">Pending evaluation</p>
             </div>
             <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">

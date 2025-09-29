@@ -13,13 +13,22 @@ export function formatDate(date: string | Date) {
 }
 
 export function formatDateTime(date: string | Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(date));
+  try {
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) {
+      return 'Invalid Date';
+    }
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(dateObj);
+  } catch (error) {
+    console.error('Date formatting error:', error, 'for date:', date);
+    return 'Invalid Date';
+  }
 }
 
 export function formatScore(score: number, maxScore: number = 100) {
