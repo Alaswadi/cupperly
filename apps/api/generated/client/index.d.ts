@@ -68,6 +68,11 @@ export type FlavorDescriptor = $Result.DefaultSelection<Prisma.$FlavorDescriptor
  * 
  */
 export type ScoreFlavorDescriptor = $Result.DefaultSelection<Prisma.$ScoreFlavorDescriptorPayload>
+/**
+ * Model GreenBeanGrading
+ * 
+ */
+export type GreenBeanGrading = $Result.DefaultSelection<Prisma.$GreenBeanGradingPayload>
 
 /**
  * Enums
@@ -178,6 +183,29 @@ export const FlavorCategory: {
 
 export type FlavorCategory = (typeof FlavorCategory)[keyof typeof FlavorCategory]
 
+
+export const GradingSystem: {
+  SCA: 'SCA',
+  ETHIOPIAN: 'ETHIOPIAN',
+  COLOMBIAN: 'COLOMBIAN',
+  BRAZILIAN: 'BRAZILIAN',
+  KENYAN: 'KENYAN',
+  CUSTOM: 'CUSTOM'
+};
+
+export type GradingSystem = (typeof GradingSystem)[keyof typeof GradingSystem]
+
+
+export const GradeClassification: {
+  SPECIALTY_GRADE: 'SPECIALTY_GRADE',
+  PREMIUM_GRADE: 'PREMIUM_GRADE',
+  EXCHANGE_GRADE: 'EXCHANGE_GRADE',
+  BELOW_STANDARD: 'BELOW_STANDARD',
+  OFF_GRADE: 'OFF_GRADE'
+};
+
+export type GradeClassification = (typeof GradeClassification)[keyof typeof GradeClassification]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -219,6 +247,14 @@ export const ParticipantRole: typeof $Enums.ParticipantRole
 export type FlavorCategory = $Enums.FlavorCategory
 
 export const FlavorCategory: typeof $Enums.FlavorCategory
+
+export type GradingSystem = $Enums.GradingSystem
+
+export const GradingSystem: typeof $Enums.GradingSystem
+
+export type GradeClassification = $Enums.GradeClassification
+
+export const GradeClassification: typeof $Enums.GradeClassification
 
 /**
  * ##  Prisma Client ʲˢ
@@ -447,6 +483,16 @@ export class PrismaClient<
     * ```
     */
   get scoreFlavorDescriptor(): Prisma.ScoreFlavorDescriptorDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.greenBeanGrading`: Exposes CRUD operations for the **GreenBeanGrading** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GreenBeanGradings
+    * const greenBeanGradings = await prisma.greenBeanGrading.findMany()
+    * ```
+    */
+  get greenBeanGrading(): Prisma.GreenBeanGradingDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -897,7 +943,8 @@ export namespace Prisma {
     SessionSample: 'SessionSample',
     Score: 'Score',
     FlavorDescriptor: 'FlavorDescriptor',
-    ScoreFlavorDescriptor: 'ScoreFlavorDescriptor'
+    ScoreFlavorDescriptor: 'ScoreFlavorDescriptor',
+    GreenBeanGrading: 'GreenBeanGrading'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -916,7 +963,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "user" | "invitation" | "sample" | "cuppingTemplate" | "cuppingSession" | "sessionParticipant" | "sessionSample" | "score" | "flavorDescriptor" | "scoreFlavorDescriptor"
+      modelProps: "organization" | "user" | "invitation" | "sample" | "cuppingTemplate" | "cuppingSession" | "sessionParticipant" | "sessionSample" | "score" | "flavorDescriptor" | "scoreFlavorDescriptor" | "greenBeanGrading"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1734,6 +1781,80 @@ export namespace Prisma {
           }
         }
       }
+      GreenBeanGrading: {
+        payload: Prisma.$GreenBeanGradingPayload<ExtArgs>
+        fields: Prisma.GreenBeanGradingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GreenBeanGradingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GreenBeanGradingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          findFirst: {
+            args: Prisma.GreenBeanGradingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GreenBeanGradingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          findMany: {
+            args: Prisma.GreenBeanGradingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>[]
+          }
+          create: {
+            args: Prisma.GreenBeanGradingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          createMany: {
+            args: Prisma.GreenBeanGradingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GreenBeanGradingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>[]
+          }
+          delete: {
+            args: Prisma.GreenBeanGradingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          update: {
+            args: Prisma.GreenBeanGradingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          deleteMany: {
+            args: Prisma.GreenBeanGradingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GreenBeanGradingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GreenBeanGradingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>[]
+          }
+          upsert: {
+            args: Prisma.GreenBeanGradingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          aggregate: {
+            args: Prisma.GreenBeanGradingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGreenBeanGrading>
+          }
+          groupBy: {
+            args: Prisma.GreenBeanGradingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GreenBeanGradingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GreenBeanGradingCountArgs<ExtArgs>
+            result: $Utils.Optional<GreenBeanGradingCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1841,6 +1962,7 @@ export namespace Prisma {
     score?: ScoreOmit
     flavorDescriptor?: FlavorDescriptorOmit
     scoreFlavorDescriptor?: ScoreFlavorDescriptorOmit
+    greenBeanGrading?: GreenBeanGradingOmit
   }
 
   /* Types for Logging */
@@ -6457,6 +6579,7 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     sessionSamples?: boolean | Sample$sessionSamplesArgs<ExtArgs>
     scores?: boolean | Sample$scoresArgs<ExtArgs>
+    greenBeanGrading?: boolean | Sample$greenBeanGradingArgs<ExtArgs>
     _count?: boolean | SampleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sample"]>
 
@@ -6548,6 +6671,7 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     sessionSamples?: boolean | Sample$sessionSamplesArgs<ExtArgs>
     scores?: boolean | Sample$scoresArgs<ExtArgs>
+    greenBeanGrading?: boolean | Sample$greenBeanGradingArgs<ExtArgs>
     _count?: boolean | SampleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SampleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6563,6 +6687,7 @@ export namespace Prisma {
       organization: Prisma.$OrganizationPayload<ExtArgs>
       sessionSamples: Prisma.$SessionSamplePayload<ExtArgs>[]
       scores: Prisma.$ScorePayload<ExtArgs>[]
+      greenBeanGrading: Prisma.$GreenBeanGradingPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6986,6 +7111,7 @@ export namespace Prisma {
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sessionSamples<T extends Sample$sessionSamplesArgs<ExtArgs> = {}>(args?: Subset<T, Sample$sessionSamplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     scores<T extends Sample$scoresArgs<ExtArgs> = {}>(args?: Subset<T, Sample$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    greenBeanGrading<T extends Sample$greenBeanGradingArgs<ExtArgs> = {}>(args?: Subset<T, Sample$greenBeanGradingArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7480,6 +7606,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
+  }
+
+  /**
+   * Sample.greenBeanGrading
+   */
+  export type Sample$greenBeanGradingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    where?: GreenBeanGradingWhereInput
   }
 
   /**
@@ -16199,6 +16344,1390 @@ export namespace Prisma {
 
 
   /**
+   * Model GreenBeanGrading
+   */
+
+  export type AggregateGreenBeanGrading = {
+    _count: GreenBeanGradingCountAggregateOutputType | null
+    _avg: GreenBeanGradingAvgAggregateOutputType | null
+    _sum: GreenBeanGradingSumAggregateOutputType | null
+    _min: GreenBeanGradingMinAggregateOutputType | null
+    _max: GreenBeanGradingMaxAggregateOutputType | null
+  }
+
+  export type GreenBeanGradingAvgAggregateOutputType = {
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    colorScore: number | null
+    uniformityScore: number | null
+    qualityScore: number | null
+  }
+
+  export type GreenBeanGradingSumAggregateOutputType = {
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    colorScore: number | null
+    uniformityScore: number | null
+    qualityScore: number | null
+  }
+
+  export type GreenBeanGradingMinAggregateOutputType = {
+    id: string | null
+    sampleId: string | null
+    gradingSystem: $Enums.GradingSystem | null
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    colorScore: number | null
+    uniformityScore: number | null
+    grade: string | null
+    classification: $Enums.GradeClassification | null
+    qualityScore: number | null
+    gradedBy: string | null
+    gradedAt: Date | null
+    certifiedBy: string | null
+    certificationDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GreenBeanGradingMaxAggregateOutputType = {
+    id: string | null
+    sampleId: string | null
+    gradingSystem: $Enums.GradingSystem | null
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    colorScore: number | null
+    uniformityScore: number | null
+    grade: string | null
+    classification: $Enums.GradeClassification | null
+    qualityScore: number | null
+    gradedBy: string | null
+    gradedAt: Date | null
+    certifiedBy: string | null
+    certificationDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GreenBeanGradingCountAggregateOutputType = {
+    id: number
+    sampleId: number
+    gradingSystem: number
+    primaryDefects: number
+    secondaryDefects: number
+    fullDefectEquivalents: number
+    defectBreakdown: number
+    screenSizeDistribution: number
+    averageScreenSize: number
+    uniformityPercentage: number
+    moistureContent: number
+    waterActivity: number
+    bulkDensity: number
+    colorScore: number
+    uniformityScore: number
+    grade: number
+    classification: number
+    qualityScore: number
+    gradedBy: number
+    gradedAt: number
+    certifiedBy: number
+    certificationDate: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GreenBeanGradingAvgAggregateInputType = {
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    colorScore?: true
+    uniformityScore?: true
+    qualityScore?: true
+  }
+
+  export type GreenBeanGradingSumAggregateInputType = {
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    colorScore?: true
+    uniformityScore?: true
+    qualityScore?: true
+  }
+
+  export type GreenBeanGradingMinAggregateInputType = {
+    id?: true
+    sampleId?: true
+    gradingSystem?: true
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    colorScore?: true
+    uniformityScore?: true
+    grade?: true
+    classification?: true
+    qualityScore?: true
+    gradedBy?: true
+    gradedAt?: true
+    certifiedBy?: true
+    certificationDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GreenBeanGradingMaxAggregateInputType = {
+    id?: true
+    sampleId?: true
+    gradingSystem?: true
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    colorScore?: true
+    uniformityScore?: true
+    grade?: true
+    classification?: true
+    qualityScore?: true
+    gradedBy?: true
+    gradedAt?: true
+    certifiedBy?: true
+    certificationDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GreenBeanGradingCountAggregateInputType = {
+    id?: true
+    sampleId?: true
+    gradingSystem?: true
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    defectBreakdown?: true
+    screenSizeDistribution?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    colorScore?: true
+    uniformityScore?: true
+    grade?: true
+    classification?: true
+    qualityScore?: true
+    gradedBy?: true
+    gradedAt?: true
+    certifiedBy?: true
+    certificationDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GreenBeanGradingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GreenBeanGrading to aggregate.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GreenBeanGradings
+    **/
+    _count?: true | GreenBeanGradingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GreenBeanGradingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GreenBeanGradingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GreenBeanGradingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GreenBeanGradingMaxAggregateInputType
+  }
+
+  export type GetGreenBeanGradingAggregateType<T extends GreenBeanGradingAggregateArgs> = {
+        [P in keyof T & keyof AggregateGreenBeanGrading]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGreenBeanGrading[P]>
+      : GetScalarType<T[P], AggregateGreenBeanGrading[P]>
+  }
+
+
+
+
+  export type GreenBeanGradingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GreenBeanGradingWhereInput
+    orderBy?: GreenBeanGradingOrderByWithAggregationInput | GreenBeanGradingOrderByWithAggregationInput[]
+    by: GreenBeanGradingScalarFieldEnum[] | GreenBeanGradingScalarFieldEnum
+    having?: GreenBeanGradingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GreenBeanGradingCountAggregateInputType | true
+    _avg?: GreenBeanGradingAvgAggregateInputType
+    _sum?: GreenBeanGradingSumAggregateInputType
+    _min?: GreenBeanGradingMinAggregateInputType
+    _max?: GreenBeanGradingMaxAggregateInputType
+  }
+
+  export type GreenBeanGradingGroupByOutputType = {
+    id: string
+    sampleId: string
+    gradingSystem: $Enums.GradingSystem
+    primaryDefects: number
+    secondaryDefects: number
+    fullDefectEquivalents: number
+    defectBreakdown: JsonValue
+    screenSizeDistribution: JsonValue | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    colorScore: number | null
+    uniformityScore: number | null
+    grade: string | null
+    classification: $Enums.GradeClassification | null
+    qualityScore: number | null
+    gradedBy: string | null
+    gradedAt: Date | null
+    certifiedBy: string | null
+    certificationDate: Date | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: GreenBeanGradingCountAggregateOutputType | null
+    _avg: GreenBeanGradingAvgAggregateOutputType | null
+    _sum: GreenBeanGradingSumAggregateOutputType | null
+    _min: GreenBeanGradingMinAggregateOutputType | null
+    _max: GreenBeanGradingMaxAggregateOutputType | null
+  }
+
+  type GetGreenBeanGradingGroupByPayload<T extends GreenBeanGradingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GreenBeanGradingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GreenBeanGradingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GreenBeanGradingGroupByOutputType[P]>
+            : GetScalarType<T[P], GreenBeanGradingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GreenBeanGradingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    colorScore?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["greenBeanGrading"]>
+
+  export type GreenBeanGradingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    colorScore?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["greenBeanGrading"]>
+
+  export type GreenBeanGradingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    colorScore?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["greenBeanGrading"]>
+
+  export type GreenBeanGradingSelectScalar = {
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    colorScore?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GreenBeanGradingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sampleId" | "gradingSystem" | "primaryDefects" | "secondaryDefects" | "fullDefectEquivalents" | "defectBreakdown" | "screenSizeDistribution" | "averageScreenSize" | "uniformityPercentage" | "moistureContent" | "waterActivity" | "bulkDensity" | "colorScore" | "uniformityScore" | "grade" | "classification" | "qualityScore" | "gradedBy" | "gradedAt" | "certifiedBy" | "certificationDate" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["greenBeanGrading"]>
+  export type GreenBeanGradingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }
+  export type GreenBeanGradingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }
+  export type GreenBeanGradingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }
+
+  export type $GreenBeanGradingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GreenBeanGrading"
+    objects: {
+      sample: Prisma.$SamplePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sampleId: string
+      gradingSystem: $Enums.GradingSystem
+      primaryDefects: number
+      secondaryDefects: number
+      fullDefectEquivalents: number
+      defectBreakdown: Prisma.JsonValue
+      screenSizeDistribution: Prisma.JsonValue | null
+      averageScreenSize: number | null
+      uniformityPercentage: number | null
+      moistureContent: number | null
+      waterActivity: number | null
+      bulkDensity: number | null
+      colorScore: number | null
+      uniformityScore: number | null
+      grade: string | null
+      classification: $Enums.GradeClassification | null
+      qualityScore: number | null
+      gradedBy: string | null
+      gradedAt: Date | null
+      certifiedBy: string | null
+      certificationDate: Date | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["greenBeanGrading"]>
+    composites: {}
+  }
+
+  type GreenBeanGradingGetPayload<S extends boolean | null | undefined | GreenBeanGradingDefaultArgs> = $Result.GetResult<Prisma.$GreenBeanGradingPayload, S>
+
+  type GreenBeanGradingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GreenBeanGradingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GreenBeanGradingCountAggregateInputType | true
+    }
+
+  export interface GreenBeanGradingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GreenBeanGrading'], meta: { name: 'GreenBeanGrading' } }
+    /**
+     * Find zero or one GreenBeanGrading that matches the filter.
+     * @param {GreenBeanGradingFindUniqueArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GreenBeanGradingFindUniqueArgs>(args: SelectSubset<T, GreenBeanGradingFindUniqueArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GreenBeanGrading that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GreenBeanGradingFindUniqueOrThrowArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GreenBeanGradingFindUniqueOrThrowArgs>(args: SelectSubset<T, GreenBeanGradingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GreenBeanGrading that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingFindFirstArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GreenBeanGradingFindFirstArgs>(args?: SelectSubset<T, GreenBeanGradingFindFirstArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GreenBeanGrading that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingFindFirstOrThrowArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GreenBeanGradingFindFirstOrThrowArgs>(args?: SelectSubset<T, GreenBeanGradingFindFirstOrThrowArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GreenBeanGradings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GreenBeanGradings
+     * const greenBeanGradings = await prisma.greenBeanGrading.findMany()
+     * 
+     * // Get first 10 GreenBeanGradings
+     * const greenBeanGradings = await prisma.greenBeanGrading.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const greenBeanGradingWithIdOnly = await prisma.greenBeanGrading.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GreenBeanGradingFindManyArgs>(args?: SelectSubset<T, GreenBeanGradingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GreenBeanGrading.
+     * @param {GreenBeanGradingCreateArgs} args - Arguments to create a GreenBeanGrading.
+     * @example
+     * // Create one GreenBeanGrading
+     * const GreenBeanGrading = await prisma.greenBeanGrading.create({
+     *   data: {
+     *     // ... data to create a GreenBeanGrading
+     *   }
+     * })
+     * 
+     */
+    create<T extends GreenBeanGradingCreateArgs>(args: SelectSubset<T, GreenBeanGradingCreateArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GreenBeanGradings.
+     * @param {GreenBeanGradingCreateManyArgs} args - Arguments to create many GreenBeanGradings.
+     * @example
+     * // Create many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GreenBeanGradingCreateManyArgs>(args?: SelectSubset<T, GreenBeanGradingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GreenBeanGradings and returns the data saved in the database.
+     * @param {GreenBeanGradingCreateManyAndReturnArgs} args - Arguments to create many GreenBeanGradings.
+     * @example
+     * // Create many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GreenBeanGradings and only return the `id`
+     * const greenBeanGradingWithIdOnly = await prisma.greenBeanGrading.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GreenBeanGradingCreateManyAndReturnArgs>(args?: SelectSubset<T, GreenBeanGradingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GreenBeanGrading.
+     * @param {GreenBeanGradingDeleteArgs} args - Arguments to delete one GreenBeanGrading.
+     * @example
+     * // Delete one GreenBeanGrading
+     * const GreenBeanGrading = await prisma.greenBeanGrading.delete({
+     *   where: {
+     *     // ... filter to delete one GreenBeanGrading
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GreenBeanGradingDeleteArgs>(args: SelectSubset<T, GreenBeanGradingDeleteArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GreenBeanGrading.
+     * @param {GreenBeanGradingUpdateArgs} args - Arguments to update one GreenBeanGrading.
+     * @example
+     * // Update one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GreenBeanGradingUpdateArgs>(args: SelectSubset<T, GreenBeanGradingUpdateArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GreenBeanGradings.
+     * @param {GreenBeanGradingDeleteManyArgs} args - Arguments to filter GreenBeanGradings to delete.
+     * @example
+     * // Delete a few GreenBeanGradings
+     * const { count } = await prisma.greenBeanGrading.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GreenBeanGradingDeleteManyArgs>(args?: SelectSubset<T, GreenBeanGradingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GreenBeanGradings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GreenBeanGradingUpdateManyArgs>(args: SelectSubset<T, GreenBeanGradingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GreenBeanGradings and returns the data updated in the database.
+     * @param {GreenBeanGradingUpdateManyAndReturnArgs} args - Arguments to update many GreenBeanGradings.
+     * @example
+     * // Update many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GreenBeanGradings and only return the `id`
+     * const greenBeanGradingWithIdOnly = await prisma.greenBeanGrading.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GreenBeanGradingUpdateManyAndReturnArgs>(args: SelectSubset<T, GreenBeanGradingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GreenBeanGrading.
+     * @param {GreenBeanGradingUpsertArgs} args - Arguments to update or create a GreenBeanGrading.
+     * @example
+     * // Update or create a GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.upsert({
+     *   create: {
+     *     // ... data to create a GreenBeanGrading
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GreenBeanGrading we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GreenBeanGradingUpsertArgs>(args: SelectSubset<T, GreenBeanGradingUpsertArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GreenBeanGradings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingCountArgs} args - Arguments to filter GreenBeanGradings to count.
+     * @example
+     * // Count the number of GreenBeanGradings
+     * const count = await prisma.greenBeanGrading.count({
+     *   where: {
+     *     // ... the filter for the GreenBeanGradings we want to count
+     *   }
+     * })
+    **/
+    count<T extends GreenBeanGradingCountArgs>(
+      args?: Subset<T, GreenBeanGradingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GreenBeanGradingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GreenBeanGrading.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GreenBeanGradingAggregateArgs>(args: Subset<T, GreenBeanGradingAggregateArgs>): Prisma.PrismaPromise<GetGreenBeanGradingAggregateType<T>>
+
+    /**
+     * Group by GreenBeanGrading.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GreenBeanGradingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GreenBeanGradingGroupByArgs['orderBy'] }
+        : { orderBy?: GreenBeanGradingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GreenBeanGradingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGreenBeanGradingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GreenBeanGrading model
+   */
+  readonly fields: GreenBeanGradingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GreenBeanGrading.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GreenBeanGradingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GreenBeanGrading model
+   */
+  interface GreenBeanGradingFieldRefs {
+    readonly id: FieldRef<"GreenBeanGrading", 'String'>
+    readonly sampleId: FieldRef<"GreenBeanGrading", 'String'>
+    readonly gradingSystem: FieldRef<"GreenBeanGrading", 'GradingSystem'>
+    readonly primaryDefects: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly secondaryDefects: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly fullDefectEquivalents: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly defectBreakdown: FieldRef<"GreenBeanGrading", 'Json'>
+    readonly screenSizeDistribution: FieldRef<"GreenBeanGrading", 'Json'>
+    readonly averageScreenSize: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly uniformityPercentage: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly moistureContent: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly waterActivity: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly bulkDensity: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly colorScore: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly uniformityScore: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly grade: FieldRef<"GreenBeanGrading", 'String'>
+    readonly classification: FieldRef<"GreenBeanGrading", 'GradeClassification'>
+    readonly qualityScore: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly gradedBy: FieldRef<"GreenBeanGrading", 'String'>
+    readonly gradedAt: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly certifiedBy: FieldRef<"GreenBeanGrading", 'String'>
+    readonly certificationDate: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly notes: FieldRef<"GreenBeanGrading", 'String'>
+    readonly createdAt: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly updatedAt: FieldRef<"GreenBeanGrading", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GreenBeanGrading findUnique
+   */
+  export type GreenBeanGradingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading findUniqueOrThrow
+   */
+  export type GreenBeanGradingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading findFirst
+   */
+  export type GreenBeanGradingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GreenBeanGradings.
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GreenBeanGradings.
+     */
+    distinct?: GreenBeanGradingScalarFieldEnum | GreenBeanGradingScalarFieldEnum[]
+  }
+
+  /**
+   * GreenBeanGrading findFirstOrThrow
+   */
+  export type GreenBeanGradingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GreenBeanGradings.
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GreenBeanGradings.
+     */
+    distinct?: GreenBeanGradingScalarFieldEnum | GreenBeanGradingScalarFieldEnum[]
+  }
+
+  /**
+   * GreenBeanGrading findMany
+   */
+  export type GreenBeanGradingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGradings to fetch.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GreenBeanGradings.
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    distinct?: GreenBeanGradingScalarFieldEnum | GreenBeanGradingScalarFieldEnum[]
+  }
+
+  /**
+   * GreenBeanGrading create
+   */
+  export type GreenBeanGradingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GreenBeanGrading.
+     */
+    data: XOR<GreenBeanGradingCreateInput, GreenBeanGradingUncheckedCreateInput>
+  }
+
+  /**
+   * GreenBeanGrading createMany
+   */
+  export type GreenBeanGradingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GreenBeanGradings.
+     */
+    data: GreenBeanGradingCreateManyInput | GreenBeanGradingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GreenBeanGrading createManyAndReturn
+   */
+  export type GreenBeanGradingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * The data used to create many GreenBeanGradings.
+     */
+    data: GreenBeanGradingCreateManyInput | GreenBeanGradingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GreenBeanGrading update
+   */
+  export type GreenBeanGradingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GreenBeanGrading.
+     */
+    data: XOR<GreenBeanGradingUpdateInput, GreenBeanGradingUncheckedUpdateInput>
+    /**
+     * Choose, which GreenBeanGrading to update.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading updateMany
+   */
+  export type GreenBeanGradingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GreenBeanGradings.
+     */
+    data: XOR<GreenBeanGradingUpdateManyMutationInput, GreenBeanGradingUncheckedUpdateManyInput>
+    /**
+     * Filter which GreenBeanGradings to update
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * Limit how many GreenBeanGradings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GreenBeanGrading updateManyAndReturn
+   */
+  export type GreenBeanGradingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * The data used to update GreenBeanGradings.
+     */
+    data: XOR<GreenBeanGradingUpdateManyMutationInput, GreenBeanGradingUncheckedUpdateManyInput>
+    /**
+     * Filter which GreenBeanGradings to update
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * Limit how many GreenBeanGradings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GreenBeanGrading upsert
+   */
+  export type GreenBeanGradingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GreenBeanGrading to update in case it exists.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+    /**
+     * In case the GreenBeanGrading found by the `where` argument doesn't exist, create a new GreenBeanGrading with this data.
+     */
+    create: XOR<GreenBeanGradingCreateInput, GreenBeanGradingUncheckedCreateInput>
+    /**
+     * In case the GreenBeanGrading was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GreenBeanGradingUpdateInput, GreenBeanGradingUncheckedUpdateInput>
+  }
+
+  /**
+   * GreenBeanGrading delete
+   */
+  export type GreenBeanGradingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter which GreenBeanGrading to delete.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading deleteMany
+   */
+  export type GreenBeanGradingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GreenBeanGradings to delete
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * Limit how many GreenBeanGradings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GreenBeanGrading without action
+   */
+  export type GreenBeanGradingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GreenBeanGrading
+     */
+    omit?: GreenBeanGradingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -16440,6 +17969,37 @@ export namespace Prisma {
   export type ScoreFlavorDescriptorScalarFieldEnum = (typeof ScoreFlavorDescriptorScalarFieldEnum)[keyof typeof ScoreFlavorDescriptorScalarFieldEnum]
 
 
+  export const GreenBeanGradingScalarFieldEnum: {
+    id: 'id',
+    sampleId: 'sampleId',
+    gradingSystem: 'gradingSystem',
+    primaryDefects: 'primaryDefects',
+    secondaryDefects: 'secondaryDefects',
+    fullDefectEquivalents: 'fullDefectEquivalents',
+    defectBreakdown: 'defectBreakdown',
+    screenSizeDistribution: 'screenSizeDistribution',
+    averageScreenSize: 'averageScreenSize',
+    uniformityPercentage: 'uniformityPercentage',
+    moistureContent: 'moistureContent',
+    waterActivity: 'waterActivity',
+    bulkDensity: 'bulkDensity',
+    colorScore: 'colorScore',
+    uniformityScore: 'uniformityScore',
+    grade: 'grade',
+    classification: 'classification',
+    qualityScore: 'qualityScore',
+    gradedBy: 'gradedBy',
+    gradedAt: 'gradedAt',
+    certifiedBy: 'certifiedBy',
+    certificationDate: 'certificationDate',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GreenBeanGradingScalarFieldEnum = (typeof GreenBeanGradingScalarFieldEnum)[keyof typeof GreenBeanGradingScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -16453,6 +18013,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -16699,6 +18267,34 @@ export namespace Prisma {
    * Reference to a field of type 'FlavorCategory[]'
    */
   export type ListEnumFlavorCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlavorCategory[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradingSystem'
+   */
+  export type EnumGradingSystemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradingSystem'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradingSystem[]'
+   */
+  export type ListEnumGradingSystemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradingSystem[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradeClassification'
+   */
+  export type EnumGradeClassificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradeClassification'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradeClassification[]'
+   */
+  export type ListEnumGradeClassificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradeClassification[]'>
     
   /**
    * Deep Input Types
@@ -17072,6 +18668,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     sessionSamples?: SessionSampleListRelationFilter
     scores?: ScoreListRelationFilter
+    greenBeanGrading?: XOR<GreenBeanGradingNullableScalarRelationFilter, GreenBeanGradingWhereInput> | null
   }
 
   export type SampleOrderByWithRelationInput = {
@@ -17102,6 +18699,7 @@ export namespace Prisma {
     organization?: OrganizationOrderByWithRelationInput
     sessionSamples?: SessionSampleOrderByRelationAggregateInput
     scores?: ScoreOrderByRelationAggregateInput
+    greenBeanGrading?: GreenBeanGradingOrderByWithRelationInput
   }
 
   export type SampleWhereUniqueInput = Prisma.AtLeast<{
@@ -17135,6 +18733,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     sessionSamples?: SessionSampleListRelationFilter
     scores?: ScoreListRelationFilter
+    greenBeanGrading?: XOR<GreenBeanGradingNullableScalarRelationFilter, GreenBeanGradingWhereInput> | null
   }, "id">
 
   export type SampleOrderByWithAggregationInput = {
@@ -17949,6 +19548,163 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ScoreFlavorDescriptor"> | Date | string
   }
 
+  export type GreenBeanGradingWhereInput = {
+    AND?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    OR?: GreenBeanGradingWhereInput[]
+    NOT?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    id?: StringFilter<"GreenBeanGrading"> | string
+    sampleId?: StringFilter<"GreenBeanGrading"> | string
+    gradingSystem?: EnumGradingSystemFilter<"GreenBeanGrading"> | $Enums.GradingSystem
+    primaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    secondaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    fullDefectEquivalents?: FloatFilter<"GreenBeanGrading"> | number
+    defectBreakdown?: JsonFilter<"GreenBeanGrading">
+    screenSizeDistribution?: JsonNullableFilter<"GreenBeanGrading">
+    averageScreenSize?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityPercentage?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    moistureContent?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    waterActivity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    bulkDensity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    colorScore?: IntNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityScore?: IntNullableFilter<"GreenBeanGrading"> | number | null
+    grade?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    classification?: EnumGradeClassificationNullableFilter<"GreenBeanGrading"> | $Enums.GradeClassification | null
+    qualityScore?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    gradedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    gradedAt?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    certifiedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    certificationDate?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    notes?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    createdAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    updatedAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
+  }
+
+  export type GreenBeanGradingOrderByWithRelationInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    defectBreakdown?: SortOrder
+    screenSizeDistribution?: SortOrderInput | SortOrder
+    averageScreenSize?: SortOrderInput | SortOrder
+    uniformityPercentage?: SortOrderInput | SortOrder
+    moistureContent?: SortOrderInput | SortOrder
+    waterActivity?: SortOrderInput | SortOrder
+    bulkDensity?: SortOrderInput | SortOrder
+    colorScore?: SortOrderInput | SortOrder
+    uniformityScore?: SortOrderInput | SortOrder
+    grade?: SortOrderInput | SortOrder
+    classification?: SortOrderInput | SortOrder
+    qualityScore?: SortOrderInput | SortOrder
+    gradedBy?: SortOrderInput | SortOrder
+    gradedAt?: SortOrderInput | SortOrder
+    certifiedBy?: SortOrderInput | SortOrder
+    certificationDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    sample?: SampleOrderByWithRelationInput
+  }
+
+  export type GreenBeanGradingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sampleId?: string
+    AND?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    OR?: GreenBeanGradingWhereInput[]
+    NOT?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    gradingSystem?: EnumGradingSystemFilter<"GreenBeanGrading"> | $Enums.GradingSystem
+    primaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    secondaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    fullDefectEquivalents?: FloatFilter<"GreenBeanGrading"> | number
+    defectBreakdown?: JsonFilter<"GreenBeanGrading">
+    screenSizeDistribution?: JsonNullableFilter<"GreenBeanGrading">
+    averageScreenSize?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityPercentage?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    moistureContent?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    waterActivity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    bulkDensity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    colorScore?: IntNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityScore?: IntNullableFilter<"GreenBeanGrading"> | number | null
+    grade?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    classification?: EnumGradeClassificationNullableFilter<"GreenBeanGrading"> | $Enums.GradeClassification | null
+    qualityScore?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    gradedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    gradedAt?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    certifiedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    certificationDate?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    notes?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    createdAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    updatedAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
+  }, "id" | "sampleId">
+
+  export type GreenBeanGradingOrderByWithAggregationInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    defectBreakdown?: SortOrder
+    screenSizeDistribution?: SortOrderInput | SortOrder
+    averageScreenSize?: SortOrderInput | SortOrder
+    uniformityPercentage?: SortOrderInput | SortOrder
+    moistureContent?: SortOrderInput | SortOrder
+    waterActivity?: SortOrderInput | SortOrder
+    bulkDensity?: SortOrderInput | SortOrder
+    colorScore?: SortOrderInput | SortOrder
+    uniformityScore?: SortOrderInput | SortOrder
+    grade?: SortOrderInput | SortOrder
+    classification?: SortOrderInput | SortOrder
+    qualityScore?: SortOrderInput | SortOrder
+    gradedBy?: SortOrderInput | SortOrder
+    gradedAt?: SortOrderInput | SortOrder
+    certifiedBy?: SortOrderInput | SortOrder
+    certificationDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GreenBeanGradingCountOrderByAggregateInput
+    _avg?: GreenBeanGradingAvgOrderByAggregateInput
+    _max?: GreenBeanGradingMaxOrderByAggregateInput
+    _min?: GreenBeanGradingMinOrderByAggregateInput
+    _sum?: GreenBeanGradingSumOrderByAggregateInput
+  }
+
+  export type GreenBeanGradingScalarWhereWithAggregatesInput = {
+    AND?: GreenBeanGradingScalarWhereWithAggregatesInput | GreenBeanGradingScalarWhereWithAggregatesInput[]
+    OR?: GreenBeanGradingScalarWhereWithAggregatesInput[]
+    NOT?: GreenBeanGradingScalarWhereWithAggregatesInput | GreenBeanGradingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GreenBeanGrading"> | string
+    sampleId?: StringWithAggregatesFilter<"GreenBeanGrading"> | string
+    gradingSystem?: EnumGradingSystemWithAggregatesFilter<"GreenBeanGrading"> | $Enums.GradingSystem
+    primaryDefects?: IntWithAggregatesFilter<"GreenBeanGrading"> | number
+    secondaryDefects?: IntWithAggregatesFilter<"GreenBeanGrading"> | number
+    fullDefectEquivalents?: FloatWithAggregatesFilter<"GreenBeanGrading"> | number
+    defectBreakdown?: JsonWithAggregatesFilter<"GreenBeanGrading">
+    screenSizeDistribution?: JsonNullableWithAggregatesFilter<"GreenBeanGrading">
+    averageScreenSize?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    uniformityPercentage?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    moistureContent?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    waterActivity?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    bulkDensity?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    colorScore?: IntNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    uniformityScore?: IntNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    grade?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    classification?: EnumGradeClassificationNullableWithAggregatesFilter<"GreenBeanGrading"> | $Enums.GradeClassification | null
+    qualityScore?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    gradedBy?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    gradedAt?: DateTimeNullableWithAggregatesFilter<"GreenBeanGrading"> | Date | string | null
+    certifiedBy?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    certificationDate?: DateTimeNullableWithAggregatesFilter<"GreenBeanGrading"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GreenBeanGrading"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GreenBeanGrading"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -18382,6 +20138,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutSamplesInput
     sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
     scores?: ScoreCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
   }
 
   export type SampleUncheckedCreateInput = {
@@ -18411,6 +20168,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
     scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
   }
 
   export type SampleUpdateInput = {
@@ -18440,6 +20198,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
     sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
     scores?: ScoreUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
   }
 
   export type SampleUncheckedUpdateInput = {
@@ -18469,6 +20228,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
   }
 
   export type SampleCreateManyInput = {
@@ -19374,6 +21134,201 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GreenBeanGradingCreateInput = {
+    id?: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    colorScore?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sample: SampleCreateNestedOneWithoutGreenBeanGradingInput
+  }
+
+  export type GreenBeanGradingUncheckedCreateInput = {
+    id?: string
+    sampleId: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    colorScore?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GreenBeanGradingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    colorScore?: NullableIntFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sample?: SampleUpdateOneRequiredWithoutGreenBeanGradingNestedInput
+  }
+
+  export type GreenBeanGradingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    colorScore?: NullableIntFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GreenBeanGradingCreateManyInput = {
+    id?: string
+    sampleId: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    colorScore?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GreenBeanGradingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    colorScore?: NullableIntFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GreenBeanGradingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    colorScore?: NullableIntFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -19915,6 +21870,11 @@ export namespace Prisma {
     every?: SessionSampleWhereInput
     some?: SessionSampleWhereInput
     none?: SessionSampleWhereInput
+  }
+
+  export type GreenBeanGradingNullableScalarRelationFilter = {
+    is?: GreenBeanGradingWhereInput | null
+    isNot?: GreenBeanGradingWhereInput | null
   }
 
   export type SessionSampleOrderByRelationAggregateInput = {
@@ -20668,6 +22628,197 @@ export namespace Prisma {
     intensity?: SortOrder
   }
 
+  export type EnumGradingSystemFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemFilter<$PrismaModel> | $Enums.GradingSystem
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumGradeClassificationNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableFilter<$PrismaModel> | $Enums.GradeClassification | null
+  }
+
+  export type GreenBeanGradingCountOrderByAggregateInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    defectBreakdown?: SortOrder
+    screenSizeDistribution?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    colorScore?: SortOrder
+    uniformityScore?: SortOrder
+    grade?: SortOrder
+    classification?: SortOrder
+    qualityScore?: SortOrder
+    gradedBy?: SortOrder
+    gradedAt?: SortOrder
+    certifiedBy?: SortOrder
+    certificationDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GreenBeanGradingAvgOrderByAggregateInput = {
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    colorScore?: SortOrder
+    uniformityScore?: SortOrder
+    qualityScore?: SortOrder
+  }
+
+  export type GreenBeanGradingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    colorScore?: SortOrder
+    uniformityScore?: SortOrder
+    grade?: SortOrder
+    classification?: SortOrder
+    qualityScore?: SortOrder
+    gradedBy?: SortOrder
+    gradedAt?: SortOrder
+    certifiedBy?: SortOrder
+    certificationDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GreenBeanGradingMinOrderByAggregateInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    colorScore?: SortOrder
+    uniformityScore?: SortOrder
+    grade?: SortOrder
+    classification?: SortOrder
+    qualityScore?: SortOrder
+    gradedBy?: SortOrder
+    gradedAt?: SortOrder
+    certifiedBy?: SortOrder
+    certificationDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GreenBeanGradingSumOrderByAggregateInput = {
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    colorScore?: SortOrder
+    uniformityScore?: SortOrder
+    qualityScore?: SortOrder
+  }
+
+  export type EnumGradingSystemWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemWithAggregatesFilter<$PrismaModel> | $Enums.GradingSystem
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGradingSystemFilter<$PrismaModel>
+    _max?: NestedEnumGradingSystemFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel> | $Enums.GradeClassification | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+    _max?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+  }
+
   export type UserCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
@@ -21218,6 +23369,12 @@ export namespace Prisma {
     connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
+  export type GreenBeanGradingCreateNestedOneWithoutSampleInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    connect?: GreenBeanGradingWhereUniqueInput
+  }
+
   export type SessionSampleUncheckedCreateNestedManyWithoutSampleInput = {
     create?: XOR<SessionSampleCreateWithoutSampleInput, SessionSampleUncheckedCreateWithoutSampleInput> | SessionSampleCreateWithoutSampleInput[] | SessionSampleUncheckedCreateWithoutSampleInput[]
     connectOrCreate?: SessionSampleCreateOrConnectWithoutSampleInput | SessionSampleCreateOrConnectWithoutSampleInput[]
@@ -21230,6 +23387,12 @@ export namespace Prisma {
     connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
     createMany?: ScoreCreateManySampleInputEnvelope
     connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+  }
+
+  export type GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    connect?: GreenBeanGradingWhereUniqueInput
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -21297,6 +23460,16 @@ export namespace Prisma {
     deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
   }
 
+  export type GreenBeanGradingUpdateOneWithoutSampleNestedInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    upsert?: GreenBeanGradingUpsertWithoutSampleInput
+    disconnect?: GreenBeanGradingWhereInput | boolean
+    delete?: GreenBeanGradingWhereInput | boolean
+    connect?: GreenBeanGradingWhereUniqueInput
+    update?: XOR<XOR<GreenBeanGradingUpdateToOneWithWhereWithoutSampleInput, GreenBeanGradingUpdateWithoutSampleInput>, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+  }
+
   export type SessionSampleUncheckedUpdateManyWithoutSampleNestedInput = {
     create?: XOR<SessionSampleCreateWithoutSampleInput, SessionSampleUncheckedCreateWithoutSampleInput> | SessionSampleCreateWithoutSampleInput[] | SessionSampleUncheckedCreateWithoutSampleInput[]
     connectOrCreate?: SessionSampleCreateOrConnectWithoutSampleInput | SessionSampleCreateOrConnectWithoutSampleInput[]
@@ -21323,6 +23496,16 @@ export namespace Prisma {
     update?: ScoreUpdateWithWhereUniqueWithoutSampleInput | ScoreUpdateWithWhereUniqueWithoutSampleInput[]
     updateMany?: ScoreUpdateManyWithWhereWithoutSampleInput | ScoreUpdateManyWithWhereWithoutSampleInput[]
     deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
+  }
+
+  export type GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    upsert?: GreenBeanGradingUpsertWithoutSampleInput
+    disconnect?: GreenBeanGradingWhereInput | boolean
+    delete?: GreenBeanGradingWhereInput | boolean
+    connect?: GreenBeanGradingWhereUniqueInput
+    update?: XOR<XOR<GreenBeanGradingUpdateToOneWithWhereWithoutSampleInput, GreenBeanGradingUpdateWithoutSampleInput>, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
   }
 
   export type OrganizationCreateNestedOneWithoutTemplatesInput = {
@@ -21904,6 +24087,28 @@ export namespace Prisma {
     update?: XOR<XOR<FlavorDescriptorUpdateToOneWithWhereWithoutScoreDescriptorsInput, FlavorDescriptorUpdateWithoutScoreDescriptorsInput>, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
   }
 
+  export type SampleCreateNestedOneWithoutGreenBeanGradingInput = {
+    create?: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutGreenBeanGradingInput
+    connect?: SampleWhereUniqueInput
+  }
+
+  export type EnumGradingSystemFieldUpdateOperationsInput = {
+    set?: $Enums.GradingSystem
+  }
+
+  export type NullableEnumGradeClassificationFieldUpdateOperationsInput = {
+    set?: $Enums.GradeClassification | null
+  }
+
+  export type SampleUpdateOneRequiredWithoutGreenBeanGradingNestedInput = {
+    create?: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutGreenBeanGradingInput
+    upsert?: SampleUpsertWithoutGreenBeanGradingInput
+    connect?: SampleWhereUniqueInput
+    update?: XOR<XOR<SampleUpdateToOneWithWhereWithoutGreenBeanGradingInput, SampleUpdateWithoutGreenBeanGradingInput>, SampleUncheckedUpdateWithoutGreenBeanGradingInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22330,6 +24535,63 @@ export namespace Prisma {
     _max?: NestedEnumFlavorCategoryFilter<$PrismaModel>
   }
 
+  export type NestedEnumGradingSystemFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemFilter<$PrismaModel> | $Enums.GradingSystem
+  }
+
+  export type NestedEnumGradeClassificationNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableFilter<$PrismaModel> | $Enums.GradeClassification | null
+  }
+
+  export type NestedEnumGradingSystemWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemWithAggregatesFilter<$PrismaModel> | $Enums.GradingSystem
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGradingSystemFilter<$PrismaModel>
+    _max?: NestedEnumGradingSystemFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel> | $Enums.GradeClassification | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+    _max?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutOrganizationInput = {
     id?: string
     email: string
@@ -22472,6 +24734,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
     scores?: ScoreCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
   }
 
   export type SampleUncheckedCreateWithoutOrganizationInput = {
@@ -22500,6 +24763,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
     scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
   }
 
   export type SampleCreateOrConnectWithoutOrganizationInput = {
@@ -23599,6 +25863,65 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GreenBeanGradingCreateWithoutSampleInput = {
+    id?: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    colorScore?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GreenBeanGradingUncheckedCreateWithoutSampleInput = {
+    id?: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    colorScore?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GreenBeanGradingCreateOrConnectWithoutSampleInput = {
+    where: GreenBeanGradingWhereUniqueInput
+    create: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+  }
+
   export type OrganizationUpsertWithoutSamplesInput = {
     update: XOR<OrganizationUpdateWithoutSamplesInput, OrganizationUncheckedUpdateWithoutSamplesInput>
     create: XOR<OrganizationCreateWithoutSamplesInput, OrganizationUncheckedCreateWithoutSamplesInput>
@@ -23707,6 +26030,71 @@ export namespace Prisma {
   export type ScoreUpdateManyWithWhereWithoutSampleInput = {
     where: ScoreScalarWhereInput
     data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSampleInput>
+  }
+
+  export type GreenBeanGradingUpsertWithoutSampleInput = {
+    update: XOR<GreenBeanGradingUpdateWithoutSampleInput, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+    create: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    where?: GreenBeanGradingWhereInput
+  }
+
+  export type GreenBeanGradingUpdateToOneWithWhereWithoutSampleInput = {
+    where?: GreenBeanGradingWhereInput
+    data: XOR<GreenBeanGradingUpdateWithoutSampleInput, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+  }
+
+  export type GreenBeanGradingUpdateWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    colorScore?: NullableIntFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GreenBeanGradingUncheckedUpdateWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    colorScore?: NullableIntFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrganizationCreateWithoutTemplatesInput = {
@@ -24804,6 +27192,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutSamplesInput
     scores?: ScoreCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
   }
 
   export type SampleUncheckedCreateWithoutSessionSamplesInput = {
@@ -24832,6 +27221,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
   }
 
   export type SampleCreateOrConnectWithoutSessionSamplesInput = {
@@ -25007,6 +27397,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
     scores?: ScoreUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
   }
 
   export type SampleUncheckedUpdateWithoutSessionSamplesInput = {
@@ -25035,6 +27426,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
   }
 
   export type ScoreUpsertWithWhereUniqueWithoutSessionSampleInput = {
@@ -25169,6 +27561,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutSamplesInput
     sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
   }
 
   export type SampleUncheckedCreateWithoutScoresInput = {
@@ -25197,6 +27590,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
   }
 
   export type SampleCreateOrConnectWithoutScoresInput = {
@@ -25420,6 +27814,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
     sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
   }
 
   export type SampleUncheckedUpdateWithoutScoresInput = {
@@ -25448,6 +27843,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
   }
 
   export type UserUpsertWithoutScoresInput = {
@@ -26004,6 +28400,138 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SampleCreateWithoutGreenBeanGradingInput = {
+    id?: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutSamplesInput
+    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
+    scores?: ScoreCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleUncheckedCreateWithoutGreenBeanGradingInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleCreateOrConnectWithoutGreenBeanGradingInput = {
+    where: SampleWhereUniqueInput
+    create: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+  }
+
+  export type SampleUpsertWithoutGreenBeanGradingInput = {
+    update: XOR<SampleUpdateWithoutGreenBeanGradingInput, SampleUncheckedUpdateWithoutGreenBeanGradingInput>
+    create: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+    where?: SampleWhereInput
+  }
+
+  export type SampleUpdateToOneWithWhereWithoutGreenBeanGradingInput = {
+    where?: SampleWhereInput
+    data: XOR<SampleUpdateWithoutGreenBeanGradingInput, SampleUncheckedUpdateWithoutGreenBeanGradingInput>
+  }
+
+  export type SampleUpdateWithoutGreenBeanGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
+    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
+    scores?: ScoreUpdateManyWithoutSampleNestedInput
+  }
+
+  export type SampleUncheckedUpdateWithoutGreenBeanGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+  }
+
   export type UserCreateManyOrganizationInput = {
     id?: string
     email: string
@@ -26269,6 +28797,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
     scores?: ScoreUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
   }
 
   export type SampleUncheckedUpdateWithoutOrganizationInput = {
@@ -26297,6 +28826,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
   }
 
   export type SampleUncheckedUpdateManyWithoutOrganizationInput = {

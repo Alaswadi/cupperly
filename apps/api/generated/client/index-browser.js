@@ -315,12 +315,45 @@ exports.Prisma.ScoreFlavorDescriptorScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.GreenBeanGradingScalarFieldEnum = {
+  id: 'id',
+  sampleId: 'sampleId',
+  gradingSystem: 'gradingSystem',
+  primaryDefects: 'primaryDefects',
+  secondaryDefects: 'secondaryDefects',
+  fullDefectEquivalents: 'fullDefectEquivalents',
+  defectBreakdown: 'defectBreakdown',
+  screenSizeDistribution: 'screenSizeDistribution',
+  averageScreenSize: 'averageScreenSize',
+  uniformityPercentage: 'uniformityPercentage',
+  moistureContent: 'moistureContent',
+  waterActivity: 'waterActivity',
+  bulkDensity: 'bulkDensity',
+  colorScore: 'colorScore',
+  uniformityScore: 'uniformityScore',
+  grade: 'grade',
+  classification: 'classification',
+  qualityScore: 'qualityScore',
+  gradedBy: 'gradedBy',
+  gradedAt: 'gradedAt',
+  certifiedBy: 'certifiedBy',
+  certificationDate: 'certificationDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
 exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
@@ -415,6 +448,23 @@ exports.FlavorCategory = exports.$Enums.FlavorCategory = {
   NEGATIVE: 'NEGATIVE'
 };
 
+exports.GradingSystem = exports.$Enums.GradingSystem = {
+  SCA: 'SCA',
+  ETHIOPIAN: 'ETHIOPIAN',
+  COLOMBIAN: 'COLOMBIAN',
+  BRAZILIAN: 'BRAZILIAN',
+  KENYAN: 'KENYAN',
+  CUSTOM: 'CUSTOM'
+};
+
+exports.GradeClassification = exports.$Enums.GradeClassification = {
+  SPECIALTY_GRADE: 'SPECIALTY_GRADE',
+  PREMIUM_GRADE: 'PREMIUM_GRADE',
+  EXCHANGE_GRADE: 'EXCHANGE_GRADE',
+  BELOW_STANDARD: 'BELOW_STANDARD',
+  OFF_GRADE: 'OFF_GRADE'
+};
+
 exports.Prisma.ModelName = {
   Organization: 'Organization',
   User: 'User',
@@ -426,7 +476,8 @@ exports.Prisma.ModelName = {
   SessionSample: 'SessionSample',
   Score: 'Score',
   FlavorDescriptor: 'FlavorDescriptor',
-  ScoreFlavorDescriptor: 'ScoreFlavorDescriptor'
+  ScoreFlavorDescriptor: 'ScoreFlavorDescriptor',
+  GreenBeanGrading: 'GreenBeanGrading'
 };
 
 /**

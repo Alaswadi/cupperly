@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '../generated/client';
+import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../types/auth';
 
 const prisma = new PrismaClient();
@@ -266,25 +266,14 @@ export const generateSessionSampleSummary = async (
       flavorDescriptors
     );
 
-    // Update session sample with AI summary
-    const updatedSessionSample = await prisma.sessionSample.update({
-      where: {
-        id: sessionSample.id,
-      },
-      data: {
-        aiSummary,
-        aiGeneratedAt: new Date(),
-      },
-      include: {
-        sample: true,
-      },
-    });
-
+    // Note: AI summary storage in database is currently disabled
+    // The aiSummary and aiGeneratedAt fields have been removed from the schema
+    // Return the generated summary without storing it
     res.json({
       success: true,
       data: {
         aiSummary,
-        generatedAt: updatedSessionSample.aiGeneratedAt,
+        generatedAt: new Date(),
       },
     });
   } catch (error) {

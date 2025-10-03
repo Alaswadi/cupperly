@@ -57,6 +57,85 @@ export interface Sample {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  greenBeanGrading?: GreenBeanGrading;
+}
+
+// Green Bean Grading types
+export interface DefectItem {
+  type: string;
+  count: number;
+  category: 1 | 2;
+  description?: string;
+}
+
+export interface ScreenSizeDistribution {
+  // Flat beans (FT)
+  size13?: number;
+  size14?: number;
+  size15?: number;
+  size16?: number;
+  size17?: number;
+  size18?: number;
+  size19?: number;
+  size20?: number;
+  // Peaberries (PB)
+  pb8?: number;
+  pb9?: number;
+  pb10?: number;
+  pb11?: number;
+  pb12?: number;
+  pb13?: number;
+}
+
+export type GradingSystem = 'SCA';
+
+export type GradeClassification =
+  | 'SPECIALTY_GRADE'    // 0-5 full defects
+  | 'PREMIUM_GRADE'      // 6-8 full defects
+  | 'EXCHANGE_GRADE'     // 9-23 full defects
+  | 'BELOW_STANDARD'     // 24+ full defects
+  | 'OFF_GRADE';         // Significant quality issues
+
+export interface GreenBeanGrading {
+  id: string;
+  sampleId: string;
+  gradingSystem: GradingSystem;
+  primaryDefects: number;
+  secondaryDefects: number;
+  fullDefectEquivalents: number;
+  defectBreakdown: DefectItem[];
+  screenSizeDistribution?: ScreenSizeDistribution;
+  averageScreenSize?: number;
+  uniformityPercentage?: number;
+  moistureContent?: number;
+  waterActivity?: number;
+  bulkDensity?: number;
+  beanColorAssessment?: string;
+  uniformityScore?: number;
+  grade?: string;
+  classification?: GradeClassification;
+  qualityScore?: number;
+  gradedBy?: string;
+  gradedAt?: string;
+  certifiedBy?: string;
+  certificationDate?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateGreenBeanGradingForm {
+  gradingSystem?: GradingSystem;
+  primaryDefects?: number;
+  secondaryDefects?: number;
+  defectBreakdown?: DefectItem[];
+  screenSizeDistribution?: ScreenSizeDistribution;
+  moistureContent?: number;
+  waterActivity?: number;
+  bulkDensity?: number;
+  beanColorAssessment?: string;
+  uniformityScore?: number;
+  notes?: string;
 }
 
 // Cupping Session types

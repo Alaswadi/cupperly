@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '../generated/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -20,7 +20,7 @@ export const tenantMiddleware = async (
   try {
     let tenantIdentifier: string | undefined;
 
-    // Extract tenant from subdomain (e.g., demo.cuppinglab.com)
+    // Extract tenant from subdomain (e.g., demo.cupperly.com)
     const host = req.get('host');
     if (host) {
       // Remove port number if present

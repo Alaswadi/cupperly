@@ -21,6 +21,7 @@ import templatesRoutes from './routes/templates';
 import flavorDescriptorsRoutes from './routes/flavorDescriptors';
 import settingsRoutes from './routes/settings';
 import aiRoutes from './routes/ai';
+import greenBeanGradingRoutes from './routes/greenBeanGrading';
 
 // Load environment variables
 dotenv.config();
@@ -99,6 +100,8 @@ app.use('/api/settings', settingsRoutes);
 console.log('✅ Settings routes registered');
 app.use('/api/ai', aiRoutes);
 console.log('✅ AI routes registered');
+app.use('/api/samples', greenBeanGradingRoutes);
+console.log('✅ Green bean grading routes registered');
 
 // 404 handler
 app.use(notFound);

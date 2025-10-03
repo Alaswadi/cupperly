@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { sampleService } from '../services/sampleService';
+import { authenticate } from '../middleware/auth';
 
 const router = Router();
 
-// Organization ID for demo purposes
-const DEMO_ORG_ID = 'cmg2jkv6j0000q6uak3lrxq96';
+// Apply authentication middleware to all routes
+router.use(authenticate);
 
 // Sample data is now managed by the SampleService
 
@@ -13,7 +14,15 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     console.log('📋 Get samples route hit');
 
-    const samples = await sampleService.getAllSamples(DEMO_ORG_ID);
+    const organizationId = (req as any).user?.organizationId;
+    if (!organizationId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Organization ID not found'
+      });
+    }
+
+    const samples = await sampleService.getAllSamples(organizationId);
 
     res.json({
       success: true,
@@ -35,7 +44,15 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     console.log('📋 Get sample route hit:', req.params.id);
 
-    const sample = await sampleService.getSampleById(req.params.id, DEMO_ORG_ID);
+    const organizationId = (req as any).user?.organizationId;
+    if (!organizationId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Organization ID not found'
+      });
+    }
+
+    const sample = await sampleService.getSampleById(req.params.id, organizationId);
 
     if (!sample) {
       return res.status(404).json({
@@ -62,6 +79,14 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     console.log('📋 Create sample route hit:', req.body);
 
+    const organizationId = (req as any).user?.organizationId;
+    if (!organizationId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Organization ID not found'
+      });
+    }
+
     const sampleData = {
       name: req.body.name || 'New Sample',
       origin: req.body.origin || 'Unknown',
@@ -80,7 +105,7 @@ router.post('/', async (req: Request, res: Response) => {
       harvestDate: req.body.harvestDate || null,
       roaster: req.body.roaster || null,
       roastDate: req.body.roastDate || null,
-      organizationId: DEMO_ORG_ID
+      organizationId: organizationId
     };
 
     const newSample = await sampleService.createSample(sampleData);
@@ -104,6 +129,14 @@ router.put('/:id', async (req: Request, res: Response) => {
   try {
     console.log('📋 Update sample route hit:', req.params.id, req.body);
 
+    const organizationId = (req as any).user?.organizationId;
+    if (!organizationId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Organization ID not found'
+      });
+    }
+
     const updateData = {
       name: req.body.name,
       origin: req.body.origin,
@@ -124,7 +157,7 @@ router.put('/:id', async (req: Request, res: Response) => {
       roastDate: req.body.roastDate
     };
 
-    const updatedSample = await sampleService.updateSample(req.params.id, DEMO_ORG_ID, updateData);
+    const updatedSample = await sampleService.updateSample(req.params.id, organizationId, updateData);
 
     if (!updatedSample) {
       return res.status(404).json({

@@ -50,6 +50,7 @@ services:
       - ./packages:/app/packages:cached
       - /app/node_modules
       - /app/apps/api/node_modules
+      - /app/generated
     depends_on:
       - postgres
       - redis

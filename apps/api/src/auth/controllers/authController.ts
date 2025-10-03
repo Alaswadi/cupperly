@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import { AuthService } from '../services/authService';
 import { AuthRequest } from '../../middleware/auth';
 import { TenantRequest } from '../../middleware/tenant';
-import { PrismaClient } from '../../generated/client';
+import { PrismaClient } from '@prisma/client';
 
 const authService = new AuthService();
 const prisma = new PrismaClient();
@@ -333,6 +333,238 @@ export const inviteUser = async (
       success: true,
       data: { invitation },
       message: 'Invitation sent successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createMember = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Validation failed',
+          details: errors.array(),
+        },
+      });
+    }
+
+    const { email, firstName, lastName, role, password } = req.body;
+
+    const user = await authService.createMember({
+      email,
+      firstName,
+      lastName,
+      role,
+      password,
+      organizationId: req.user!.organizationId,
+      createdBy: req.user!.id,
+    });
+
+    res.status(201).json({
+      success: true,
+      data: { user },
+      message: 'Team member created successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTeamMembers = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const organizationId = req.user!.organizationId;
+
+    const users = await prisma.user.findMany({
+      where: {
+        organizationId,
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        avatar: true,
+        bio: true,
+        emailVerified: true,
+        createdAt: true,
+        updatedAt: true,
+        lastLoginAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    res.json({
+      success: true,
+      data: { users },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTeamMember = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Validation failed',
+          details: errors.array(),
+        },
+      });
+    }
+
+    const { id } = req.params;
+    const { firstName, lastName, email, role, bio } = req.body;
+    const organizationId = req.user!.organizationId;
+
+    // Check if user exists and belongs to organization
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        id,
+        organizationId,
+      },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'User not found',
+        },
+      });
+    }
+
+    // Prevent users from changing their own role
+    if (id === req.user!.id && role && role !== existingUser.role) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'You cannot change your own role',
+        },
+      });
+    }
+
+    // Check if email is being changed and if it's already taken
+    if (email && email !== existingUser.email) {
+      const emailTaken = await prisma.user.findFirst({
+        where: {
+          email,
+          id: { not: id },
+        },
+      });
+
+      if (emailTaken) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            message: 'Email is already taken',
+          },
+        });
+      }
+    }
+
+    // Update user
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        ...(firstName && { firstName }),
+        ...(lastName && { lastName }),
+        ...(email && { email }),
+        ...(role && { role }),
+        ...(bio !== undefined && { bio }),
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        avatar: true,
+        bio: true,
+        emailVerified: true,
+        createdAt: true,
+        updatedAt: true,
+        lastLoginAt: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      data: { user: updatedUser },
+      message: 'Team member updated successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTeamMember = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const organizationId = req.user!.organizationId;
+
+    // Check if user exists and belongs to organization
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        id,
+        organizationId,
+      },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'User not found',
+        },
+      });
+    }
+
+    // Prevent users from deleting themselves
+    if (id === req.user!.id) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'You cannot delete your own account',
+        },
+      });
+    }
+
+    // Delete user
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    res.json({
+      success: true,
+      message: 'Team member deleted successfully',
     });
   } catch (error) {
     next(error);

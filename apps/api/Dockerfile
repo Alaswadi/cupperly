@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for CuppingLab API
+# Multi-stage Dockerfile for Cupperly API
 FROM node:18-alpine AS base
 
 # Install dependencies only when needed

@@ -58,22 +58,27 @@ export type SessionSample = $Result.DefaultSelection<Prisma.$SessionSamplePayloa
  * 
  */
 export type Score = $Result.DefaultSelection<Prisma.$ScorePayload>
+/**
+ * Model GreenBeanGrading
+ * 
+ */
+export type GreenBeanGrading = $Result.DefaultSelection<Prisma.$GreenBeanGradingPayload>
+/**
+ * Model FlavorDescriptor
+ * 
+ */
+export type FlavorDescriptor = $Result.DefaultSelection<Prisma.$FlavorDescriptorPayload>
+/**
+ * Model ScoreFlavorDescriptor
+ * 
+ */
+export type ScoreFlavorDescriptor = $Result.DefaultSelection<Prisma.$ScoreFlavorDescriptorPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const UserRole: {
-  ADMIN: 'ADMIN',
-  MANAGER: 'MANAGER',
-  CUPPER: 'CUPPER',
-  VIEWER: 'VIEWER'
-};
-
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
-
-
-export const SubscriptionStatus: {
+  export const SubscriptionStatus: {
   TRIAL: 'TRIAL',
   ACTIVE: 'ACTIVE',
   PAST_DUE: 'PAST_DUE',
@@ -92,6 +97,14 @@ export const SubscriptionPlan: {
 };
 
 export type SubscriptionPlan = (typeof SubscriptionPlan)[keyof typeof SubscriptionPlan]
+
+
+export const UserRole: {
+  ADMIN: 'ADMIN',
+  CUPPER: 'CUPPER'
+};
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
 export const InvitationStatus: {
@@ -160,11 +173,33 @@ export const ParticipantRole: {
 
 export type ParticipantRole = (typeof ParticipantRole)[keyof typeof ParticipantRole]
 
+
+export const GradingSystem: {
+  SCA: 'SCA'
+};
+
+export type GradingSystem = (typeof GradingSystem)[keyof typeof GradingSystem]
+
+
+export const GradeClassification: {
+  SPECIALTY_GRADE: 'SPECIALTY_GRADE',
+  PREMIUM_GRADE: 'PREMIUM_GRADE',
+  EXCHANGE_GRADE: 'EXCHANGE_GRADE',
+  BELOW_STANDARD: 'BELOW_STANDARD',
+  OFF_GRADE: 'OFF_GRADE'
+};
+
+export type GradeClassification = (typeof GradeClassification)[keyof typeof GradeClassification]
+
+
+export const FlavorCategory: {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE'
+};
+
+export type FlavorCategory = (typeof FlavorCategory)[keyof typeof FlavorCategory]
+
 }
-
-export type UserRole = $Enums.UserRole
-
-export const UserRole: typeof $Enums.UserRole
 
 export type SubscriptionStatus = $Enums.SubscriptionStatus
 
@@ -173,6 +208,10 @@ export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
 export type SubscriptionPlan = $Enums.SubscriptionPlan
 
 export const SubscriptionPlan: typeof $Enums.SubscriptionPlan
+
+export type UserRole = $Enums.UserRole
+
+export const UserRole: typeof $Enums.UserRole
 
 export type InvitationStatus = $Enums.InvitationStatus
 
@@ -198,9 +237,21 @@ export type ParticipantRole = $Enums.ParticipantRole
 
 export const ParticipantRole: typeof $Enums.ParticipantRole
 
+export type GradingSystem = $Enums.GradingSystem
+
+export const GradingSystem: typeof $Enums.GradingSystem
+
+export type GradeClassification = $Enums.GradeClassification
+
+export const GradeClassification: typeof $Enums.GradeClassification
+
+export type FlavorCategory = $Enums.FlavorCategory
+
+export const FlavorCategory: typeof $Enums.FlavorCategory
+
 /**
  * ##  Prisma Client ʲˢ
- *
+ * 
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
@@ -209,19 +260,19 @@ export const ParticipantRole: typeof $Enums.ParticipantRole
  * const organizations = await prisma.organization.findMany()
  * ```
  *
- *
+ * 
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
    * ##  Prisma Client ʲˢ
-   *
+   * 
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
@@ -230,12 +281,12 @@ export class PrismaClient<
    * const organizations = await prisma.organization.findMany()
    * ```
    *
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
+  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): void;
 
   /**
    * Connect with the database
@@ -247,13 +298,20 @@ export class PrismaClient<
    */
   $disconnect(): $Utils.JsPromise<void>;
 
+  /**
+   * Add a middleware
+   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
+   * @see https://pris.ly/d/extensions
+   */
+  $use(cb: Prisma.Middleware): void
+
 /**
    * Executes a prepared raw query and returns the number of affected rows.
    * @example
    * ```
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -265,7 +323,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -276,7 +334,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -288,7 +346,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -312,9 +370,7 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
 
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
-    extArgs: ExtArgs
-  }>>
+  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs>
 
       /**
    * `prisma.organization`: Exposes CRUD operations for the **Organization** model.
@@ -324,7 +380,7 @@ export class PrismaClient<
     * const organizations = await prisma.organization.findMany()
     * ```
     */
-  get organization(): Prisma.OrganizationDelegate<ExtArgs, ClientOptions>;
+  get organization(): Prisma.OrganizationDelegate<ExtArgs>;
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -334,7 +390,7 @@ export class PrismaClient<
     * const users = await prisma.user.findMany()
     * ```
     */
-  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+  get user(): Prisma.UserDelegate<ExtArgs>;
 
   /**
    * `prisma.invitation`: Exposes CRUD operations for the **Invitation** model.
@@ -344,7 +400,7 @@ export class PrismaClient<
     * const invitations = await prisma.invitation.findMany()
     * ```
     */
-  get invitation(): Prisma.InvitationDelegate<ExtArgs, ClientOptions>;
+  get invitation(): Prisma.InvitationDelegate<ExtArgs>;
 
   /**
    * `prisma.sample`: Exposes CRUD operations for the **Sample** model.
@@ -354,7 +410,7 @@ export class PrismaClient<
     * const samples = await prisma.sample.findMany()
     * ```
     */
-  get sample(): Prisma.SampleDelegate<ExtArgs, ClientOptions>;
+  get sample(): Prisma.SampleDelegate<ExtArgs>;
 
   /**
    * `prisma.cuppingTemplate`: Exposes CRUD operations for the **CuppingTemplate** model.
@@ -364,7 +420,7 @@ export class PrismaClient<
     * const cuppingTemplates = await prisma.cuppingTemplate.findMany()
     * ```
     */
-  get cuppingTemplate(): Prisma.CuppingTemplateDelegate<ExtArgs, ClientOptions>;
+  get cuppingTemplate(): Prisma.CuppingTemplateDelegate<ExtArgs>;
 
   /**
    * `prisma.cuppingSession`: Exposes CRUD operations for the **CuppingSession** model.
@@ -374,7 +430,7 @@ export class PrismaClient<
     * const cuppingSessions = await prisma.cuppingSession.findMany()
     * ```
     */
-  get cuppingSession(): Prisma.CuppingSessionDelegate<ExtArgs, ClientOptions>;
+  get cuppingSession(): Prisma.CuppingSessionDelegate<ExtArgs>;
 
   /**
    * `prisma.sessionParticipant`: Exposes CRUD operations for the **SessionParticipant** model.
@@ -384,7 +440,7 @@ export class PrismaClient<
     * const sessionParticipants = await prisma.sessionParticipant.findMany()
     * ```
     */
-  get sessionParticipant(): Prisma.SessionParticipantDelegate<ExtArgs, ClientOptions>;
+  get sessionParticipant(): Prisma.SessionParticipantDelegate<ExtArgs>;
 
   /**
    * `prisma.sessionSample`: Exposes CRUD operations for the **SessionSample** model.
@@ -394,7 +450,7 @@ export class PrismaClient<
     * const sessionSamples = await prisma.sessionSample.findMany()
     * ```
     */
-  get sessionSample(): Prisma.SessionSampleDelegate<ExtArgs, ClientOptions>;
+  get sessionSample(): Prisma.SessionSampleDelegate<ExtArgs>;
 
   /**
    * `prisma.score`: Exposes CRUD operations for the **Score** model.
@@ -404,7 +460,37 @@ export class PrismaClient<
     * const scores = await prisma.score.findMany()
     * ```
     */
-  get score(): Prisma.ScoreDelegate<ExtArgs, ClientOptions>;
+  get score(): Prisma.ScoreDelegate<ExtArgs>;
+
+  /**
+   * `prisma.greenBeanGrading`: Exposes CRUD operations for the **GreenBeanGrading** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GreenBeanGradings
+    * const greenBeanGradings = await prisma.greenBeanGrading.findMany()
+    * ```
+    */
+  get greenBeanGrading(): Prisma.GreenBeanGradingDelegate<ExtArgs>;
+
+  /**
+   * `prisma.flavorDescriptor`: Exposes CRUD operations for the **FlavorDescriptor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FlavorDescriptors
+    * const flavorDescriptors = await prisma.flavorDescriptor.findMany()
+    * ```
+    */
+  get flavorDescriptor(): Prisma.FlavorDescriptorDelegate<ExtArgs>;
+
+  /**
+   * `prisma.scoreFlavorDescriptor`: Exposes CRUD operations for the **ScoreFlavorDescriptor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ScoreFlavorDescriptors
+    * const scoreFlavorDescriptors = await prisma.scoreFlavorDescriptor.findMany()
+    * ```
+    */
+  get scoreFlavorDescriptor(): Prisma.ScoreFlavorDescriptorDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -425,6 +511,7 @@ export namespace Prisma {
   export import PrismaClientRustPanicError = runtime.PrismaClientRustPanicError
   export import PrismaClientInitializationError = runtime.PrismaClientInitializationError
   export import PrismaClientValidationError = runtime.PrismaClientValidationError
+  export import NotFoundError = runtime.NotFoundError
 
   /**
    * Re-export of sql-template-tag
@@ -445,7 +532,7 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
-   * Metrics
+   * Metrics 
    */
   export type Metrics = runtime.Metrics
   export type Metric<T> = runtime.Metric<T>
@@ -463,14 +550,14 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.2
-   * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
+   * Prisma Client JS version: 5.22.0
+   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
    */
   export type PrismaVersion = {
     client: string
   }
 
-  export const prismaVersion: PrismaVersion
+  export const prismaVersion: PrismaVersion 
 
   /**
    * Utility Types
@@ -486,15 +573,15 @@ export namespace Prisma {
 
   /**
    * Types of the values used to represent different kinds of `null` values when working with JSON fields.
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   namespace NullTypes {
     /**
     * Type of `Prisma.DbNull`.
-    *
+    * 
     * You cannot use other instances of this class. Please use the `Prisma.DbNull` value.
-    *
+    * 
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class DbNull {
@@ -504,9 +591,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.JsonNull`.
-    *
+    * 
     * You cannot use other instances of this class. Please use the `Prisma.JsonNull` value.
-    *
+    * 
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class JsonNull {
@@ -516,9 +603,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.AnyNull`.
-    *
+    * 
     * You cannot use other instances of this class. Please use the `Prisma.AnyNull` value.
-    *
+    * 
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class AnyNull {
@@ -529,21 +616,21 @@ export namespace Prisma {
 
   /**
    * Helper for filtering JSON entries that have `null` on the database (empty on the db)
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const DbNull: NullTypes.DbNull
 
   /**
    * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const JsonNull: NullTypes.JsonNull
 
   /**
    * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const AnyNull: NullTypes.AnyNull
@@ -731,7 +818,7 @@ export namespace Prisma {
   type AtLeast<O extends object, K extends string> = NoExpand<
     O extends unknown
     ? | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-      | {[P in keyof O as P extends K ? P : never]-?: O[P]} & O
+      | {[P in keyof O as P extends K ? K : never]-?: O[P]} & O
     : never>;
 
   type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
@@ -853,7 +940,10 @@ export namespace Prisma {
     CuppingSession: 'CuppingSession',
     SessionParticipant: 'SessionParticipant',
     SessionSample: 'SessionSample',
-    Score: 'Score'
+    Score: 'Score',
+    GreenBeanGrading: 'GreenBeanGrading',
+    FlavorDescriptor: 'FlavorDescriptor',
+    ScoreFlavorDescriptor: 'ScoreFlavorDescriptor'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -863,16 +953,13 @@ export namespace Prisma {
     db?: Datasource
   }
 
-  interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
-    returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
+  interface TypeMapCb extends $Utils.Fn<{extArgs: $Extensions.InternalArgs, clientOptions: PrismaClientOptions }, $Utils.Record<string, any>> {
+    returns: Prisma.TypeMap<this['params']['extArgs'], this['params']['clientOptions']>
   }
 
-  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> = {
-    globalOmitOptions: {
-      omit: GlobalOmitOptions
-    }
+  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "organization" | "user" | "invitation" | "sample" | "cuppingTemplate" | "cuppingSession" | "sessionParticipant" | "sessionSample" | "score"
+      modelProps: "organization" | "user" | "invitation" | "sample" | "cuppingTemplate" | "cuppingSession" | "sessionParticipant" | "sessionSample" | "score" | "greenBeanGrading" | "flavorDescriptor" | "scoreFlavorDescriptor"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -927,10 +1014,6 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.OrganizationUpdateManyArgs<ExtArgs>
             result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.OrganizationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OrganizationPayload>[]
           }
           upsert: {
             args: Prisma.OrganizationUpsertArgs<ExtArgs>
@@ -1002,10 +1085,6 @@ export namespace Prisma {
             args: Prisma.UserUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
-          updateManyAndReturn: {
-            args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
-          }
           upsert: {
             args: Prisma.UserUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$UserPayload>
@@ -1075,10 +1154,6 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.InvitationUpdateManyArgs<ExtArgs>
             result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.InvitationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InvitationPayload>[]
           }
           upsert: {
             args: Prisma.InvitationUpsertArgs<ExtArgs>
@@ -1150,10 +1225,6 @@ export namespace Prisma {
             args: Prisma.SampleUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
-          updateManyAndReturn: {
-            args: Prisma.SampleUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SamplePayload>[]
-          }
           upsert: {
             args: Prisma.SampleUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SamplePayload>
@@ -1223,10 +1294,6 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.CuppingTemplateUpdateManyArgs<ExtArgs>
             result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.CuppingTemplateUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CuppingTemplatePayload>[]
           }
           upsert: {
             args: Prisma.CuppingTemplateUpsertArgs<ExtArgs>
@@ -1298,10 +1365,6 @@ export namespace Prisma {
             args: Prisma.CuppingSessionUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
-          updateManyAndReturn: {
-            args: Prisma.CuppingSessionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CuppingSessionPayload>[]
-          }
           upsert: {
             args: Prisma.CuppingSessionUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$CuppingSessionPayload>
@@ -1371,10 +1434,6 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.SessionParticipantUpdateManyArgs<ExtArgs>
             result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.SessionParticipantUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionParticipantPayload>[]
           }
           upsert: {
             args: Prisma.SessionParticipantUpsertArgs<ExtArgs>
@@ -1446,10 +1505,6 @@ export namespace Prisma {
             args: Prisma.SessionSampleUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
-          updateManyAndReturn: {
-            args: Prisma.SessionSampleUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionSamplePayload>[]
-          }
           upsert: {
             args: Prisma.SessionSampleUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SessionSamplePayload>
@@ -1520,10 +1575,6 @@ export namespace Prisma {
             args: Prisma.ScoreUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
-          updateManyAndReturn: {
-            args: Prisma.ScoreUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ScorePayload>[]
-          }
           upsert: {
             args: Prisma.ScoreUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$ScorePayload>
@@ -1539,6 +1590,216 @@ export namespace Prisma {
           count: {
             args: Prisma.ScoreCountArgs<ExtArgs>
             result: $Utils.Optional<ScoreCountAggregateOutputType> | number
+          }
+        }
+      }
+      GreenBeanGrading: {
+        payload: Prisma.$GreenBeanGradingPayload<ExtArgs>
+        fields: Prisma.GreenBeanGradingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GreenBeanGradingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GreenBeanGradingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          findFirst: {
+            args: Prisma.GreenBeanGradingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GreenBeanGradingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          findMany: {
+            args: Prisma.GreenBeanGradingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>[]
+          }
+          create: {
+            args: Prisma.GreenBeanGradingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          createMany: {
+            args: Prisma.GreenBeanGradingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GreenBeanGradingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>[]
+          }
+          delete: {
+            args: Prisma.GreenBeanGradingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          update: {
+            args: Prisma.GreenBeanGradingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          deleteMany: {
+            args: Prisma.GreenBeanGradingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GreenBeanGradingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.GreenBeanGradingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GreenBeanGradingPayload>
+          }
+          aggregate: {
+            args: Prisma.GreenBeanGradingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGreenBeanGrading>
+          }
+          groupBy: {
+            args: Prisma.GreenBeanGradingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GreenBeanGradingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GreenBeanGradingCountArgs<ExtArgs>
+            result: $Utils.Optional<GreenBeanGradingCountAggregateOutputType> | number
+          }
+        }
+      }
+      FlavorDescriptor: {
+        payload: Prisma.$FlavorDescriptorPayload<ExtArgs>
+        fields: Prisma.FlavorDescriptorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FlavorDescriptorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          findFirst: {
+            args: Prisma.FlavorDescriptorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FlavorDescriptorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          findMany: {
+            args: Prisma.FlavorDescriptorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>[]
+          }
+          create: {
+            args: Prisma.FlavorDescriptorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          createMany: {
+            args: Prisma.FlavorDescriptorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlavorDescriptorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>[]
+          }
+          delete: {
+            args: Prisma.FlavorDescriptorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          update: {
+            args: Prisma.FlavorDescriptorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          deleteMany: {
+            args: Prisma.FlavorDescriptorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FlavorDescriptorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FlavorDescriptorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlavorDescriptorPayload>
+          }
+          aggregate: {
+            args: Prisma.FlavorDescriptorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFlavorDescriptor>
+          }
+          groupBy: {
+            args: Prisma.FlavorDescriptorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FlavorDescriptorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FlavorDescriptorCountArgs<ExtArgs>
+            result: $Utils.Optional<FlavorDescriptorCountAggregateOutputType> | number
+          }
+        }
+      }
+      ScoreFlavorDescriptor: {
+        payload: Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>
+        fields: Prisma.ScoreFlavorDescriptorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScoreFlavorDescriptorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScoreFlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          findFirst: {
+            args: Prisma.ScoreFlavorDescriptorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScoreFlavorDescriptorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          findMany: {
+            args: Prisma.ScoreFlavorDescriptorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>[]
+          }
+          create: {
+            args: Prisma.ScoreFlavorDescriptorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          createMany: {
+            args: Prisma.ScoreFlavorDescriptorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScoreFlavorDescriptorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>[]
+          }
+          delete: {
+            args: Prisma.ScoreFlavorDescriptorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          update: {
+            args: Prisma.ScoreFlavorDescriptorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          deleteMany: {
+            args: Prisma.ScoreFlavorDescriptorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScoreFlavorDescriptorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ScoreFlavorDescriptorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScoreFlavorDescriptorPayload>
+          }
+          aggregate: {
+            args: Prisma.ScoreFlavorDescriptorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScoreFlavorDescriptor>
+          }
+          groupBy: {
+            args: Prisma.ScoreFlavorDescriptorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScoreFlavorDescriptorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScoreFlavorDescriptorCountArgs<ExtArgs>
+            result: $Utils.Optional<ScoreFlavorDescriptorCountAggregateOutputType> | number
           }
         }
       }
@@ -1585,24 +1846,16 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Shorthand for `emit: 'stdout'`
+     * // Defaults to stdout
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events only
+     * // Emit as events
      * log: [
-     *   { emit: 'event', level: 'query' },
-     *   { emit: 'event', level: 'info' },
-     *   { emit: 'event', level: 'warn' }
-     *   { emit: 'event', level: 'error' }
+     *   { emit: 'stdout', level: 'query' },
+     *   { emit: 'stdout', level: 'info' },
+     *   { emit: 'stdout', level: 'warn' }
+     *   { emit: 'stdout', level: 'error' }
      * ]
-     * 
-     * / Emit as events and log to stdout
-     * og: [
-     *  { emit: 'stdout', level: 'query' },
-     *  { emit: 'stdout', level: 'info' },
-     *  { emit: 'stdout', level: 'warn' }
-     *  { emit: 'stdout', level: 'error' }
-     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1617,37 +1870,8 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
-    /**
-     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
-     */
-    adapter?: runtime.SqlDriverAdapterFactory | null
-    /**
-     * Global configuration for omitting model fields by default.
-     * 
-     * @example
-     * ```
-     * const prisma = new PrismaClient({
-     *   omit: {
-     *     user: {
-     *       password: true
-     *     }
-     *   }
-     * })
-     * ```
-     */
-    omit?: Prisma.GlobalOmitConfig
   }
-  export type GlobalOmitConfig = {
-    organization?: OrganizationOmit
-    user?: UserOmit
-    invitation?: InvitationOmit
-    sample?: SampleOmit
-    cuppingTemplate?: CuppingTemplateOmit
-    cuppingSession?: CuppingSessionOmit
-    sessionParticipant?: SessionParticipantOmit
-    sessionSample?: SessionSampleOmit
-    score?: ScoreOmit
-  }
+
 
   /* Types for Logging */
   export type LogLevel = 'info' | 'query' | 'warn' | 'error'
@@ -1656,15 +1880,10 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
-
-  export type GetLogType<T> = CheckIsLogLevel<
-    T extends LogDefinition ? T['level'] : T
-  >;
-
-  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
-    ? GetLogType<T[number]>
-    : never;
+  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
+  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
+    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
+    : never
 
   export type QueryEvent = {
     timestamp: Date
@@ -1693,7 +1912,6 @@ export namespace Prisma {
     | 'createManyAndReturn'
     | 'update'
     | 'updateMany'
-    | 'updateManyAndReturn'
     | 'upsert'
     | 'delete'
     | 'deleteMany'
@@ -1704,6 +1922,25 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
+
+  /**
+   * These options are being passed into the middleware as "params"
+   */
+  export type MiddlewareParams = {
+    model?: ModelName
+    action: PrismaAction
+    args: any
+    dataPath: string[]
+    runInTransaction: boolean
+  }
+
+  /**
+   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
+   */
+  export type Middleware<T = any> = (
+    params: MiddlewareParams,
+    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
+  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -1727,19 +1964,21 @@ export namespace Prisma {
    */
 
   export type OrganizationCountOutputType = {
-    users: number
     cuppingSessions: number
-    samples: number
     templates: number
+    flavorDescriptors: number
     invitations: number
+    samples: number
+    users: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | OrganizationCountOutputTypeCountUsersArgs
     cuppingSessions?: boolean | OrganizationCountOutputTypeCountCuppingSessionsArgs
-    samples?: boolean | OrganizationCountOutputTypeCountSamplesArgs
     templates?: boolean | OrganizationCountOutputTypeCountTemplatesArgs
+    flavorDescriptors?: boolean | OrganizationCountOutputTypeCountFlavorDescriptorsArgs
     invitations?: boolean | OrganizationCountOutputTypeCountInvitationsArgs
+    samples?: boolean | OrganizationCountOutputTypeCountSamplesArgs
+    users?: boolean | OrganizationCountOutputTypeCountUsersArgs
   }
 
   // Custom InputTypes
@@ -1756,22 +1995,8 @@ export namespace Prisma {
   /**
    * OrganizationCountOutputType without action
    */
-  export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-  }
-
-  /**
-   * OrganizationCountOutputType without action
-   */
   export type OrganizationCountOutputTypeCountCuppingSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CuppingSessionWhereInput
-  }
-
-  /**
-   * OrganizationCountOutputType without action
-   */
-  export type OrganizationCountOutputTypeCountSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SampleWhereInput
   }
 
   /**
@@ -1784,8 +2009,29 @@ export namespace Prisma {
   /**
    * OrganizationCountOutputType without action
    */
+  export type OrganizationCountOutputTypeCountFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlavorDescriptorWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
   export type OrganizationCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InvitationWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SampleWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
 
@@ -1795,16 +2041,18 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     cuppingSessions: number
+    createdTemplates: number
+    flavorDescriptors: number
     scores: number
     sessionParticipants: number
-    createdTemplates: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cuppingSessions?: boolean | UserCountOutputTypeCountCuppingSessionsArgs
+    createdTemplates?: boolean | UserCountOutputTypeCountCreatedTemplatesArgs
+    flavorDescriptors?: boolean | UserCountOutputTypeCountFlavorDescriptorsArgs
     scores?: boolean | UserCountOutputTypeCountScoresArgs
     sessionParticipants?: boolean | UserCountOutputTypeCountSessionParticipantsArgs
-    createdTemplates?: boolean | UserCountOutputTypeCountCreatedTemplatesArgs
   }
 
   // Custom InputTypes
@@ -1828,6 +2076,20 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountCreatedTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CuppingTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlavorDescriptorWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ScoreWhereInput
   }
@@ -1839,26 +2101,19 @@ export namespace Prisma {
     where?: SessionParticipantWhereInput
   }
 
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountCreatedTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CuppingTemplateWhereInput
-  }
-
 
   /**
    * Count Type SampleCountOutputType
    */
 
   export type SampleCountOutputType = {
-    sessionSamples: number
     scores: number
+    sessionSamples: number
   }
 
   export type SampleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sessionSamples?: boolean | SampleCountOutputTypeCountSessionSamplesArgs
     scores?: boolean | SampleCountOutputTypeCountScoresArgs
+    sessionSamples?: boolean | SampleCountOutputTypeCountSessionSamplesArgs
   }
 
   // Custom InputTypes
@@ -1875,15 +2130,15 @@ export namespace Prisma {
   /**
    * SampleCountOutputType without action
    */
-  export type SampleCountOutputTypeCountSessionSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SessionSampleWhereInput
+  export type SampleCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreWhereInput
   }
 
   /**
    * SampleCountOutputType without action
    */
-  export type SampleCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ScoreWhereInput
+  export type SampleCountOutputTypeCountSessionSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionSampleWhereInput
   }
 
 
@@ -1923,15 +2178,15 @@ export namespace Prisma {
    */
 
   export type CuppingSessionCountOutputType = {
+    scores: number
     participants: number
     samples: number
-    scores: number
   }
 
   export type CuppingSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    scores?: boolean | CuppingSessionCountOutputTypeCountScoresArgs
     participants?: boolean | CuppingSessionCountOutputTypeCountParticipantsArgs
     samples?: boolean | CuppingSessionCountOutputTypeCountSamplesArgs
-    scores?: boolean | CuppingSessionCountOutputTypeCountScoresArgs
   }
 
   // Custom InputTypes
@@ -1948,6 +2203,13 @@ export namespace Prisma {
   /**
    * CuppingSessionCountOutputType without action
    */
+  export type CuppingSessionCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreWhereInput
+  }
+
+  /**
+   * CuppingSessionCountOutputType without action
+   */
   export type CuppingSessionCountOutputTypeCountParticipantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionParticipantWhereInput
   }
@@ -1957,13 +2219,6 @@ export namespace Prisma {
    */
   export type CuppingSessionCountOutputTypeCountSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionSampleWhereInput
-  }
-
-  /**
-   * CuppingSessionCountOutputType without action
-   */
-  export type CuppingSessionCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ScoreWhereInput
   }
 
 
@@ -1995,6 +2250,68 @@ export namespace Prisma {
    */
   export type SessionSampleCountOutputTypeCountScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ScoreWhereInput
+  }
+
+
+  /**
+   * Count Type ScoreCountOutputType
+   */
+
+  export type ScoreCountOutputType = {
+    flavorDescriptors: number
+  }
+
+  export type ScoreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flavorDescriptors?: boolean | ScoreCountOutputTypeCountFlavorDescriptorsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ScoreCountOutputType without action
+   */
+  export type ScoreCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreCountOutputType
+     */
+    select?: ScoreCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ScoreCountOutputType without action
+   */
+  export type ScoreCountOutputTypeCountFlavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreFlavorDescriptorWhereInput
+  }
+
+
+  /**
+   * Count Type FlavorDescriptorCountOutputType
+   */
+
+  export type FlavorDescriptorCountOutputType = {
+    scoreDescriptors: number
+  }
+
+  export type FlavorDescriptorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    scoreDescriptors?: boolean | FlavorDescriptorCountOutputTypeCountScoreDescriptorsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FlavorDescriptorCountOutputType without action
+   */
+  export type FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptorCountOutputType
+     */
+    select?: FlavorDescriptorCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FlavorDescriptorCountOutputType without action
+   */
+  export type FlavorDescriptorCountOutputTypeCountScoreDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreFlavorDescriptorWhereInput
   }
 
 
@@ -2250,34 +2567,16 @@ export namespace Prisma {
     settings?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    users?: boolean | Organization$usersArgs<ExtArgs>
     cuppingSessions?: boolean | Organization$cuppingSessionsArgs<ExtArgs>
-    samples?: boolean | Organization$samplesArgs<ExtArgs>
     templates?: boolean | Organization$templatesArgs<ExtArgs>
+    flavorDescriptors?: boolean | Organization$flavorDescriptorsArgs<ExtArgs>
     invitations?: boolean | Organization$invitationsArgs<ExtArgs>
+    samples?: boolean | Organization$samplesArgs<ExtArgs>
+    users?: boolean | Organization$usersArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
   export type OrganizationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    slug?: boolean
-    domain?: boolean
-    subdomain?: boolean
-    description?: boolean
-    logo?: boolean
-    website?: boolean
-    subscriptionStatus?: boolean
-    subscriptionPlan?: boolean
-    trialEndsAt?: boolean
-    subscriptionEndsAt?: boolean
-    stripeCustomerId?: boolean
-    settings?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["organization"]>
-
-  export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     slug?: boolean
@@ -2315,26 +2614,26 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "domain" | "subdomain" | "description" | "logo" | "website" | "subscriptionStatus" | "subscriptionPlan" | "trialEndsAt" | "subscriptionEndsAt" | "stripeCustomerId" | "settings" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | Organization$usersArgs<ExtArgs>
     cuppingSessions?: boolean | Organization$cuppingSessionsArgs<ExtArgs>
-    samples?: boolean | Organization$samplesArgs<ExtArgs>
     templates?: boolean | Organization$templatesArgs<ExtArgs>
+    flavorDescriptors?: boolean | Organization$flavorDescriptorsArgs<ExtArgs>
     invitations?: boolean | Organization$invitationsArgs<ExtArgs>
+    samples?: boolean | Organization$samplesArgs<ExtArgs>
+    users?: boolean | Organization$usersArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $OrganizationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Organization"
     objects: {
-      users: Prisma.$UserPayload<ExtArgs>[]
       cuppingSessions: Prisma.$CuppingSessionPayload<ExtArgs>[]
-      samples: Prisma.$SamplePayload<ExtArgs>[]
       templates: Prisma.$CuppingTemplatePayload<ExtArgs>[]
+      flavorDescriptors: Prisma.$FlavorDescriptorPayload<ExtArgs>[]
       invitations: Prisma.$InvitationPayload<ExtArgs>[]
+      samples: Prisma.$SamplePayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2359,12 +2658,12 @@ export namespace Prisma {
 
   type OrganizationGetPayload<S extends boolean | null | undefined | OrganizationDefaultArgs> = $Result.GetResult<Prisma.$OrganizationPayload, S>
 
-  type OrganizationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<OrganizationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type OrganizationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<OrganizationFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: OrganizationCountAggregateInputType | true
     }
 
-  export interface OrganizationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface OrganizationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Organization'], meta: { name: 'Organization' } }
     /**
      * Find zero or one Organization that matches the filter.
@@ -2377,10 +2676,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends OrganizationFindUniqueArgs>(args: SelectSubset<T, OrganizationFindUniqueArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends OrganizationFindUniqueArgs>(args: SelectSubset<T, OrganizationFindUniqueArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one Organization that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Organization that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {OrganizationFindUniqueOrThrowArgs} args - Arguments to find a Organization
      * @example
@@ -2391,7 +2690,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends OrganizationFindUniqueOrThrowArgs>(args: SelectSubset<T, OrganizationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends OrganizationFindUniqueOrThrowArgs>(args: SelectSubset<T, OrganizationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first Organization that matches the filter.
@@ -2406,7 +2705,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends OrganizationFindFirstArgs>(args?: SelectSubset<T, OrganizationFindFirstArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends OrganizationFindFirstArgs>(args?: SelectSubset<T, OrganizationFindFirstArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first Organization that matches the filter or
@@ -2422,7 +2721,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends OrganizationFindFirstOrThrowArgs>(args?: SelectSubset<T, OrganizationFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends OrganizationFindFirstOrThrowArgs>(args?: SelectSubset<T, OrganizationFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more Organizations that matches the filter.
@@ -2440,7 +2739,7 @@ export namespace Prisma {
      * const organizationWithIdOnly = await prisma.organization.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends OrganizationFindManyArgs>(args?: SelectSubset<T, OrganizationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends OrganizationFindManyArgs>(args?: SelectSubset<T, OrganizationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a Organization.
@@ -2454,7 +2753,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends OrganizationCreateArgs>(args: SelectSubset<T, OrganizationCreateArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends OrganizationCreateArgs>(args: SelectSubset<T, OrganizationCreateArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many Organizations.
@@ -2482,7 +2781,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Organizations and only return the `id`
-     * const organizationWithIdOnly = await prisma.organization.createManyAndReturn({
+     * const organizationWithIdOnly = await prisma.organization.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -2492,7 +2791,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends OrganizationCreateManyAndReturnArgs>(args?: SelectSubset<T, OrganizationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends OrganizationCreateManyAndReturnArgs>(args?: SelectSubset<T, OrganizationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Organization.
@@ -2506,7 +2805,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends OrganizationDeleteArgs>(args: SelectSubset<T, OrganizationDeleteArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends OrganizationDeleteArgs>(args: SelectSubset<T, OrganizationDeleteArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one Organization.
@@ -2523,7 +2822,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends OrganizationUpdateArgs>(args: SelectSubset<T, OrganizationUpdateArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends OrganizationUpdateArgs>(args: SelectSubset<T, OrganizationUpdateArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more Organizations.
@@ -2559,36 +2858,6 @@ export namespace Prisma {
     updateMany<T extends OrganizationUpdateManyArgs>(args: SelectSubset<T, OrganizationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Organizations and returns the data updated in the database.
-     * @param {OrganizationUpdateManyAndReturnArgs} args - Arguments to update many Organizations.
-     * @example
-     * // Update many Organizations
-     * const organization = await prisma.organization.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Organizations and only return the `id`
-     * const organizationWithIdOnly = await prisma.organization.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends OrganizationUpdateManyAndReturnArgs>(args: SelectSubset<T, OrganizationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one Organization.
      * @param {OrganizationUpsertArgs} args - Arguments to update or create a Organization.
      * @example
@@ -2605,7 +2874,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends OrganizationUpsertArgs>(args: SelectSubset<T, OrganizationUpsertArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends OrganizationUpsertArgs>(args: SelectSubset<T, OrganizationUpsertArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -2745,13 +3014,14 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    cuppingSessions<T extends Organization$cuppingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$cuppingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    samples<T extends Organization$samplesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$samplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    templates<T extends Organization$templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    invitations<T extends Organization$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cuppingSessions<T extends Organization$cuppingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$cuppingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany"> | Null>
+    templates<T extends Organization$templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    flavorDescriptors<T extends Organization$flavorDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$flavorDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findMany"> | Null>
+    invitations<T extends Organization$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany"> | Null>
+    samples<T extends Organization$samplesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$samplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findMany"> | Null>
+    users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2779,7 +3049,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Organization model
-   */
+   */ 
   interface OrganizationFieldRefs {
     readonly id: FieldRef<"Organization", 'String'>
     readonly name: FieldRef<"Organization", 'String'>
@@ -2810,10 +3080,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
@@ -2832,10 +3098,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
@@ -2853,10 +3115,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Organization
      */
     select?: OrganizationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -2906,10 +3164,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
@@ -2958,10 +3212,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
@@ -3005,10 +3255,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
@@ -3038,10 +3284,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * The data used to create many Organizations.
      */
     data: OrganizationCreateManyInput | OrganizationCreateManyInput[]
@@ -3056,10 +3298,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Organization
      */
     select?: OrganizationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3086,36 +3324,6 @@ export namespace Prisma {
      * Filter which Organizations to update
      */
     where?: OrganizationWhereInput
-    /**
-     * Limit how many Organizations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Organization updateManyAndReturn
-   */
-  export type OrganizationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Organization
-     */
-    select?: OrganizationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
-     * The data used to update Organizations.
-     */
-    data: XOR<OrganizationUpdateManyMutationInput, OrganizationUncheckedUpdateManyInput>
-    /**
-     * Filter which Organizations to update
-     */
-    where?: OrganizationWhereInput
-    /**
-     * Limit how many Organizations to update.
-     */
-    limit?: number
   }
 
   /**
@@ -3126,10 +3334,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Organization
      */
     select?: OrganizationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3157,10 +3361,6 @@ export namespace Prisma {
      */
     select?: OrganizationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
@@ -3178,34 +3378,6 @@ export namespace Prisma {
      * Filter which Organizations to delete
      */
     where?: OrganizationWhereInput
-    /**
-     * Limit how many Organizations to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Organization.users
-   */
-  export type Organization$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -3216,10 +3388,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3233,30 +3401,6 @@ export namespace Prisma {
   }
 
   /**
-   * Organization.samples
-   */
-  export type Organization$samplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Sample
-     */
-    select?: SampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SampleInclude<ExtArgs> | null
-    where?: SampleWhereInput
-    orderBy?: SampleOrderByWithRelationInput | SampleOrderByWithRelationInput[]
-    cursor?: SampleWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SampleScalarFieldEnum | SampleScalarFieldEnum[]
-  }
-
-  /**
    * Organization.templates
    */
   export type Organization$templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3264,10 +3408,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingTemplate
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3281,6 +3421,26 @@ export namespace Prisma {
   }
 
   /**
+   * Organization.flavorDescriptors
+   */
+  export type Organization$flavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    where?: FlavorDescriptorWhereInput
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    cursor?: FlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
    * Organization.invitations
    */
   export type Organization$invitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3288,10 +3448,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Invitation
      */
     select?: InvitationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3305,6 +3461,46 @@ export namespace Prisma {
   }
 
   /**
+   * Organization.samples
+   */
+  export type Organization$samplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sample
+     */
+    select?: SampleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SampleInclude<ExtArgs> | null
+    where?: SampleWhereInput
+    orderBy?: SampleOrderByWithRelationInput | SampleOrderByWithRelationInput[]
+    cursor?: SampleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SampleScalarFieldEnum | SampleScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.users
+   */
+  export type Organization$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
    * Organization without action
    */
   export type OrganizationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3312,10 +3508,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Organization
      */
     select?: OrganizationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Organization
-     */
-    omit?: OrganizationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3579,36 +3771,16 @@ export namespace Prisma {
     preferences?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     cuppingSessions?: boolean | User$cuppingSessionsArgs<ExtArgs>
+    createdTemplates?: boolean | User$createdTemplatesArgs<ExtArgs>
+    flavorDescriptors?: boolean | User$flavorDescriptorsArgs<ExtArgs>
     scores?: boolean | User$scoresArgs<ExtArgs>
     sessionParticipants?: boolean | User$sessionParticipantsArgs<ExtArgs>
-    createdTemplates?: boolean | User$createdTemplatesArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    email?: boolean
-    password?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    avatar?: boolean
-    bio?: boolean
-    organizationId?: boolean
-    role?: boolean
-    emailVerified?: boolean
-    emailVerifiedAt?: boolean
-    lastLoginAt?: boolean
-    resetToken?: boolean
-    resetTokenExpiry?: boolean
-    preferences?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["user"]>
-
-  export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
     password?: boolean
@@ -3649,30 +3821,28 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "avatar" | "bio" | "organizationId" | "role" | "emailVerified" | "emailVerifiedAt" | "lastLoginAt" | "resetToken" | "resetTokenExpiry" | "preferences" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     cuppingSessions?: boolean | User$cuppingSessionsArgs<ExtArgs>
+    createdTemplates?: boolean | User$createdTemplatesArgs<ExtArgs>
+    flavorDescriptors?: boolean | User$flavorDescriptorsArgs<ExtArgs>
     scores?: boolean | User$scoresArgs<ExtArgs>
     sessionParticipants?: boolean | User$sessionParticipantsArgs<ExtArgs>
-    createdTemplates?: boolean | User$createdTemplatesArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-  }
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
       cuppingSessions: Prisma.$CuppingSessionPayload<ExtArgs>[]
+      createdTemplates: Prisma.$CuppingTemplatePayload<ExtArgs>[]
+      flavorDescriptors: Prisma.$FlavorDescriptorPayload<ExtArgs>[]
       scores: Prisma.$ScorePayload<ExtArgs>[]
       sessionParticipants: Prisma.$SessionParticipantPayload<ExtArgs>[]
-      createdTemplates: Prisma.$CuppingTemplatePayload<ExtArgs>[]
+      organization: Prisma.$OrganizationPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3698,12 +3868,12 @@ export namespace Prisma {
 
   type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
 
-  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: UserCountAggregateInputType | true
     }
 
-  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
     /**
      * Find zero or one User that matches the filter.
@@ -3716,10 +3886,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one User that matches the filter or throw an error with `error.code='P2025'`
+     * Find one User that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
      * @example
@@ -3730,7 +3900,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first User that matches the filter.
@@ -3745,7 +3915,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first User that matches the filter or
@@ -3761,7 +3931,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more Users that matches the filter.
@@ -3779,7 +3949,7 @@ export namespace Prisma {
      * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a User.
@@ -3793,7 +3963,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many Users.
@@ -3821,7 +3991,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Users and only return the `id`
-     * const userWithIdOnly = await prisma.user.createManyAndReturn({
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3831,7 +4001,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a User.
@@ -3845,7 +4015,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one User.
@@ -3862,7 +4032,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more Users.
@@ -3898,36 +4068,6 @@ export namespace Prisma {
     updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Users and returns the data updated in the database.
-     * @param {UserUpdateManyAndReturnArgs} args - Arguments to update many Users.
-     * @example
-     * // Update many Users
-     * const user = await prisma.user.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Users and only return the `id`
-     * const userWithIdOnly = await prisma.user.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one User.
      * @param {UserUpsertArgs} args - Arguments to update or create a User.
      * @example
@@ -3944,7 +4084,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -4084,13 +4224,14 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    cuppingSessions<T extends User$cuppingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$cuppingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    scores<T extends User$scoresArgs<ExtArgs> = {}>(args?: Subset<T, User$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    sessionParticipants<T extends User$sessionParticipantsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionParticipantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    createdTemplates<T extends User$createdTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cuppingSessions<T extends User$cuppingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$cuppingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany"> | Null>
+    createdTemplates<T extends User$createdTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    flavorDescriptors<T extends User$flavorDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, User$flavorDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findMany"> | Null>
+    scores<T extends User$scoresArgs<ExtArgs> = {}>(args?: Subset<T, User$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany"> | Null>
+    sessionParticipants<T extends User$sessionParticipantsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionParticipantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany"> | Null>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4118,7 +4259,7 @@ export namespace Prisma {
 
   /**
    * Fields of the User model
-   */
+   */ 
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
@@ -4150,10 +4291,6 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -4172,10 +4309,6 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -4193,10 +4326,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4246,10 +4375,6 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -4298,10 +4423,6 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -4345,10 +4466,6 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -4378,10 +4495,6 @@ export namespace Prisma {
      */
     select?: UserSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[]
@@ -4400,10 +4513,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4430,40 +4539,6 @@ export namespace Prisma {
      * Filter which Users to update
      */
     where?: UserWhereInput
-    /**
-     * Limit how many Users to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * User updateManyAndReturn
-   */
-  export type UserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * The data used to update Users.
-     */
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
-    /**
-     * Filter which Users to update
-     */
-    where?: UserWhereInput
-    /**
-     * Limit how many Users to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4474,10 +4549,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4505,10 +4576,6 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -4526,10 +4593,6 @@ export namespace Prisma {
      * Filter which Users to delete
      */
     where?: UserWhereInput
-    /**
-     * Limit how many Users to delete.
-     */
-    limit?: number
   }
 
   /**
@@ -4540,10 +4603,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4557,6 +4616,46 @@ export namespace Prisma {
   }
 
   /**
+   * User.createdTemplates
+   */
+  export type User$createdTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CuppingTemplate
+     */
+    select?: CuppingTemplateSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CuppingTemplateInclude<ExtArgs> | null
+    where?: CuppingTemplateWhereInput
+    orderBy?: CuppingTemplateOrderByWithRelationInput | CuppingTemplateOrderByWithRelationInput[]
+    cursor?: CuppingTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CuppingTemplateScalarFieldEnum | CuppingTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.flavorDescriptors
+   */
+  export type User$flavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    where?: FlavorDescriptorWhereInput
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    cursor?: FlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
    * User.scores
    */
   export type User$scoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4564,10 +4663,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Score
      */
     select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4589,10 +4684,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -4605,30 +4696,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.createdTemplates
-   */
-  export type User$createdTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CuppingTemplate
-     */
-    select?: CuppingTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CuppingTemplateInclude<ExtArgs> | null
-    where?: CuppingTemplateWhereInput
-    orderBy?: CuppingTemplateOrderByWithRelationInput | CuppingTemplateOrderByWithRelationInput[]
-    cursor?: CuppingTemplateWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CuppingTemplateScalarFieldEnum | CuppingTemplateScalarFieldEnum[]
-  }
-
-  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4636,10 +4703,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4868,20 +4931,6 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invitation"]>
 
-  export type InvitationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    email?: boolean
-    organizationId?: boolean
-    role?: boolean
-    token?: boolean
-    status?: boolean
-    expiresAt?: boolean
-    invitedBy?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["invitation"]>
-
   export type InvitationSelectScalar = {
     id?: boolean
     email?: boolean
@@ -4895,14 +4944,10 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "organizationId" | "role" | "token" | "status" | "expiresAt" | "invitedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["invitation"]>
   export type InvitationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
   export type InvitationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-  }
-  export type InvitationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
 
@@ -4928,12 +4973,12 @@ export namespace Prisma {
 
   type InvitationGetPayload<S extends boolean | null | undefined | InvitationDefaultArgs> = $Result.GetResult<Prisma.$InvitationPayload, S>
 
-  type InvitationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<InvitationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type InvitationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InvitationFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: InvitationCountAggregateInputType | true
     }
 
-  export interface InvitationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface InvitationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Invitation'], meta: { name: 'Invitation' } }
     /**
      * Find zero or one Invitation that matches the filter.
@@ -4946,10 +4991,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends InvitationFindUniqueArgs>(args: SelectSubset<T, InvitationFindUniqueArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends InvitationFindUniqueArgs>(args: SelectSubset<T, InvitationFindUniqueArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one Invitation that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Invitation that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {InvitationFindUniqueOrThrowArgs} args - Arguments to find a Invitation
      * @example
@@ -4960,7 +5005,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends InvitationFindUniqueOrThrowArgs>(args: SelectSubset<T, InvitationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends InvitationFindUniqueOrThrowArgs>(args: SelectSubset<T, InvitationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first Invitation that matches the filter.
@@ -4975,7 +5020,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends InvitationFindFirstArgs>(args?: SelectSubset<T, InvitationFindFirstArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends InvitationFindFirstArgs>(args?: SelectSubset<T, InvitationFindFirstArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first Invitation that matches the filter or
@@ -4991,7 +5036,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends InvitationFindFirstOrThrowArgs>(args?: SelectSubset<T, InvitationFindFirstOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends InvitationFindFirstOrThrowArgs>(args?: SelectSubset<T, InvitationFindFirstOrThrowArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more Invitations that matches the filter.
@@ -5009,7 +5054,7 @@ export namespace Prisma {
      * const invitationWithIdOnly = await prisma.invitation.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends InvitationFindManyArgs>(args?: SelectSubset<T, InvitationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends InvitationFindManyArgs>(args?: SelectSubset<T, InvitationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a Invitation.
@@ -5023,7 +5068,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends InvitationCreateArgs>(args: SelectSubset<T, InvitationCreateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends InvitationCreateArgs>(args: SelectSubset<T, InvitationCreateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many Invitations.
@@ -5051,7 +5096,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Invitations and only return the `id`
-     * const invitationWithIdOnly = await prisma.invitation.createManyAndReturn({
+     * const invitationWithIdOnly = await prisma.invitation.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -5061,7 +5106,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends InvitationCreateManyAndReturnArgs>(args?: SelectSubset<T, InvitationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends InvitationCreateManyAndReturnArgs>(args?: SelectSubset<T, InvitationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Invitation.
@@ -5075,7 +5120,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends InvitationDeleteArgs>(args: SelectSubset<T, InvitationDeleteArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends InvitationDeleteArgs>(args: SelectSubset<T, InvitationDeleteArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one Invitation.
@@ -5092,7 +5137,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends InvitationUpdateArgs>(args: SelectSubset<T, InvitationUpdateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends InvitationUpdateArgs>(args: SelectSubset<T, InvitationUpdateArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more Invitations.
@@ -5128,36 +5173,6 @@ export namespace Prisma {
     updateMany<T extends InvitationUpdateManyArgs>(args: SelectSubset<T, InvitationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Invitations and returns the data updated in the database.
-     * @param {InvitationUpdateManyAndReturnArgs} args - Arguments to update many Invitations.
-     * @example
-     * // Update many Invitations
-     * const invitation = await prisma.invitation.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Invitations and only return the `id`
-     * const invitationWithIdOnly = await prisma.invitation.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends InvitationUpdateManyAndReturnArgs>(args: SelectSubset<T, InvitationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one Invitation.
      * @param {InvitationUpsertArgs} args - Arguments to update or create a Invitation.
      * @example
@@ -5174,7 +5189,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends InvitationUpsertArgs>(args: SelectSubset<T, InvitationUpsertArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends InvitationUpsertArgs>(args: SelectSubset<T, InvitationUpsertArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -5314,9 +5329,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__InvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__InvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5344,7 +5359,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Invitation model
-   */
+   */ 
   interface InvitationFieldRefs {
     readonly id: FieldRef<"Invitation", 'String'>
     readonly email: FieldRef<"Invitation", 'String'>
@@ -5369,10 +5384,6 @@ export namespace Prisma {
      */
     select?: InvitationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
@@ -5391,10 +5402,6 @@ export namespace Prisma {
      */
     select?: InvitationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
@@ -5412,10 +5419,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Invitation
      */
     select?: InvitationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5465,10 +5468,6 @@ export namespace Prisma {
      */
     select?: InvitationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
@@ -5517,10 +5516,6 @@ export namespace Prisma {
      */
     select?: InvitationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
@@ -5564,10 +5559,6 @@ export namespace Prisma {
      */
     select?: InvitationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
@@ -5597,10 +5588,6 @@ export namespace Prisma {
      */
     select?: InvitationSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * The data used to create many Invitations.
      */
     data: InvitationCreateManyInput | InvitationCreateManyInput[]
@@ -5619,10 +5606,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Invitation
      */
     select?: InvitationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5649,40 +5632,6 @@ export namespace Prisma {
      * Filter which Invitations to update
      */
     where?: InvitationWhereInput
-    /**
-     * Limit how many Invitations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Invitation updateManyAndReturn
-   */
-  export type InvitationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Invitation
-     */
-    select?: InvitationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
-     * The data used to update Invitations.
-     */
-    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyInput>
-    /**
-     * Filter which Invitations to update
-     */
-    where?: InvitationWhereInput
-    /**
-     * Limit how many Invitations to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InvitationIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5693,10 +5642,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Invitation
      */
     select?: InvitationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5724,10 +5669,6 @@ export namespace Prisma {
      */
     select?: InvitationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
@@ -5745,10 +5686,6 @@ export namespace Prisma {
      * Filter which Invitations to delete
      */
     where?: InvitationWhereInput
-    /**
-     * Limit how many Invitations to delete.
-     */
-    limit?: number
   }
 
   /**
@@ -5759,10 +5696,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Invitation
      */
     select?: InvitationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invitation
-     */
-    omit?: InvitationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6124,41 +6057,14 @@ export namespace Prisma {
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    greenBeanGrading?: boolean | Sample$greenBeanGradingArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sessionSamples?: boolean | Sample$sessionSamplesArgs<ExtArgs>
     scores?: boolean | Sample$scoresArgs<ExtArgs>
+    sessionSamples?: boolean | Sample$sessionSamplesArgs<ExtArgs>
     _count?: boolean | SampleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sample"]>
 
   export type SampleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    organizationId?: boolean
-    name?: boolean
-    description?: boolean
-    code?: boolean
-    origin?: boolean
-    region?: boolean
-    farm?: boolean
-    producer?: boolean
-    variety?: boolean
-    altitude?: boolean
-    processingMethod?: boolean
-    harvestDate?: boolean
-    roaster?: boolean
-    roastDate?: boolean
-    roastLevel?: boolean
-    moisture?: boolean
-    density?: boolean
-    screenSize?: boolean
-    notes?: boolean
-    imageUrl?: boolean
-    tags?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sample"]>
-
-  export type SampleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
     name?: boolean
@@ -6213,26 +6119,24 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SampleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "description" | "code" | "origin" | "region" | "farm" | "producer" | "variety" | "altitude" | "processingMethod" | "harvestDate" | "roaster" | "roastDate" | "roastLevel" | "moisture" | "density" | "screenSize" | "notes" | "imageUrl" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["sample"]>
   export type SampleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    greenBeanGrading?: boolean | Sample$greenBeanGradingArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sessionSamples?: boolean | Sample$sessionSamplesArgs<ExtArgs>
     scores?: boolean | Sample$scoresArgs<ExtArgs>
+    sessionSamples?: boolean | Sample$sessionSamplesArgs<ExtArgs>
     _count?: boolean | SampleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SampleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-  }
-  export type SampleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
 
   export type $SamplePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Sample"
     objects: {
+      greenBeanGrading: Prisma.$GreenBeanGradingPayload<ExtArgs> | null
       organization: Prisma.$OrganizationPayload<ExtArgs>
-      sessionSamples: Prisma.$SessionSamplePayload<ExtArgs>[]
       scores: Prisma.$ScorePayload<ExtArgs>[]
+      sessionSamples: Prisma.$SessionSamplePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6265,12 +6169,12 @@ export namespace Prisma {
 
   type SampleGetPayload<S extends boolean | null | undefined | SampleDefaultArgs> = $Result.GetResult<Prisma.$SamplePayload, S>
 
-  type SampleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SampleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type SampleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SampleFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: SampleCountAggregateInputType | true
     }
 
-  export interface SampleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface SampleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Sample'], meta: { name: 'Sample' } }
     /**
      * Find zero or one Sample that matches the filter.
@@ -6283,10 +6187,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SampleFindUniqueArgs>(args: SelectSubset<T, SampleFindUniqueArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends SampleFindUniqueArgs>(args: SelectSubset<T, SampleFindUniqueArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one Sample that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Sample that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {SampleFindUniqueOrThrowArgs} args - Arguments to find a Sample
      * @example
@@ -6297,7 +6201,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SampleFindUniqueOrThrowArgs>(args: SelectSubset<T, SampleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends SampleFindUniqueOrThrowArgs>(args: SelectSubset<T, SampleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first Sample that matches the filter.
@@ -6312,7 +6216,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SampleFindFirstArgs>(args?: SelectSubset<T, SampleFindFirstArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends SampleFindFirstArgs>(args?: SelectSubset<T, SampleFindFirstArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first Sample that matches the filter or
@@ -6328,7 +6232,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SampleFindFirstOrThrowArgs>(args?: SelectSubset<T, SampleFindFirstOrThrowArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends SampleFindFirstOrThrowArgs>(args?: SelectSubset<T, SampleFindFirstOrThrowArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more Samples that matches the filter.
@@ -6346,7 +6250,7 @@ export namespace Prisma {
      * const sampleWithIdOnly = await prisma.sample.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SampleFindManyArgs>(args?: SelectSubset<T, SampleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends SampleFindManyArgs>(args?: SelectSubset<T, SampleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a Sample.
@@ -6360,7 +6264,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SampleCreateArgs>(args: SelectSubset<T, SampleCreateArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends SampleCreateArgs>(args: SelectSubset<T, SampleCreateArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many Samples.
@@ -6388,7 +6292,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Samples and only return the `id`
-     * const sampleWithIdOnly = await prisma.sample.createManyAndReturn({
+     * const sampleWithIdOnly = await prisma.sample.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6398,7 +6302,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SampleCreateManyAndReturnArgs>(args?: SelectSubset<T, SampleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends SampleCreateManyAndReturnArgs>(args?: SelectSubset<T, SampleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Sample.
@@ -6412,7 +6316,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SampleDeleteArgs>(args: SelectSubset<T, SampleDeleteArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends SampleDeleteArgs>(args: SelectSubset<T, SampleDeleteArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one Sample.
@@ -6429,7 +6333,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SampleUpdateArgs>(args: SelectSubset<T, SampleUpdateArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends SampleUpdateArgs>(args: SelectSubset<T, SampleUpdateArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more Samples.
@@ -6465,36 +6369,6 @@ export namespace Prisma {
     updateMany<T extends SampleUpdateManyArgs>(args: SelectSubset<T, SampleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Samples and returns the data updated in the database.
-     * @param {SampleUpdateManyAndReturnArgs} args - Arguments to update many Samples.
-     * @example
-     * // Update many Samples
-     * const sample = await prisma.sample.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Samples and only return the `id`
-     * const sampleWithIdOnly = await prisma.sample.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends SampleUpdateManyAndReturnArgs>(args: SelectSubset<T, SampleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one Sample.
      * @param {SampleUpsertArgs} args - Arguments to update or create a Sample.
      * @example
@@ -6511,7 +6385,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SampleUpsertArgs>(args: SelectSubset<T, SampleUpsertArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends SampleUpsertArgs>(args: SelectSubset<T, SampleUpsertArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -6651,11 +6525,12 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SampleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SampleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sessionSamples<T extends Sample$sessionSamplesArgs<ExtArgs> = {}>(args?: Subset<T, Sample$sessionSamplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    scores<T extends Sample$scoresArgs<ExtArgs> = {}>(args?: Subset<T, Sample$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    greenBeanGrading<T extends Sample$greenBeanGradingArgs<ExtArgs> = {}>(args?: Subset<T, Sample$greenBeanGradingArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    scores<T extends Sample$scoresArgs<ExtArgs> = {}>(args?: Subset<T, Sample$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany"> | Null>
+    sessionSamples<T extends Sample$sessionSamplesArgs<ExtArgs> = {}>(args?: Subset<T, Sample$sessionSamplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6683,7 +6558,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Sample model
-   */
+   */ 
   interface SampleFieldRefs {
     readonly id: FieldRef<"Sample", 'String'>
     readonly organizationId: FieldRef<"Sample", 'String'>
@@ -6722,10 +6597,6 @@ export namespace Prisma {
      */
     select?: SampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SampleInclude<ExtArgs> | null
@@ -6744,10 +6615,6 @@ export namespace Prisma {
      */
     select?: SampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SampleInclude<ExtArgs> | null
@@ -6765,10 +6632,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Sample
      */
     select?: SampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6818,10 +6681,6 @@ export namespace Prisma {
      */
     select?: SampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SampleInclude<ExtArgs> | null
@@ -6870,10 +6729,6 @@ export namespace Prisma {
      */
     select?: SampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SampleInclude<ExtArgs> | null
@@ -6917,10 +6772,6 @@ export namespace Prisma {
      */
     select?: SampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SampleInclude<ExtArgs> | null
@@ -6950,10 +6801,6 @@ export namespace Prisma {
      */
     select?: SampleSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * The data used to create many Samples.
      */
     data: SampleCreateManyInput | SampleCreateManyInput[]
@@ -6972,10 +6819,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Sample
      */
     select?: SampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7002,40 +6845,6 @@ export namespace Prisma {
      * Filter which Samples to update
      */
     where?: SampleWhereInput
-    /**
-     * Limit how many Samples to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Sample updateManyAndReturn
-   */
-  export type SampleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Sample
-     */
-    select?: SampleSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
-     * The data used to update Samples.
-     */
-    data: XOR<SampleUpdateManyMutationInput, SampleUncheckedUpdateManyInput>
-    /**
-     * Filter which Samples to update
-     */
-    where?: SampleWhereInput
-    /**
-     * Limit how many Samples to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SampleIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7046,10 +6855,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Sample
      */
     select?: SampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7077,10 +6882,6 @@ export namespace Prisma {
      */
     select?: SampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SampleInclude<ExtArgs> | null
@@ -7098,34 +6899,21 @@ export namespace Prisma {
      * Filter which Samples to delete
      */
     where?: SampleWhereInput
-    /**
-     * Limit how many Samples to delete.
-     */
-    limit?: number
   }
 
   /**
-   * Sample.sessionSamples
+   * Sample.greenBeanGrading
    */
-  export type Sample$sessionSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Sample$greenBeanGradingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SessionSample
+     * Select specific fields to fetch from the GreenBeanGrading
      */
-    select?: SessionSampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
+    select?: GreenBeanGradingSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SessionSampleInclude<ExtArgs> | null
-    where?: SessionSampleWhereInput
-    orderBy?: SessionSampleOrderByWithRelationInput | SessionSampleOrderByWithRelationInput[]
-    cursor?: SessionSampleWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SessionSampleScalarFieldEnum | SessionSampleScalarFieldEnum[]
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    where?: GreenBeanGradingWhereInput
   }
 
   /**
@@ -7136,10 +6924,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Score
      */
     select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7153,6 +6937,26 @@ export namespace Prisma {
   }
 
   /**
+   * Sample.sessionSamples
+   */
+  export type Sample$sessionSamplesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionSample
+     */
+    select?: SessionSampleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionSampleInclude<ExtArgs> | null
+    where?: SessionSampleWhereInput
+    orderBy?: SessionSampleOrderByWithRelationInput | SessionSampleOrderByWithRelationInput[]
+    cursor?: SessionSampleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SessionSampleScalarFieldEnum | SessionSampleScalarFieldEnum[]
+  }
+
+  /**
    * Sample without action
    */
   export type SampleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7160,10 +6964,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Sample
      */
     select?: SampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Sample
-     */
-    omit?: SampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7421,9 +7221,9 @@ export namespace Prisma {
     categories?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
     cuppingSessions?: boolean | CuppingTemplate$cuppingSessionsArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     _count?: boolean | CuppingTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cuppingTemplate"]>
 
@@ -7440,25 +7240,8 @@ export namespace Prisma {
     categories?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["cuppingTemplate"]>
-
-  export type CuppingTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    organizationId?: boolean
-    createdBy?: boolean
-    name?: boolean
-    description?: boolean
-    isDefault?: boolean
-    isPublic?: boolean
-    scoringSystem?: boolean
-    maxScore?: boolean
-    categories?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cuppingTemplate"]>
 
   export type CuppingTemplateSelectScalar = {
@@ -7476,28 +7259,23 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CuppingTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "createdBy" | "name" | "description" | "isDefault" | "isPublic" | "scoringSystem" | "maxScore" | "categories" | "createdAt" | "updatedAt", ExtArgs["result"]["cuppingTemplate"]>
   export type CuppingTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
     cuppingSessions?: boolean | CuppingTemplate$cuppingSessionsArgs<ExtArgs>
+    creator?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     _count?: boolean | CuppingTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CuppingTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type CuppingTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $CuppingTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CuppingTemplate"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
-      creator: Prisma.$UserPayload<ExtArgs>
       cuppingSessions: Prisma.$CuppingSessionPayload<ExtArgs>[]
+      creator: Prisma.$UserPayload<ExtArgs>
+      organization: Prisma.$OrganizationPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7518,12 +7296,12 @@ export namespace Prisma {
 
   type CuppingTemplateGetPayload<S extends boolean | null | undefined | CuppingTemplateDefaultArgs> = $Result.GetResult<Prisma.$CuppingTemplatePayload, S>
 
-  type CuppingTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CuppingTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type CuppingTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CuppingTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: CuppingTemplateCountAggregateInputType | true
     }
 
-  export interface CuppingTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface CuppingTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CuppingTemplate'], meta: { name: 'CuppingTemplate' } }
     /**
      * Find zero or one CuppingTemplate that matches the filter.
@@ -7536,10 +7314,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CuppingTemplateFindUniqueArgs>(args: SelectSubset<T, CuppingTemplateFindUniqueArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends CuppingTemplateFindUniqueArgs>(args: SelectSubset<T, CuppingTemplateFindUniqueArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one CuppingTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * Find one CuppingTemplate that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {CuppingTemplateFindUniqueOrThrowArgs} args - Arguments to find a CuppingTemplate
      * @example
@@ -7550,7 +7328,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CuppingTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, CuppingTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends CuppingTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, CuppingTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first CuppingTemplate that matches the filter.
@@ -7565,7 +7343,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CuppingTemplateFindFirstArgs>(args?: SelectSubset<T, CuppingTemplateFindFirstArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends CuppingTemplateFindFirstArgs>(args?: SelectSubset<T, CuppingTemplateFindFirstArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first CuppingTemplate that matches the filter or
@@ -7581,7 +7359,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CuppingTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, CuppingTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends CuppingTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, CuppingTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more CuppingTemplates that matches the filter.
@@ -7599,7 +7377,7 @@ export namespace Prisma {
      * const cuppingTemplateWithIdOnly = await prisma.cuppingTemplate.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CuppingTemplateFindManyArgs>(args?: SelectSubset<T, CuppingTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends CuppingTemplateFindManyArgs>(args?: SelectSubset<T, CuppingTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a CuppingTemplate.
@@ -7613,7 +7391,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CuppingTemplateCreateArgs>(args: SelectSubset<T, CuppingTemplateCreateArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends CuppingTemplateCreateArgs>(args: SelectSubset<T, CuppingTemplateCreateArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many CuppingTemplates.
@@ -7641,7 +7419,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CuppingTemplates and only return the `id`
-     * const cuppingTemplateWithIdOnly = await prisma.cuppingTemplate.createManyAndReturn({
+     * const cuppingTemplateWithIdOnly = await prisma.cuppingTemplate.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -7651,7 +7429,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CuppingTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, CuppingTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends CuppingTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, CuppingTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a CuppingTemplate.
@@ -7665,7 +7443,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CuppingTemplateDeleteArgs>(args: SelectSubset<T, CuppingTemplateDeleteArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends CuppingTemplateDeleteArgs>(args: SelectSubset<T, CuppingTemplateDeleteArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one CuppingTemplate.
@@ -7682,7 +7460,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CuppingTemplateUpdateArgs>(args: SelectSubset<T, CuppingTemplateUpdateArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends CuppingTemplateUpdateArgs>(args: SelectSubset<T, CuppingTemplateUpdateArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more CuppingTemplates.
@@ -7718,36 +7496,6 @@ export namespace Prisma {
     updateMany<T extends CuppingTemplateUpdateManyArgs>(args: SelectSubset<T, CuppingTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more CuppingTemplates and returns the data updated in the database.
-     * @param {CuppingTemplateUpdateManyAndReturnArgs} args - Arguments to update many CuppingTemplates.
-     * @example
-     * // Update many CuppingTemplates
-     * const cuppingTemplate = await prisma.cuppingTemplate.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more CuppingTemplates and only return the `id`
-     * const cuppingTemplateWithIdOnly = await prisma.cuppingTemplate.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends CuppingTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, CuppingTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one CuppingTemplate.
      * @param {CuppingTemplateUpsertArgs} args - Arguments to update or create a CuppingTemplate.
      * @example
@@ -7764,7 +7512,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CuppingTemplateUpsertArgs>(args: SelectSubset<T, CuppingTemplateUpsertArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends CuppingTemplateUpsertArgs>(args: SelectSubset<T, CuppingTemplateUpsertArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -7904,11 +7652,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CuppingTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CuppingTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    cuppingSessions<T extends CuppingTemplate$cuppingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, CuppingTemplate$cuppingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cuppingSessions<T extends CuppingTemplate$cuppingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, CuppingTemplate$cuppingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany"> | Null>
+    creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7936,7 +7684,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CuppingTemplate model
-   */
+   */ 
   interface CuppingTemplateFieldRefs {
     readonly id: FieldRef<"CuppingTemplate", 'String'>
     readonly organizationId: FieldRef<"CuppingTemplate", 'String'>
@@ -7963,10 +7711,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
@@ -7985,10 +7729,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
@@ -8006,10 +7746,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingTemplate
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8059,10 +7795,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
@@ -8111,10 +7843,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
@@ -8158,10 +7886,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
@@ -8191,10 +7915,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * The data used to create many CuppingTemplates.
      */
     data: CuppingTemplateCreateManyInput | CuppingTemplateCreateManyInput[]
@@ -8213,10 +7933,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingTemplate
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8243,40 +7959,6 @@ export namespace Prisma {
      * Filter which CuppingTemplates to update
      */
     where?: CuppingTemplateWhereInput
-    /**
-     * Limit how many CuppingTemplates to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * CuppingTemplate updateManyAndReturn
-   */
-  export type CuppingTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CuppingTemplate
-     */
-    select?: CuppingTemplateSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
-     * The data used to update CuppingTemplates.
-     */
-    data: XOR<CuppingTemplateUpdateManyMutationInput, CuppingTemplateUncheckedUpdateManyInput>
-    /**
-     * Filter which CuppingTemplates to update
-     */
-    where?: CuppingTemplateWhereInput
-    /**
-     * Limit how many CuppingTemplates to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CuppingTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8287,10 +7969,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingTemplate
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8318,10 +7996,6 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
@@ -8339,10 +8013,6 @@ export namespace Prisma {
      * Filter which CuppingTemplates to delete
      */
     where?: CuppingTemplateWhereInput
-    /**
-     * Limit how many CuppingTemplates to delete.
-     */
-    limit?: number
   }
 
   /**
@@ -8353,10 +8023,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8377,10 +8043,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingTemplate
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8656,12 +8318,12 @@ export namespace Prisma {
     settings?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     template?: boolean | CuppingSession$templateArgs<ExtArgs>
+    scores?: boolean | CuppingSession$scoresArgs<ExtArgs>
     participants?: boolean | CuppingSession$participantsArgs<ExtArgs>
     samples?: boolean | CuppingSession$samplesArgs<ExtArgs>
-    scores?: boolean | CuppingSession$scoresArgs<ExtArgs>
     _count?: boolean | CuppingSessionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cuppingSession"]>
 
@@ -8685,33 +8347,8 @@ export namespace Prisma {
     settings?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
-    template?: boolean | CuppingSession$templateArgs<ExtArgs>
-  }, ExtArgs["result"]["cuppingSession"]>
-
-  export type CuppingSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    organizationId?: boolean
-    createdBy?: boolean
-    name?: boolean
-    description?: boolean
-    location?: boolean
-    templateId?: boolean
-    blindTasting?: boolean
-    allowComments?: boolean
-    requireCalibration?: boolean
-    status?: boolean
-    scheduledAt?: boolean
-    startedAt?: boolean
-    completedAt?: boolean
-    notes?: boolean
-    tags?: boolean
-    settings?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | CuppingSession$templateArgs<ExtArgs>
   }, ExtArgs["result"]["cuppingSession"]>
 
@@ -8737,36 +8374,30 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CuppingSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "createdBy" | "name" | "description" | "location" | "templateId" | "blindTasting" | "allowComments" | "requireCalibration" | "status" | "scheduledAt" | "startedAt" | "completedAt" | "notes" | "tags" | "settings" | "createdAt" | "updatedAt", ExtArgs["result"]["cuppingSession"]>
   export type CuppingSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     template?: boolean | CuppingSession$templateArgs<ExtArgs>
+    scores?: boolean | CuppingSession$scoresArgs<ExtArgs>
     participants?: boolean | CuppingSession$participantsArgs<ExtArgs>
     samples?: boolean | CuppingSession$samplesArgs<ExtArgs>
-    scores?: boolean | CuppingSession$scoresArgs<ExtArgs>
     _count?: boolean | CuppingSessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CuppingSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
-    template?: boolean | CuppingSession$templateArgs<ExtArgs>
-  }
-  export type CuppingSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | CuppingSession$templateArgs<ExtArgs>
   }
 
   export type $CuppingSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CuppingSession"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
       creator: Prisma.$UserPayload<ExtArgs>
+      organization: Prisma.$OrganizationPayload<ExtArgs>
       template: Prisma.$CuppingTemplatePayload<ExtArgs> | null
+      scores: Prisma.$ScorePayload<ExtArgs>[]
       participants: Prisma.$SessionParticipantPayload<ExtArgs>[]
       samples: Prisma.$SessionSamplePayload<ExtArgs>[]
-      scores: Prisma.$ScorePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8794,12 +8425,12 @@ export namespace Prisma {
 
   type CuppingSessionGetPayload<S extends boolean | null | undefined | CuppingSessionDefaultArgs> = $Result.GetResult<Prisma.$CuppingSessionPayload, S>
 
-  type CuppingSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CuppingSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type CuppingSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CuppingSessionFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: CuppingSessionCountAggregateInputType | true
     }
 
-  export interface CuppingSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface CuppingSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CuppingSession'], meta: { name: 'CuppingSession' } }
     /**
      * Find zero or one CuppingSession that matches the filter.
@@ -8812,10 +8443,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CuppingSessionFindUniqueArgs>(args: SelectSubset<T, CuppingSessionFindUniqueArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends CuppingSessionFindUniqueArgs>(args: SelectSubset<T, CuppingSessionFindUniqueArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one CuppingSession that matches the filter or throw an error with `error.code='P2025'`
+     * Find one CuppingSession that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {CuppingSessionFindUniqueOrThrowArgs} args - Arguments to find a CuppingSession
      * @example
@@ -8826,7 +8457,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CuppingSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, CuppingSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends CuppingSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, CuppingSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first CuppingSession that matches the filter.
@@ -8841,7 +8472,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CuppingSessionFindFirstArgs>(args?: SelectSubset<T, CuppingSessionFindFirstArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends CuppingSessionFindFirstArgs>(args?: SelectSubset<T, CuppingSessionFindFirstArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first CuppingSession that matches the filter or
@@ -8857,7 +8488,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CuppingSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, CuppingSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends CuppingSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, CuppingSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more CuppingSessions that matches the filter.
@@ -8875,7 +8506,7 @@ export namespace Prisma {
      * const cuppingSessionWithIdOnly = await prisma.cuppingSession.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CuppingSessionFindManyArgs>(args?: SelectSubset<T, CuppingSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends CuppingSessionFindManyArgs>(args?: SelectSubset<T, CuppingSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a CuppingSession.
@@ -8889,7 +8520,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CuppingSessionCreateArgs>(args: SelectSubset<T, CuppingSessionCreateArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends CuppingSessionCreateArgs>(args: SelectSubset<T, CuppingSessionCreateArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many CuppingSessions.
@@ -8917,7 +8548,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CuppingSessions and only return the `id`
-     * const cuppingSessionWithIdOnly = await prisma.cuppingSession.createManyAndReturn({
+     * const cuppingSessionWithIdOnly = await prisma.cuppingSession.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -8927,7 +8558,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CuppingSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, CuppingSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends CuppingSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, CuppingSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a CuppingSession.
@@ -8941,7 +8572,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CuppingSessionDeleteArgs>(args: SelectSubset<T, CuppingSessionDeleteArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends CuppingSessionDeleteArgs>(args: SelectSubset<T, CuppingSessionDeleteArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one CuppingSession.
@@ -8958,7 +8589,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CuppingSessionUpdateArgs>(args: SelectSubset<T, CuppingSessionUpdateArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends CuppingSessionUpdateArgs>(args: SelectSubset<T, CuppingSessionUpdateArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more CuppingSessions.
@@ -8994,36 +8625,6 @@ export namespace Prisma {
     updateMany<T extends CuppingSessionUpdateManyArgs>(args: SelectSubset<T, CuppingSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more CuppingSessions and returns the data updated in the database.
-     * @param {CuppingSessionUpdateManyAndReturnArgs} args - Arguments to update many CuppingSessions.
-     * @example
-     * // Update many CuppingSessions
-     * const cuppingSession = await prisma.cuppingSession.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more CuppingSessions and only return the `id`
-     * const cuppingSessionWithIdOnly = await prisma.cuppingSession.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends CuppingSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, CuppingSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one CuppingSession.
      * @param {CuppingSessionUpsertArgs} args - Arguments to update or create a CuppingSession.
      * @example
@@ -9040,7 +8641,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CuppingSessionUpsertArgs>(args: SelectSubset<T, CuppingSessionUpsertArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends CuppingSessionUpsertArgs>(args: SelectSubset<T, CuppingSessionUpsertArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -9180,14 +8781,14 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CuppingSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CuppingSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    template<T extends CuppingSession$templateArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$templateArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    participants<T extends CuppingSession$participantsArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    samples<T extends CuppingSession$samplesArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$samplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    scores<T extends CuppingSession$scoresArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    template<T extends CuppingSession$templateArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$templateArgs<ExtArgs>>): Prisma__CuppingTemplateClient<$Result.GetResult<Prisma.$CuppingTemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    scores<T extends CuppingSession$scoresArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany"> | Null>
+    participants<T extends CuppingSession$participantsArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany"> | Null>
+    samples<T extends CuppingSession$samplesArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSession$samplesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9215,7 +8816,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CuppingSession model
-   */
+   */ 
   interface CuppingSessionFieldRefs {
     readonly id: FieldRef<"CuppingSession", 'String'>
     readonly organizationId: FieldRef<"CuppingSession", 'String'>
@@ -9249,10 +8850,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingSessionInclude<ExtArgs> | null
@@ -9271,10 +8868,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingSessionInclude<ExtArgs> | null
@@ -9292,10 +8885,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9345,10 +8934,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingSessionInclude<ExtArgs> | null
@@ -9397,10 +8982,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingSessionInclude<ExtArgs> | null
@@ -9444,10 +9025,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingSessionInclude<ExtArgs> | null
@@ -9477,10 +9054,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * The data used to create many CuppingSessions.
      */
     data: CuppingSessionCreateManyInput | CuppingSessionCreateManyInput[]
@@ -9499,10 +9072,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9529,40 +9098,6 @@ export namespace Prisma {
      * Filter which CuppingSessions to update
      */
     where?: CuppingSessionWhereInput
-    /**
-     * Limit how many CuppingSessions to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * CuppingSession updateManyAndReturn
-   */
-  export type CuppingSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CuppingSession
-     */
-    select?: CuppingSessionSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
-     * The data used to update CuppingSessions.
-     */
-    data: XOR<CuppingSessionUpdateManyMutationInput, CuppingSessionUncheckedUpdateManyInput>
-    /**
-     * Filter which CuppingSessions to update
-     */
-    where?: CuppingSessionWhereInput
-    /**
-     * Limit how many CuppingSessions to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CuppingSessionIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -9573,10 +9108,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9604,10 +9135,6 @@ export namespace Prisma {
      */
     select?: CuppingSessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingSessionInclude<ExtArgs> | null
@@ -9625,10 +9152,6 @@ export namespace Prisma {
      * Filter which CuppingSessions to delete
      */
     where?: CuppingSessionWhereInput
-    /**
-     * Limit how many CuppingSessions to delete.
-     */
-    limit?: number
   }
 
   /**
@@ -9640,14 +9163,30 @@ export namespace Prisma {
      */
     select?: CuppingTemplateSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CuppingTemplate
-     */
-    omit?: CuppingTemplateOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CuppingTemplateInclude<ExtArgs> | null
     where?: CuppingTemplateWhereInput
+  }
+
+  /**
+   * CuppingSession.scores
+   */
+  export type CuppingSession$scoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Score
+     */
+    select?: ScoreSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreInclude<ExtArgs> | null
+    where?: ScoreWhereInput
+    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
+    cursor?: ScoreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
   }
 
   /**
@@ -9658,10 +9197,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionParticipant
      */
     select?: SessionParticipantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9683,10 +9218,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -9699,30 +9230,6 @@ export namespace Prisma {
   }
 
   /**
-   * CuppingSession.scores
-   */
-  export type CuppingSession$scoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Score
-     */
-    select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ScoreInclude<ExtArgs> | null
-    where?: ScoreWhereInput
-    orderBy?: ScoreOrderByWithRelationInput | ScoreOrderByWithRelationInput[]
-    cursor?: ScoreWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ScoreScalarFieldEnum | ScoreScalarFieldEnum[]
-  }
-
-  /**
    * CuppingSession without action
    */
   export type CuppingSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9730,10 +9237,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CuppingSession
      */
     select?: CuppingSessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CuppingSession
-     */
-    omit?: CuppingSessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9955,20 +9458,6 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sessionParticipant"]>
 
-  export type SessionParticipantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sessionId?: boolean
-    userId?: boolean
-    role?: boolean
-    joinedAt?: boolean
-    leftAt?: boolean
-    isActive?: boolean
-    isCalibrated?: boolean
-    calibratedAt?: boolean
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sessionParticipant"]>
-
   export type SessionParticipantSelectScalar = {
     id?: boolean
     sessionId?: boolean
@@ -9981,16 +9470,11 @@ export namespace Prisma {
     calibratedAt?: boolean
   }
 
-  export type SessionParticipantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "userId" | "role" | "joinedAt" | "leftAt" | "isActive" | "isCalibrated" | "calibratedAt", ExtArgs["result"]["sessionParticipant"]>
   export type SessionParticipantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type SessionParticipantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type SessionParticipantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -10017,12 +9501,12 @@ export namespace Prisma {
 
   type SessionParticipantGetPayload<S extends boolean | null | undefined | SessionParticipantDefaultArgs> = $Result.GetResult<Prisma.$SessionParticipantPayload, S>
 
-  type SessionParticipantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SessionParticipantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type SessionParticipantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SessionParticipantFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: SessionParticipantCountAggregateInputType | true
     }
 
-  export interface SessionParticipantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface SessionParticipantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SessionParticipant'], meta: { name: 'SessionParticipant' } }
     /**
      * Find zero or one SessionParticipant that matches the filter.
@@ -10035,10 +9519,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SessionParticipantFindUniqueArgs>(args: SelectSubset<T, SessionParticipantFindUniqueArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends SessionParticipantFindUniqueArgs>(args: SelectSubset<T, SessionParticipantFindUniqueArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one SessionParticipant that matches the filter or throw an error with `error.code='P2025'`
+     * Find one SessionParticipant that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {SessionParticipantFindUniqueOrThrowArgs} args - Arguments to find a SessionParticipant
      * @example
@@ -10049,7 +9533,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SessionParticipantFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionParticipantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends SessionParticipantFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionParticipantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first SessionParticipant that matches the filter.
@@ -10064,7 +9548,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SessionParticipantFindFirstArgs>(args?: SelectSubset<T, SessionParticipantFindFirstArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends SessionParticipantFindFirstArgs>(args?: SelectSubset<T, SessionParticipantFindFirstArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first SessionParticipant that matches the filter or
@@ -10080,7 +9564,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SessionParticipantFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionParticipantFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends SessionParticipantFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionParticipantFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more SessionParticipants that matches the filter.
@@ -10098,7 +9582,7 @@ export namespace Prisma {
      * const sessionParticipantWithIdOnly = await prisma.sessionParticipant.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SessionParticipantFindManyArgs>(args?: SelectSubset<T, SessionParticipantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends SessionParticipantFindManyArgs>(args?: SelectSubset<T, SessionParticipantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a SessionParticipant.
@@ -10112,7 +9596,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SessionParticipantCreateArgs>(args: SelectSubset<T, SessionParticipantCreateArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends SessionParticipantCreateArgs>(args: SelectSubset<T, SessionParticipantCreateArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many SessionParticipants.
@@ -10140,7 +9624,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SessionParticipants and only return the `id`
-     * const sessionParticipantWithIdOnly = await prisma.sessionParticipant.createManyAndReturn({
+     * const sessionParticipantWithIdOnly = await prisma.sessionParticipant.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -10150,7 +9634,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SessionParticipantCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionParticipantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends SessionParticipantCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionParticipantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a SessionParticipant.
@@ -10164,7 +9648,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SessionParticipantDeleteArgs>(args: SelectSubset<T, SessionParticipantDeleteArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends SessionParticipantDeleteArgs>(args: SelectSubset<T, SessionParticipantDeleteArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one SessionParticipant.
@@ -10181,7 +9665,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SessionParticipantUpdateArgs>(args: SelectSubset<T, SessionParticipantUpdateArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends SessionParticipantUpdateArgs>(args: SelectSubset<T, SessionParticipantUpdateArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more SessionParticipants.
@@ -10217,36 +9701,6 @@ export namespace Prisma {
     updateMany<T extends SessionParticipantUpdateManyArgs>(args: SelectSubset<T, SessionParticipantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SessionParticipants and returns the data updated in the database.
-     * @param {SessionParticipantUpdateManyAndReturnArgs} args - Arguments to update many SessionParticipants.
-     * @example
-     * // Update many SessionParticipants
-     * const sessionParticipant = await prisma.sessionParticipant.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more SessionParticipants and only return the `id`
-     * const sessionParticipantWithIdOnly = await prisma.sessionParticipant.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends SessionParticipantUpdateManyAndReturnArgs>(args: SelectSubset<T, SessionParticipantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one SessionParticipant.
      * @param {SessionParticipantUpsertArgs} args - Arguments to update or create a SessionParticipant.
      * @example
@@ -10263,7 +9717,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SessionParticipantUpsertArgs>(args: SelectSubset<T, SessionParticipantUpsertArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends SessionParticipantUpsertArgs>(args: SelectSubset<T, SessionParticipantUpsertArgs<ExtArgs>>): Prisma__SessionParticipantClient<$Result.GetResult<Prisma.$SessionParticipantPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -10403,10 +9857,10 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SessionParticipantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SessionParticipantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    session<T extends CuppingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSessionDefaultArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    session<T extends CuppingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSessionDefaultArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10434,7 +9888,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SessionParticipant model
-   */
+   */ 
   interface SessionParticipantFieldRefs {
     readonly id: FieldRef<"SessionParticipant", 'String'>
     readonly sessionId: FieldRef<"SessionParticipant", 'String'>
@@ -10458,10 +9912,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -10480,10 +9930,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -10501,10 +9947,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionParticipant
      */
     select?: SessionParticipantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10554,10 +9996,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -10606,10 +10044,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -10653,10 +10087,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -10686,10 +10116,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * The data used to create many SessionParticipants.
      */
     data: SessionParticipantCreateManyInput | SessionParticipantCreateManyInput[]
@@ -10708,10 +10134,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionParticipant
      */
     select?: SessionParticipantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10738,40 +10160,6 @@ export namespace Prisma {
      * Filter which SessionParticipants to update
      */
     where?: SessionParticipantWhereInput
-    /**
-     * Limit how many SessionParticipants to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SessionParticipant updateManyAndReturn
-   */
-  export type SessionParticipantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SessionParticipant
-     */
-    select?: SessionParticipantSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
-     * The data used to update SessionParticipants.
-     */
-    data: XOR<SessionParticipantUpdateManyMutationInput, SessionParticipantUncheckedUpdateManyInput>
-    /**
-     * Filter which SessionParticipants to update
-     */
-    where?: SessionParticipantWhereInput
-    /**
-     * Limit how many SessionParticipants to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SessionParticipantIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10782,10 +10170,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionParticipant
      */
     select?: SessionParticipantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10813,10 +10197,6 @@ export namespace Prisma {
      */
     select?: SessionParticipantSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionParticipantInclude<ExtArgs> | null
@@ -10834,10 +10214,6 @@ export namespace Prisma {
      * Filter which SessionParticipants to delete
      */
     where?: SessionParticipantWhereInput
-    /**
-     * Limit how many SessionParticipants to delete.
-     */
-    limit?: number
   }
 
   /**
@@ -10848,10 +10224,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionParticipant
      */
     select?: SessionParticipantSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionParticipant
-     */
-    omit?: SessionParticipantOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11113,9 +10485,9 @@ export namespace Prisma {
     brewRatio?: boolean
     steepTime?: boolean
     addedAt?: boolean
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
     scores?: boolean | SessionSample$scoresArgs<ExtArgs>
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     _count?: boolean | SessionSampleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sessionSample"]>
 
@@ -11131,24 +10503,8 @@ export namespace Prisma {
     brewRatio?: boolean
     steepTime?: boolean
     addedAt?: boolean
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sessionSample"]>
-
-  export type SessionSampleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sessionId?: boolean
-    sampleId?: boolean
-    position?: boolean
-    isBlind?: boolean
-    blindCode?: boolean
-    grindSize?: boolean
-    waterTemp?: boolean
-    brewRatio?: boolean
-    steepTime?: boolean
-    addedAt?: boolean
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sessionSample"]>
 
   export type SessionSampleSelectScalar = {
@@ -11165,28 +10521,23 @@ export namespace Prisma {
     addedAt?: boolean
   }
 
-  export type SessionSampleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "sampleId" | "position" | "isBlind" | "blindCode" | "grindSize" | "waterTemp" | "brewRatio" | "steepTime" | "addedAt", ExtArgs["result"]["sessionSample"]>
   export type SessionSampleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
     scores?: boolean | SessionSample$scoresArgs<ExtArgs>
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     _count?: boolean | SessionSampleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SessionSampleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sample?: boolean | SampleDefaultArgs<ExtArgs>
-  }
-  export type SessionSampleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
   }
 
   export type $SessionSamplePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SessionSample"
     objects: {
-      session: Prisma.$CuppingSessionPayload<ExtArgs>
-      sample: Prisma.$SamplePayload<ExtArgs>
       scores: Prisma.$ScorePayload<ExtArgs>[]
+      sample: Prisma.$SamplePayload<ExtArgs>
+      session: Prisma.$CuppingSessionPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11206,12 +10557,12 @@ export namespace Prisma {
 
   type SessionSampleGetPayload<S extends boolean | null | undefined | SessionSampleDefaultArgs> = $Result.GetResult<Prisma.$SessionSamplePayload, S>
 
-  type SessionSampleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SessionSampleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type SessionSampleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SessionSampleFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: SessionSampleCountAggregateInputType | true
     }
 
-  export interface SessionSampleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface SessionSampleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SessionSample'], meta: { name: 'SessionSample' } }
     /**
      * Find zero or one SessionSample that matches the filter.
@@ -11224,10 +10575,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SessionSampleFindUniqueArgs>(args: SelectSubset<T, SessionSampleFindUniqueArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends SessionSampleFindUniqueArgs>(args: SelectSubset<T, SessionSampleFindUniqueArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one SessionSample that matches the filter or throw an error with `error.code='P2025'`
+     * Find one SessionSample that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {SessionSampleFindUniqueOrThrowArgs} args - Arguments to find a SessionSample
      * @example
@@ -11238,7 +10589,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SessionSampleFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionSampleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends SessionSampleFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionSampleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first SessionSample that matches the filter.
@@ -11253,7 +10604,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SessionSampleFindFirstArgs>(args?: SelectSubset<T, SessionSampleFindFirstArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends SessionSampleFindFirstArgs>(args?: SelectSubset<T, SessionSampleFindFirstArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first SessionSample that matches the filter or
@@ -11269,7 +10620,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SessionSampleFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionSampleFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends SessionSampleFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionSampleFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more SessionSamples that matches the filter.
@@ -11287,7 +10638,7 @@ export namespace Prisma {
      * const sessionSampleWithIdOnly = await prisma.sessionSample.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SessionSampleFindManyArgs>(args?: SelectSubset<T, SessionSampleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends SessionSampleFindManyArgs>(args?: SelectSubset<T, SessionSampleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a SessionSample.
@@ -11301,7 +10652,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SessionSampleCreateArgs>(args: SelectSubset<T, SessionSampleCreateArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends SessionSampleCreateArgs>(args: SelectSubset<T, SessionSampleCreateArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many SessionSamples.
@@ -11329,7 +10680,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SessionSamples and only return the `id`
-     * const sessionSampleWithIdOnly = await prisma.sessionSample.createManyAndReturn({
+     * const sessionSampleWithIdOnly = await prisma.sessionSample.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -11339,7 +10690,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SessionSampleCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionSampleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends SessionSampleCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionSampleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a SessionSample.
@@ -11353,7 +10704,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SessionSampleDeleteArgs>(args: SelectSubset<T, SessionSampleDeleteArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends SessionSampleDeleteArgs>(args: SelectSubset<T, SessionSampleDeleteArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one SessionSample.
@@ -11370,7 +10721,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SessionSampleUpdateArgs>(args: SelectSubset<T, SessionSampleUpdateArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends SessionSampleUpdateArgs>(args: SelectSubset<T, SessionSampleUpdateArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more SessionSamples.
@@ -11406,36 +10757,6 @@ export namespace Prisma {
     updateMany<T extends SessionSampleUpdateManyArgs>(args: SelectSubset<T, SessionSampleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SessionSamples and returns the data updated in the database.
-     * @param {SessionSampleUpdateManyAndReturnArgs} args - Arguments to update many SessionSamples.
-     * @example
-     * // Update many SessionSamples
-     * const sessionSample = await prisma.sessionSample.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more SessionSamples and only return the `id`
-     * const sessionSampleWithIdOnly = await prisma.sessionSample.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends SessionSampleUpdateManyAndReturnArgs>(args: SelectSubset<T, SessionSampleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one SessionSample.
      * @param {SessionSampleUpsertArgs} args - Arguments to update or create a SessionSample.
      * @example
@@ -11452,7 +10773,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SessionSampleUpsertArgs>(args: SelectSubset<T, SessionSampleUpsertArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends SessionSampleUpsertArgs>(args: SelectSubset<T, SessionSampleUpsertArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -11592,11 +10913,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SessionSampleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SessionSampleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    session<T extends CuppingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSessionDefaultArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    scores<T extends SessionSample$scoresArgs<ExtArgs> = {}>(args?: Subset<T, SessionSample$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    scores<T extends SessionSample$scoresArgs<ExtArgs> = {}>(args?: Subset<T, SessionSample$scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany"> | Null>
+    sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    session<T extends CuppingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSessionDefaultArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11624,7 +10945,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SessionSample model
-   */
+   */ 
   interface SessionSampleFieldRefs {
     readonly id: FieldRef<"SessionSample", 'String'>
     readonly sessionId: FieldRef<"SessionSample", 'String'>
@@ -11650,10 +10971,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -11672,10 +10989,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -11693,10 +11006,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionSample
      */
     select?: SessionSampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11746,10 +11055,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -11798,10 +11103,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -11845,10 +11146,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -11878,10 +11175,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * The data used to create many SessionSamples.
      */
     data: SessionSampleCreateManyInput | SessionSampleCreateManyInput[]
@@ -11900,10 +11193,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionSample
      */
     select?: SessionSampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11930,40 +11219,6 @@ export namespace Prisma {
      * Filter which SessionSamples to update
      */
     where?: SessionSampleWhereInput
-    /**
-     * Limit how many SessionSamples to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SessionSample updateManyAndReturn
-   */
-  export type SessionSampleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SessionSample
-     */
-    select?: SessionSampleSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
-     * The data used to update SessionSamples.
-     */
-    data: XOR<SessionSampleUpdateManyMutationInput, SessionSampleUncheckedUpdateManyInput>
-    /**
-     * Filter which SessionSamples to update
-     */
-    where?: SessionSampleWhereInput
-    /**
-     * Limit how many SessionSamples to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SessionSampleIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11974,10 +11229,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionSample
      */
     select?: SessionSampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12005,10 +11256,6 @@ export namespace Prisma {
      */
     select?: SessionSampleSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SessionSampleInclude<ExtArgs> | null
@@ -12026,10 +11273,6 @@ export namespace Prisma {
      * Filter which SessionSamples to delete
      */
     where?: SessionSampleWhereInput
-    /**
-     * Limit how many SessionSamples to delete.
-     */
-    limit?: number
   }
 
   /**
@@ -12040,10 +11283,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Score
      */
     select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12064,10 +11303,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the SessionSample
      */
     select?: SessionSampleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SessionSample
-     */
-    omit?: SessionSampleOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12493,10 +11728,12 @@ export namespace Prisma {
     submittedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    flavorDescriptors?: boolean | Score$flavorDescriptorsArgs<ExtArgs>
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | ScoreCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["score"]>
 
   export type ScoreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12528,44 +11765,9 @@ export namespace Prisma {
     submittedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["score"]>
-
-  export type ScoreSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sessionId?: boolean
-    sessionSampleId?: boolean
-    sampleId?: boolean
-    userId?: boolean
-    totalScore?: boolean
-    maxScore?: boolean
-    scores?: boolean
-    aroma?: boolean
-    flavor?: boolean
-    aftertaste?: boolean
-    acidity?: boolean
-    body?: boolean
-    balance?: boolean
-    sweetness?: boolean
-    cleanliness?: boolean
-    uniformity?: boolean
-    overall?: boolean
-    defects?: boolean
-    notes?: boolean
-    privateNotes?: boolean
-    voiceNotes?: boolean
-    voiceFileUrl?: boolean
-    isComplete?: boolean
-    isSubmitted?: boolean
-    submittedAt?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["score"]>
 
@@ -12600,32 +11802,28 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "sessionSampleId" | "sampleId" | "userId" | "totalScore" | "maxScore" | "scores" | "aroma" | "flavor" | "aftertaste" | "acidity" | "body" | "balance" | "sweetness" | "cleanliness" | "uniformity" | "overall" | "defects" | "notes" | "privateNotes" | "voiceNotes" | "voiceFileUrl" | "isComplete" | "isSubmitted" | "submittedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["score"]>
   export type ScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flavorDescriptors?: boolean | Score$flavorDescriptorsArgs<ExtArgs>
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | ScoreCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ScoreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
     session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
     sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type ScoreIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    session?: boolean | CuppingSessionDefaultArgs<ExtArgs>
-    sessionSample?: boolean | SessionSampleDefaultArgs<ExtArgs>
-    sample?: boolean | SampleDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ScorePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Score"
     objects: {
+      flavorDescriptors: Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>[]
+      sample: Prisma.$SamplePayload<ExtArgs>
       session: Prisma.$CuppingSessionPayload<ExtArgs>
       sessionSample: Prisma.$SessionSamplePayload<ExtArgs>
-      sample: Prisma.$SamplePayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -12663,12 +11861,12 @@ export namespace Prisma {
 
   type ScoreGetPayload<S extends boolean | null | undefined | ScoreDefaultArgs> = $Result.GetResult<Prisma.$ScorePayload, S>
 
-  type ScoreCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ScoreFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type ScoreCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ScoreFindManyArgs, 'select' | 'include' | 'distinct'> & {
       select?: ScoreCountAggregateInputType | true
     }
 
-  export interface ScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface ScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Score'], meta: { name: 'Score' } }
     /**
      * Find zero or one Score that matches the filter.
@@ -12681,10 +11879,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends ScoreFindUniqueArgs>(args: SelectSubset<T, ScoreFindUniqueArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends ScoreFindUniqueArgs>(args: SelectSubset<T, ScoreFindUniqueArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one Score that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Score that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
      * @param {ScoreFindUniqueOrThrowArgs} args - Arguments to find a Score
      * @example
@@ -12695,7 +11893,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ScoreFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends ScoreFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
      * Find the first Score that matches the filter.
@@ -12710,7 +11908,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends ScoreFindFirstArgs>(args?: SelectSubset<T, ScoreFindFirstArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends ScoreFindFirstArgs>(args?: SelectSubset<T, ScoreFindFirstArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
      * Find the first Score that matches the filter or
@@ -12726,7 +11924,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends ScoreFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends ScoreFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
      * Find zero or more Scores that matches the filter.
@@ -12744,7 +11942,7 @@ export namespace Prisma {
      * const scoreWithIdOnly = await prisma.score.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ScoreFindManyArgs>(args?: SelectSubset<T, ScoreFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends ScoreFindManyArgs>(args?: SelectSubset<T, ScoreFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findMany">>
 
     /**
      * Create a Score.
@@ -12758,7 +11956,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends ScoreCreateArgs>(args: SelectSubset<T, ScoreCreateArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends ScoreCreateArgs>(args: SelectSubset<T, ScoreCreateArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
      * Create many Scores.
@@ -12786,7 +11984,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Scores and only return the `id`
-     * const scoreWithIdOnly = await prisma.score.createManyAndReturn({
+     * const scoreWithIdOnly = await prisma.score.createManyAndReturn({ 
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -12796,7 +11994,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ScoreCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends ScoreCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Score.
@@ -12810,7 +12008,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends ScoreDeleteArgs>(args: SelectSubset<T, ScoreDeleteArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends ScoreDeleteArgs>(args: SelectSubset<T, ScoreDeleteArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
      * Update one Score.
@@ -12827,7 +12025,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ScoreUpdateArgs>(args: SelectSubset<T, ScoreUpdateArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends ScoreUpdateArgs>(args: SelectSubset<T, ScoreUpdateArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
      * Delete zero or more Scores.
@@ -12863,36 +12061,6 @@ export namespace Prisma {
     updateMany<T extends ScoreUpdateManyArgs>(args: SelectSubset<T, ScoreUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Scores and returns the data updated in the database.
-     * @param {ScoreUpdateManyAndReturnArgs} args - Arguments to update many Scores.
-     * @example
-     * // Update many Scores
-     * const score = await prisma.score.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Scores and only return the `id`
-     * const scoreWithIdOnly = await prisma.score.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ScoreUpdateManyAndReturnArgs>(args: SelectSubset<T, ScoreUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Create or update one Score.
      * @param {ScoreUpsertArgs} args - Arguments to update or create a Score.
      * @example
@@ -12909,7 +12077,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends ScoreUpsertArgs>(args: SelectSubset<T, ScoreUpsertArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends ScoreUpsertArgs>(args: SelectSubset<T, ScoreUpsertArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
@@ -13049,12 +12217,13 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ScoreClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ScoreClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    session<T extends CuppingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSessionDefaultArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sessionSample<T extends SessionSampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SessionSampleDefaultArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    flavorDescriptors<T extends Score$flavorDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, Score$flavorDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findMany"> | Null>
+    sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    session<T extends CuppingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CuppingSessionDefaultArgs<ExtArgs>>): Prisma__CuppingSessionClient<$Result.GetResult<Prisma.$CuppingSessionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    sessionSample<T extends SessionSampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SessionSampleDefaultArgs<ExtArgs>>): Prisma__SessionSampleClient<$Result.GetResult<Prisma.$SessionSamplePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13082,7 +12251,7 @@ export namespace Prisma {
 
   /**
    * Fields of the Score model
-   */
+   */ 
   interface ScoreFieldRefs {
     readonly id: FieldRef<"Score", 'String'>
     readonly sessionId: FieldRef<"Score", 'String'>
@@ -13125,10 +12294,6 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
@@ -13147,10 +12312,6 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
@@ -13168,10 +12329,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Score
      */
     select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13221,10 +12378,6 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
@@ -13273,10 +12426,6 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
@@ -13320,10 +12469,6 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
@@ -13353,10 +12498,6 @@ export namespace Prisma {
      */
     select?: ScoreSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * The data used to create many Scores.
      */
     data: ScoreCreateManyInput | ScoreCreateManyInput[]
@@ -13375,10 +12516,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Score
      */
     select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13405,40 +12542,6 @@ export namespace Prisma {
      * Filter which Scores to update
      */
     where?: ScoreWhereInput
-    /**
-     * Limit how many Scores to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Score updateManyAndReturn
-   */
-  export type ScoreUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Score
-     */
-    select?: ScoreSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
-     * The data used to update Scores.
-     */
-    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyInput>
-    /**
-     * Filter which Scores to update
-     */
-    where?: ScoreWhereInput
-    /**
-     * Limit how many Scores to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ScoreIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -13449,10 +12552,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the Score
      */
     select?: ScoreSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13480,10 +12579,6 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
@@ -13501,10 +12596,26 @@ export namespace Prisma {
      * Filter which Scores to delete
      */
     where?: ScoreWhereInput
+  }
+
+  /**
+   * Score.flavorDescriptors
+   */
+  export type Score$flavorDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Limit how many Scores to delete.
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
      */
-    limit?: number
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    where?: ScoreFlavorDescriptorWhereInput
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
   }
 
   /**
@@ -13516,13 +12627,3260 @@ export namespace Prisma {
      */
     select?: ScoreSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Score
-     */
-    omit?: ScoreOmit<ExtArgs> | null
-    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ScoreInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GreenBeanGrading
+   */
+
+  export type AggregateGreenBeanGrading = {
+    _count: GreenBeanGradingCountAggregateOutputType | null
+    _avg: GreenBeanGradingAvgAggregateOutputType | null
+    _sum: GreenBeanGradingSumAggregateOutputType | null
+    _min: GreenBeanGradingMinAggregateOutputType | null
+    _max: GreenBeanGradingMaxAggregateOutputType | null
+  }
+
+  export type GreenBeanGradingAvgAggregateOutputType = {
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    uniformityScore: number | null
+    qualityScore: number | null
+  }
+
+  export type GreenBeanGradingSumAggregateOutputType = {
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    uniformityScore: number | null
+    qualityScore: number | null
+  }
+
+  export type GreenBeanGradingMinAggregateOutputType = {
+    id: string | null
+    sampleId: string | null
+    gradingSystem: $Enums.GradingSystem | null
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    uniformityScore: number | null
+    grade: string | null
+    classification: $Enums.GradeClassification | null
+    qualityScore: number | null
+    gradedBy: string | null
+    gradedAt: Date | null
+    certifiedBy: string | null
+    certificationDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    beanColorAssessment: string | null
+  }
+
+  export type GreenBeanGradingMaxAggregateOutputType = {
+    id: string | null
+    sampleId: string | null
+    gradingSystem: $Enums.GradingSystem | null
+    primaryDefects: number | null
+    secondaryDefects: number | null
+    fullDefectEquivalents: number | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    uniformityScore: number | null
+    grade: string | null
+    classification: $Enums.GradeClassification | null
+    qualityScore: number | null
+    gradedBy: string | null
+    gradedAt: Date | null
+    certifiedBy: string | null
+    certificationDate: Date | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    beanColorAssessment: string | null
+  }
+
+  export type GreenBeanGradingCountAggregateOutputType = {
+    id: number
+    sampleId: number
+    gradingSystem: number
+    primaryDefects: number
+    secondaryDefects: number
+    fullDefectEquivalents: number
+    defectBreakdown: number
+    screenSizeDistribution: number
+    averageScreenSize: number
+    uniformityPercentage: number
+    moistureContent: number
+    waterActivity: number
+    bulkDensity: number
+    uniformityScore: number
+    grade: number
+    classification: number
+    qualityScore: number
+    gradedBy: number
+    gradedAt: number
+    certifiedBy: number
+    certificationDate: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    beanColorAssessment: number
+    _all: number
+  }
+
+
+  export type GreenBeanGradingAvgAggregateInputType = {
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    uniformityScore?: true
+    qualityScore?: true
+  }
+
+  export type GreenBeanGradingSumAggregateInputType = {
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    uniformityScore?: true
+    qualityScore?: true
+  }
+
+  export type GreenBeanGradingMinAggregateInputType = {
+    id?: true
+    sampleId?: true
+    gradingSystem?: true
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    uniformityScore?: true
+    grade?: true
+    classification?: true
+    qualityScore?: true
+    gradedBy?: true
+    gradedAt?: true
+    certifiedBy?: true
+    certificationDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    beanColorAssessment?: true
+  }
+
+  export type GreenBeanGradingMaxAggregateInputType = {
+    id?: true
+    sampleId?: true
+    gradingSystem?: true
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    uniformityScore?: true
+    grade?: true
+    classification?: true
+    qualityScore?: true
+    gradedBy?: true
+    gradedAt?: true
+    certifiedBy?: true
+    certificationDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    beanColorAssessment?: true
+  }
+
+  export type GreenBeanGradingCountAggregateInputType = {
+    id?: true
+    sampleId?: true
+    gradingSystem?: true
+    primaryDefects?: true
+    secondaryDefects?: true
+    fullDefectEquivalents?: true
+    defectBreakdown?: true
+    screenSizeDistribution?: true
+    averageScreenSize?: true
+    uniformityPercentage?: true
+    moistureContent?: true
+    waterActivity?: true
+    bulkDensity?: true
+    uniformityScore?: true
+    grade?: true
+    classification?: true
+    qualityScore?: true
+    gradedBy?: true
+    gradedAt?: true
+    certifiedBy?: true
+    certificationDate?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    beanColorAssessment?: true
+    _all?: true
+  }
+
+  export type GreenBeanGradingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GreenBeanGrading to aggregate.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GreenBeanGradings
+    **/
+    _count?: true | GreenBeanGradingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GreenBeanGradingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GreenBeanGradingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GreenBeanGradingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GreenBeanGradingMaxAggregateInputType
+  }
+
+  export type GetGreenBeanGradingAggregateType<T extends GreenBeanGradingAggregateArgs> = {
+        [P in keyof T & keyof AggregateGreenBeanGrading]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGreenBeanGrading[P]>
+      : GetScalarType<T[P], AggregateGreenBeanGrading[P]>
+  }
+
+
+
+
+  export type GreenBeanGradingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GreenBeanGradingWhereInput
+    orderBy?: GreenBeanGradingOrderByWithAggregationInput | GreenBeanGradingOrderByWithAggregationInput[]
+    by: GreenBeanGradingScalarFieldEnum[] | GreenBeanGradingScalarFieldEnum
+    having?: GreenBeanGradingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GreenBeanGradingCountAggregateInputType | true
+    _avg?: GreenBeanGradingAvgAggregateInputType
+    _sum?: GreenBeanGradingSumAggregateInputType
+    _min?: GreenBeanGradingMinAggregateInputType
+    _max?: GreenBeanGradingMaxAggregateInputType
+  }
+
+  export type GreenBeanGradingGroupByOutputType = {
+    id: string
+    sampleId: string
+    gradingSystem: $Enums.GradingSystem
+    primaryDefects: number
+    secondaryDefects: number
+    fullDefectEquivalents: number
+    defectBreakdown: JsonValue
+    screenSizeDistribution: JsonValue | null
+    averageScreenSize: number | null
+    uniformityPercentage: number | null
+    moistureContent: number | null
+    waterActivity: number | null
+    bulkDensity: number | null
+    uniformityScore: number | null
+    grade: string | null
+    classification: $Enums.GradeClassification | null
+    qualityScore: number | null
+    gradedBy: string | null
+    gradedAt: Date | null
+    certifiedBy: string | null
+    certificationDate: Date | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    beanColorAssessment: string | null
+    _count: GreenBeanGradingCountAggregateOutputType | null
+    _avg: GreenBeanGradingAvgAggregateOutputType | null
+    _sum: GreenBeanGradingSumAggregateOutputType | null
+    _min: GreenBeanGradingMinAggregateOutputType | null
+    _max: GreenBeanGradingMaxAggregateOutputType | null
+  }
+
+  type GetGreenBeanGradingGroupByPayload<T extends GreenBeanGradingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GreenBeanGradingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GreenBeanGradingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GreenBeanGradingGroupByOutputType[P]>
+            : GetScalarType<T[P], GreenBeanGradingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GreenBeanGradingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beanColorAssessment?: boolean
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["greenBeanGrading"]>
+
+  export type GreenBeanGradingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beanColorAssessment?: boolean
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["greenBeanGrading"]>
+
+  export type GreenBeanGradingSelectScalar = {
+    id?: boolean
+    sampleId?: boolean
+    gradingSystem?: boolean
+    primaryDefects?: boolean
+    secondaryDefects?: boolean
+    fullDefectEquivalents?: boolean
+    defectBreakdown?: boolean
+    screenSizeDistribution?: boolean
+    averageScreenSize?: boolean
+    uniformityPercentage?: boolean
+    moistureContent?: boolean
+    waterActivity?: boolean
+    bulkDensity?: boolean
+    uniformityScore?: boolean
+    grade?: boolean
+    classification?: boolean
+    qualityScore?: boolean
+    gradedBy?: boolean
+    gradedAt?: boolean
+    certifiedBy?: boolean
+    certificationDate?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beanColorAssessment?: boolean
+  }
+
+  export type GreenBeanGradingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }
+  export type GreenBeanGradingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sample?: boolean | SampleDefaultArgs<ExtArgs>
+  }
+
+  export type $GreenBeanGradingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GreenBeanGrading"
+    objects: {
+      sample: Prisma.$SamplePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sampleId: string
+      gradingSystem: $Enums.GradingSystem
+      primaryDefects: number
+      secondaryDefects: number
+      fullDefectEquivalents: number
+      defectBreakdown: Prisma.JsonValue
+      screenSizeDistribution: Prisma.JsonValue | null
+      averageScreenSize: number | null
+      uniformityPercentage: number | null
+      moistureContent: number | null
+      waterActivity: number | null
+      bulkDensity: number | null
+      uniformityScore: number | null
+      grade: string | null
+      classification: $Enums.GradeClassification | null
+      qualityScore: number | null
+      gradedBy: string | null
+      gradedAt: Date | null
+      certifiedBy: string | null
+      certificationDate: Date | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+      beanColorAssessment: string | null
+    }, ExtArgs["result"]["greenBeanGrading"]>
+    composites: {}
+  }
+
+  type GreenBeanGradingGetPayload<S extends boolean | null | undefined | GreenBeanGradingDefaultArgs> = $Result.GetResult<Prisma.$GreenBeanGradingPayload, S>
+
+  type GreenBeanGradingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<GreenBeanGradingFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: GreenBeanGradingCountAggregateInputType | true
+    }
+
+  export interface GreenBeanGradingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GreenBeanGrading'], meta: { name: 'GreenBeanGrading' } }
+    /**
+     * Find zero or one GreenBeanGrading that matches the filter.
+     * @param {GreenBeanGradingFindUniqueArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GreenBeanGradingFindUniqueArgs>(args: SelectSubset<T, GreenBeanGradingFindUniqueArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one GreenBeanGrading that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {GreenBeanGradingFindUniqueOrThrowArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GreenBeanGradingFindUniqueOrThrowArgs>(args: SelectSubset<T, GreenBeanGradingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first GreenBeanGrading that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingFindFirstArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GreenBeanGradingFindFirstArgs>(args?: SelectSubset<T, GreenBeanGradingFindFirstArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first GreenBeanGrading that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingFindFirstOrThrowArgs} args - Arguments to find a GreenBeanGrading
+     * @example
+     * // Get one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GreenBeanGradingFindFirstOrThrowArgs>(args?: SelectSubset<T, GreenBeanGradingFindFirstOrThrowArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more GreenBeanGradings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GreenBeanGradings
+     * const greenBeanGradings = await prisma.greenBeanGrading.findMany()
+     * 
+     * // Get first 10 GreenBeanGradings
+     * const greenBeanGradings = await prisma.greenBeanGrading.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const greenBeanGradingWithIdOnly = await prisma.greenBeanGrading.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GreenBeanGradingFindManyArgs>(args?: SelectSubset<T, GreenBeanGradingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a GreenBeanGrading.
+     * @param {GreenBeanGradingCreateArgs} args - Arguments to create a GreenBeanGrading.
+     * @example
+     * // Create one GreenBeanGrading
+     * const GreenBeanGrading = await prisma.greenBeanGrading.create({
+     *   data: {
+     *     // ... data to create a GreenBeanGrading
+     *   }
+     * })
+     * 
+     */
+    create<T extends GreenBeanGradingCreateArgs>(args: SelectSubset<T, GreenBeanGradingCreateArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many GreenBeanGradings.
+     * @param {GreenBeanGradingCreateManyArgs} args - Arguments to create many GreenBeanGradings.
+     * @example
+     * // Create many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GreenBeanGradingCreateManyArgs>(args?: SelectSubset<T, GreenBeanGradingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GreenBeanGradings and returns the data saved in the database.
+     * @param {GreenBeanGradingCreateManyAndReturnArgs} args - Arguments to create many GreenBeanGradings.
+     * @example
+     * // Create many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GreenBeanGradings and only return the `id`
+     * const greenBeanGradingWithIdOnly = await prisma.greenBeanGrading.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GreenBeanGradingCreateManyAndReturnArgs>(args?: SelectSubset<T, GreenBeanGradingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a GreenBeanGrading.
+     * @param {GreenBeanGradingDeleteArgs} args - Arguments to delete one GreenBeanGrading.
+     * @example
+     * // Delete one GreenBeanGrading
+     * const GreenBeanGrading = await prisma.greenBeanGrading.delete({
+     *   where: {
+     *     // ... filter to delete one GreenBeanGrading
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GreenBeanGradingDeleteArgs>(args: SelectSubset<T, GreenBeanGradingDeleteArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one GreenBeanGrading.
+     * @param {GreenBeanGradingUpdateArgs} args - Arguments to update one GreenBeanGrading.
+     * @example
+     * // Update one GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GreenBeanGradingUpdateArgs>(args: SelectSubset<T, GreenBeanGradingUpdateArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more GreenBeanGradings.
+     * @param {GreenBeanGradingDeleteManyArgs} args - Arguments to filter GreenBeanGradings to delete.
+     * @example
+     * // Delete a few GreenBeanGradings
+     * const { count } = await prisma.greenBeanGrading.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GreenBeanGradingDeleteManyArgs>(args?: SelectSubset<T, GreenBeanGradingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GreenBeanGradings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GreenBeanGradings
+     * const greenBeanGrading = await prisma.greenBeanGrading.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GreenBeanGradingUpdateManyArgs>(args: SelectSubset<T, GreenBeanGradingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one GreenBeanGrading.
+     * @param {GreenBeanGradingUpsertArgs} args - Arguments to update or create a GreenBeanGrading.
+     * @example
+     * // Update or create a GreenBeanGrading
+     * const greenBeanGrading = await prisma.greenBeanGrading.upsert({
+     *   create: {
+     *     // ... data to create a GreenBeanGrading
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GreenBeanGrading we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GreenBeanGradingUpsertArgs>(args: SelectSubset<T, GreenBeanGradingUpsertArgs<ExtArgs>>): Prisma__GreenBeanGradingClient<$Result.GetResult<Prisma.$GreenBeanGradingPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of GreenBeanGradings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingCountArgs} args - Arguments to filter GreenBeanGradings to count.
+     * @example
+     * // Count the number of GreenBeanGradings
+     * const count = await prisma.greenBeanGrading.count({
+     *   where: {
+     *     // ... the filter for the GreenBeanGradings we want to count
+     *   }
+     * })
+    **/
+    count<T extends GreenBeanGradingCountArgs>(
+      args?: Subset<T, GreenBeanGradingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GreenBeanGradingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GreenBeanGrading.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GreenBeanGradingAggregateArgs>(args: Subset<T, GreenBeanGradingAggregateArgs>): Prisma.PrismaPromise<GetGreenBeanGradingAggregateType<T>>
+
+    /**
+     * Group by GreenBeanGrading.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GreenBeanGradingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GreenBeanGradingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GreenBeanGradingGroupByArgs['orderBy'] }
+        : { orderBy?: GreenBeanGradingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GreenBeanGradingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGreenBeanGradingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GreenBeanGrading model
+   */
+  readonly fields: GreenBeanGradingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GreenBeanGrading.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GreenBeanGradingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sample<T extends SampleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SampleDefaultArgs<ExtArgs>>): Prisma__SampleClient<$Result.GetResult<Prisma.$SamplePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GreenBeanGrading model
+   */ 
+  interface GreenBeanGradingFieldRefs {
+    readonly id: FieldRef<"GreenBeanGrading", 'String'>
+    readonly sampleId: FieldRef<"GreenBeanGrading", 'String'>
+    readonly gradingSystem: FieldRef<"GreenBeanGrading", 'GradingSystem'>
+    readonly primaryDefects: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly secondaryDefects: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly fullDefectEquivalents: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly defectBreakdown: FieldRef<"GreenBeanGrading", 'Json'>
+    readonly screenSizeDistribution: FieldRef<"GreenBeanGrading", 'Json'>
+    readonly averageScreenSize: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly uniformityPercentage: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly moistureContent: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly waterActivity: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly bulkDensity: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly uniformityScore: FieldRef<"GreenBeanGrading", 'Int'>
+    readonly grade: FieldRef<"GreenBeanGrading", 'String'>
+    readonly classification: FieldRef<"GreenBeanGrading", 'GradeClassification'>
+    readonly qualityScore: FieldRef<"GreenBeanGrading", 'Float'>
+    readonly gradedBy: FieldRef<"GreenBeanGrading", 'String'>
+    readonly gradedAt: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly certifiedBy: FieldRef<"GreenBeanGrading", 'String'>
+    readonly certificationDate: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly notes: FieldRef<"GreenBeanGrading", 'String'>
+    readonly createdAt: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly updatedAt: FieldRef<"GreenBeanGrading", 'DateTime'>
+    readonly beanColorAssessment: FieldRef<"GreenBeanGrading", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GreenBeanGrading findUnique
+   */
+  export type GreenBeanGradingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading findUniqueOrThrow
+   */
+  export type GreenBeanGradingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading findFirst
+   */
+  export type GreenBeanGradingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GreenBeanGradings.
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GreenBeanGradings.
+     */
+    distinct?: GreenBeanGradingScalarFieldEnum | GreenBeanGradingScalarFieldEnum[]
+  }
+
+  /**
+   * GreenBeanGrading findFirstOrThrow
+   */
+  export type GreenBeanGradingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGrading to fetch.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GreenBeanGradings.
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GreenBeanGradings.
+     */
+    distinct?: GreenBeanGradingScalarFieldEnum | GreenBeanGradingScalarFieldEnum[]
+  }
+
+  /**
+   * GreenBeanGrading findMany
+   */
+  export type GreenBeanGradingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter, which GreenBeanGradings to fetch.
+     */
+    where?: GreenBeanGradingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GreenBeanGradings to fetch.
+     */
+    orderBy?: GreenBeanGradingOrderByWithRelationInput | GreenBeanGradingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GreenBeanGradings.
+     */
+    cursor?: GreenBeanGradingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GreenBeanGradings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GreenBeanGradings.
+     */
+    skip?: number
+    distinct?: GreenBeanGradingScalarFieldEnum | GreenBeanGradingScalarFieldEnum[]
+  }
+
+  /**
+   * GreenBeanGrading create
+   */
+  export type GreenBeanGradingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GreenBeanGrading.
+     */
+    data: XOR<GreenBeanGradingCreateInput, GreenBeanGradingUncheckedCreateInput>
+  }
+
+  /**
+   * GreenBeanGrading createMany
+   */
+  export type GreenBeanGradingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GreenBeanGradings.
+     */
+    data: GreenBeanGradingCreateManyInput | GreenBeanGradingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GreenBeanGrading createManyAndReturn
+   */
+  export type GreenBeanGradingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many GreenBeanGradings.
+     */
+    data: GreenBeanGradingCreateManyInput | GreenBeanGradingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GreenBeanGrading update
+   */
+  export type GreenBeanGradingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GreenBeanGrading.
+     */
+    data: XOR<GreenBeanGradingUpdateInput, GreenBeanGradingUncheckedUpdateInput>
+    /**
+     * Choose, which GreenBeanGrading to update.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading updateMany
+   */
+  export type GreenBeanGradingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GreenBeanGradings.
+     */
+    data: XOR<GreenBeanGradingUpdateManyMutationInput, GreenBeanGradingUncheckedUpdateManyInput>
+    /**
+     * Filter which GreenBeanGradings to update
+     */
+    where?: GreenBeanGradingWhereInput
+  }
+
+  /**
+   * GreenBeanGrading upsert
+   */
+  export type GreenBeanGradingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GreenBeanGrading to update in case it exists.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+    /**
+     * In case the GreenBeanGrading found by the `where` argument doesn't exist, create a new GreenBeanGrading with this data.
+     */
+    create: XOR<GreenBeanGradingCreateInput, GreenBeanGradingUncheckedCreateInput>
+    /**
+     * In case the GreenBeanGrading was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GreenBeanGradingUpdateInput, GreenBeanGradingUncheckedUpdateInput>
+  }
+
+  /**
+   * GreenBeanGrading delete
+   */
+  export type GreenBeanGradingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+    /**
+     * Filter which GreenBeanGrading to delete.
+     */
+    where: GreenBeanGradingWhereUniqueInput
+  }
+
+  /**
+   * GreenBeanGrading deleteMany
+   */
+  export type GreenBeanGradingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GreenBeanGradings to delete
+     */
+    where?: GreenBeanGradingWhereInput
+  }
+
+  /**
+   * GreenBeanGrading without action
+   */
+  export type GreenBeanGradingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GreenBeanGrading
+     */
+    select?: GreenBeanGradingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GreenBeanGradingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FlavorDescriptor
+   */
+
+  export type AggregateFlavorDescriptor = {
+    _count: FlavorDescriptorCountAggregateOutputType | null
+    _min: FlavorDescriptorMinAggregateOutputType | null
+    _max: FlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  export type FlavorDescriptorMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    category: $Enums.FlavorCategory | null
+    description: string | null
+    isDefault: boolean | null
+    organizationId: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FlavorDescriptorMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    category: $Enums.FlavorCategory | null
+    description: string | null
+    isDefault: boolean | null
+    organizationId: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FlavorDescriptorCountAggregateOutputType = {
+    id: number
+    name: number
+    category: number
+    description: number
+    isDefault: number
+    organizationId: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FlavorDescriptorMinAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    isDefault?: true
+    organizationId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FlavorDescriptorMaxAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    isDefault?: true
+    organizationId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FlavorDescriptorCountAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    isDefault?: true
+    organizationId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FlavorDescriptorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlavorDescriptor to aggregate.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FlavorDescriptors
+    **/
+    _count?: true | FlavorDescriptorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FlavorDescriptorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FlavorDescriptorMaxAggregateInputType
+  }
+
+  export type GetFlavorDescriptorAggregateType<T extends FlavorDescriptorAggregateArgs> = {
+        [P in keyof T & keyof AggregateFlavorDescriptor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFlavorDescriptor[P]>
+      : GetScalarType<T[P], AggregateFlavorDescriptor[P]>
+  }
+
+
+
+
+  export type FlavorDescriptorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlavorDescriptorWhereInput
+    orderBy?: FlavorDescriptorOrderByWithAggregationInput | FlavorDescriptorOrderByWithAggregationInput[]
+    by: FlavorDescriptorScalarFieldEnum[] | FlavorDescriptorScalarFieldEnum
+    having?: FlavorDescriptorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FlavorDescriptorCountAggregateInputType | true
+    _min?: FlavorDescriptorMinAggregateInputType
+    _max?: FlavorDescriptorMaxAggregateInputType
+  }
+
+  export type FlavorDescriptorGroupByOutputType = {
+    id: string
+    name: string
+    category: $Enums.FlavorCategory
+    description: string | null
+    isDefault: boolean
+    organizationId: string | null
+    createdBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FlavorDescriptorCountAggregateOutputType | null
+    _min: FlavorDescriptorMinAggregateOutputType | null
+    _max: FlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  type GetFlavorDescriptorGroupByPayload<T extends FlavorDescriptorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FlavorDescriptorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FlavorDescriptorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FlavorDescriptorGroupByOutputType[P]>
+            : GetScalarType<T[P], FlavorDescriptorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FlavorDescriptorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    scoreDescriptors?: boolean | FlavorDescriptor$scoreDescriptorsArgs<ExtArgs>
+    _count?: boolean | FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flavorDescriptor"]>
+
+  export type FlavorDescriptorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+  }, ExtArgs["result"]["flavorDescriptor"]>
+
+  export type FlavorDescriptorSelectScalar = {
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isDefault?: boolean
+    organizationId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FlavorDescriptorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+    scoreDescriptors?: boolean | FlavorDescriptor$scoreDescriptorsArgs<ExtArgs>
+    _count?: boolean | FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FlavorDescriptorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creator?: boolean | FlavorDescriptor$creatorArgs<ExtArgs>
+    organization?: boolean | FlavorDescriptor$organizationArgs<ExtArgs>
+  }
+
+  export type $FlavorDescriptorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FlavorDescriptor"
+    objects: {
+      creator: Prisma.$UserPayload<ExtArgs> | null
+      organization: Prisma.$OrganizationPayload<ExtArgs> | null
+      scoreDescriptors: Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      category: $Enums.FlavorCategory
+      description: string | null
+      isDefault: boolean
+      organizationId: string | null
+      createdBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["flavorDescriptor"]>
+    composites: {}
+  }
+
+  type FlavorDescriptorGetPayload<S extends boolean | null | undefined | FlavorDescriptorDefaultArgs> = $Result.GetResult<Prisma.$FlavorDescriptorPayload, S>
+
+  type FlavorDescriptorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FlavorDescriptorFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FlavorDescriptorCountAggregateInputType | true
+    }
+
+  export interface FlavorDescriptorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FlavorDescriptor'], meta: { name: 'FlavorDescriptor' } }
+    /**
+     * Find zero or one FlavorDescriptor that matches the filter.
+     * @param {FlavorDescriptorFindUniqueArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FlavorDescriptorFindUniqueArgs>(args: SelectSubset<T, FlavorDescriptorFindUniqueArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FlavorDescriptor that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FlavorDescriptorFindUniqueOrThrowArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FlavorDescriptorFindUniqueOrThrowArgs>(args: SelectSubset<T, FlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FlavorDescriptor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorFindFirstArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FlavorDescriptorFindFirstArgs>(args?: SelectSubset<T, FlavorDescriptorFindFirstArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FlavorDescriptor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorFindFirstOrThrowArgs} args - Arguments to find a FlavorDescriptor
+     * @example
+     * // Get one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FlavorDescriptorFindFirstOrThrowArgs>(args?: SelectSubset<T, FlavorDescriptorFindFirstOrThrowArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FlavorDescriptors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FlavorDescriptors
+     * const flavorDescriptors = await prisma.flavorDescriptor.findMany()
+     * 
+     * // Get first 10 FlavorDescriptors
+     * const flavorDescriptors = await prisma.flavorDescriptor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const flavorDescriptorWithIdOnly = await prisma.flavorDescriptor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FlavorDescriptorFindManyArgs>(args?: SelectSubset<T, FlavorDescriptorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FlavorDescriptor.
+     * @param {FlavorDescriptorCreateArgs} args - Arguments to create a FlavorDescriptor.
+     * @example
+     * // Create one FlavorDescriptor
+     * const FlavorDescriptor = await prisma.flavorDescriptor.create({
+     *   data: {
+     *     // ... data to create a FlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlavorDescriptorCreateArgs>(args: SelectSubset<T, FlavorDescriptorCreateArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FlavorDescriptors.
+     * @param {FlavorDescriptorCreateManyArgs} args - Arguments to create many FlavorDescriptors.
+     * @example
+     * // Create many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlavorDescriptorCreateManyArgs>(args?: SelectSubset<T, FlavorDescriptorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlavorDescriptors and returns the data saved in the database.
+     * @param {FlavorDescriptorCreateManyAndReturnArgs} args - Arguments to create many FlavorDescriptors.
+     * @example
+     * // Create many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlavorDescriptors and only return the `id`
+     * const flavorDescriptorWithIdOnly = await prisma.flavorDescriptor.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlavorDescriptorCreateManyAndReturnArgs>(args?: SelectSubset<T, FlavorDescriptorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FlavorDescriptor.
+     * @param {FlavorDescriptorDeleteArgs} args - Arguments to delete one FlavorDescriptor.
+     * @example
+     * // Delete one FlavorDescriptor
+     * const FlavorDescriptor = await prisma.flavorDescriptor.delete({
+     *   where: {
+     *     // ... filter to delete one FlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FlavorDescriptorDeleteArgs>(args: SelectSubset<T, FlavorDescriptorDeleteArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FlavorDescriptor.
+     * @param {FlavorDescriptorUpdateArgs} args - Arguments to update one FlavorDescriptor.
+     * @example
+     * // Update one FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FlavorDescriptorUpdateArgs>(args: SelectSubset<T, FlavorDescriptorUpdateArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FlavorDescriptors.
+     * @param {FlavorDescriptorDeleteManyArgs} args - Arguments to filter FlavorDescriptors to delete.
+     * @example
+     * // Delete a few FlavorDescriptors
+     * const { count } = await prisma.flavorDescriptor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FlavorDescriptorDeleteManyArgs>(args?: SelectSubset<T, FlavorDescriptorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FlavorDescriptors
+     * const flavorDescriptor = await prisma.flavorDescriptor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FlavorDescriptorUpdateManyArgs>(args: SelectSubset<T, FlavorDescriptorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FlavorDescriptor.
+     * @param {FlavorDescriptorUpsertArgs} args - Arguments to update or create a FlavorDescriptor.
+     * @example
+     * // Update or create a FlavorDescriptor
+     * const flavorDescriptor = await prisma.flavorDescriptor.upsert({
+     *   create: {
+     *     // ... data to create a FlavorDescriptor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlavorDescriptor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlavorDescriptorUpsertArgs>(args: SelectSubset<T, FlavorDescriptorUpsertArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorCountArgs} args - Arguments to filter FlavorDescriptors to count.
+     * @example
+     * // Count the number of FlavorDescriptors
+     * const count = await prisma.flavorDescriptor.count({
+     *   where: {
+     *     // ... the filter for the FlavorDescriptors we want to count
+     *   }
+     * })
+    **/
+    count<T extends FlavorDescriptorCountArgs>(
+      args?: Subset<T, FlavorDescriptorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FlavorDescriptorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FlavorDescriptorAggregateArgs>(args: Subset<T, FlavorDescriptorAggregateArgs>): Prisma.PrismaPromise<GetFlavorDescriptorAggregateType<T>>
+
+    /**
+     * Group by FlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FlavorDescriptorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FlavorDescriptorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FlavorDescriptorGroupByArgs['orderBy'] }
+        : { orderBy?: FlavorDescriptorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FlavorDescriptorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFlavorDescriptorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FlavorDescriptor model
+   */
+  readonly fields: FlavorDescriptorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FlavorDescriptor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FlavorDescriptorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    creator<T extends FlavorDescriptor$creatorArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptor$creatorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    organization<T extends FlavorDescriptor$organizationArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptor$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    scoreDescriptors<T extends FlavorDescriptor$scoreDescriptorsArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptor$scoreDescriptorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FlavorDescriptor model
+   */ 
+  interface FlavorDescriptorFieldRefs {
+    readonly id: FieldRef<"FlavorDescriptor", 'String'>
+    readonly name: FieldRef<"FlavorDescriptor", 'String'>
+    readonly category: FieldRef<"FlavorDescriptor", 'FlavorCategory'>
+    readonly description: FieldRef<"FlavorDescriptor", 'String'>
+    readonly isDefault: FieldRef<"FlavorDescriptor", 'Boolean'>
+    readonly organizationId: FieldRef<"FlavorDescriptor", 'String'>
+    readonly createdBy: FieldRef<"FlavorDescriptor", 'String'>
+    readonly createdAt: FieldRef<"FlavorDescriptor", 'DateTime'>
+    readonly updatedAt: FieldRef<"FlavorDescriptor", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FlavorDescriptor findUnique
+   */
+  export type FlavorDescriptorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor findUniqueOrThrow
+   */
+  export type FlavorDescriptorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor findFirst
+   */
+  export type FlavorDescriptorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlavorDescriptors.
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlavorDescriptors.
+     */
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor findFirstOrThrow
+   */
+  export type FlavorDescriptorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptor to fetch.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FlavorDescriptors.
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FlavorDescriptors.
+     */
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor findMany
+   */
+  export type FlavorDescriptorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which FlavorDescriptors to fetch.
+     */
+    where?: FlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FlavorDescriptors to fetch.
+     */
+    orderBy?: FlavorDescriptorOrderByWithRelationInput | FlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FlavorDescriptors.
+     */
+    cursor?: FlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FlavorDescriptors.
+     */
+    skip?: number
+    distinct?: FlavorDescriptorScalarFieldEnum | FlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor create
+   */
+  export type FlavorDescriptorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlavorDescriptor.
+     */
+    data: XOR<FlavorDescriptorCreateInput, FlavorDescriptorUncheckedCreateInput>
+  }
+
+  /**
+   * FlavorDescriptor createMany
+   */
+  export type FlavorDescriptorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlavorDescriptors.
+     */
+    data: FlavorDescriptorCreateManyInput | FlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlavorDescriptor createManyAndReturn
+   */
+  export type FlavorDescriptorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FlavorDescriptors.
+     */
+    data: FlavorDescriptorCreateManyInput | FlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FlavorDescriptor update
+   */
+  export type FlavorDescriptorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FlavorDescriptor.
+     */
+    data: XOR<FlavorDescriptorUpdateInput, FlavorDescriptorUncheckedUpdateInput>
+    /**
+     * Choose, which FlavorDescriptor to update.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor updateMany
+   */
+  export type FlavorDescriptorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FlavorDescriptors.
+     */
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyInput>
+    /**
+     * Filter which FlavorDescriptors to update
+     */
+    where?: FlavorDescriptorWhereInput
+  }
+
+  /**
+   * FlavorDescriptor upsert
+   */
+  export type FlavorDescriptorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlavorDescriptor to update in case it exists.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+    /**
+     * In case the FlavorDescriptor found by the `where` argument doesn't exist, create a new FlavorDescriptor with this data.
+     */
+    create: XOR<FlavorDescriptorCreateInput, FlavorDescriptorUncheckedCreateInput>
+    /**
+     * In case the FlavorDescriptor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlavorDescriptorUpdateInput, FlavorDescriptorUncheckedUpdateInput>
+  }
+
+  /**
+   * FlavorDescriptor delete
+   */
+  export type FlavorDescriptorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter which FlavorDescriptor to delete.
+     */
+    where: FlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * FlavorDescriptor deleteMany
+   */
+  export type FlavorDescriptorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FlavorDescriptors to delete
+     */
+    where?: FlavorDescriptorWhereInput
+  }
+
+  /**
+   * FlavorDescriptor.creator
+   */
+  export type FlavorDescriptor$creatorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FlavorDescriptor.organization
+   */
+  export type FlavorDescriptor$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    where?: OrganizationWhereInput
+  }
+
+  /**
+   * FlavorDescriptor.scoreDescriptors
+   */
+  export type FlavorDescriptor$scoreDescriptorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    where?: ScoreFlavorDescriptorWhereInput
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * FlavorDescriptor without action
+   */
+  export type FlavorDescriptorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlavorDescriptor
+     */
+    select?: FlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlavorDescriptorInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ScoreFlavorDescriptor
+   */
+
+  export type AggregateScoreFlavorDescriptor = {
+    _count: ScoreFlavorDescriptorCountAggregateOutputType | null
+    _avg: ScoreFlavorDescriptorAvgAggregateOutputType | null
+    _sum: ScoreFlavorDescriptorSumAggregateOutputType | null
+    _min: ScoreFlavorDescriptorMinAggregateOutputType | null
+    _max: ScoreFlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  export type ScoreFlavorDescriptorAvgAggregateOutputType = {
+    intensity: number | null
+  }
+
+  export type ScoreFlavorDescriptorSumAggregateOutputType = {
+    intensity: number | null
+  }
+
+  export type ScoreFlavorDescriptorMinAggregateOutputType = {
+    id: string | null
+    scoreId: string | null
+    flavorDescriptorId: string | null
+    intensity: number | null
+    createdAt: Date | null
+  }
+
+  export type ScoreFlavorDescriptorMaxAggregateOutputType = {
+    id: string | null
+    scoreId: string | null
+    flavorDescriptorId: string | null
+    intensity: number | null
+    createdAt: Date | null
+  }
+
+  export type ScoreFlavorDescriptorCountAggregateOutputType = {
+    id: number
+    scoreId: number
+    flavorDescriptorId: number
+    intensity: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ScoreFlavorDescriptorAvgAggregateInputType = {
+    intensity?: true
+  }
+
+  export type ScoreFlavorDescriptorSumAggregateInputType = {
+    intensity?: true
+  }
+
+  export type ScoreFlavorDescriptorMinAggregateInputType = {
+    id?: true
+    scoreId?: true
+    flavorDescriptorId?: true
+    intensity?: true
+    createdAt?: true
+  }
+
+  export type ScoreFlavorDescriptorMaxAggregateInputType = {
+    id?: true
+    scoreId?: true
+    flavorDescriptorId?: true
+    intensity?: true
+    createdAt?: true
+  }
+
+  export type ScoreFlavorDescriptorCountAggregateInputType = {
+    id?: true
+    scoreId?: true
+    flavorDescriptorId?: true
+    intensity?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ScoreFlavorDescriptorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScoreFlavorDescriptor to aggregate.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ScoreFlavorDescriptors
+    **/
+    _count?: true | ScoreFlavorDescriptorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ScoreFlavorDescriptorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScoreFlavorDescriptorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScoreFlavorDescriptorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScoreFlavorDescriptorMaxAggregateInputType
+  }
+
+  export type GetScoreFlavorDescriptorAggregateType<T extends ScoreFlavorDescriptorAggregateArgs> = {
+        [P in keyof T & keyof AggregateScoreFlavorDescriptor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScoreFlavorDescriptor[P]>
+      : GetScalarType<T[P], AggregateScoreFlavorDescriptor[P]>
+  }
+
+
+
+
+  export type ScoreFlavorDescriptorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScoreFlavorDescriptorWhereInput
+    orderBy?: ScoreFlavorDescriptorOrderByWithAggregationInput | ScoreFlavorDescriptorOrderByWithAggregationInput[]
+    by: ScoreFlavorDescriptorScalarFieldEnum[] | ScoreFlavorDescriptorScalarFieldEnum
+    having?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScoreFlavorDescriptorCountAggregateInputType | true
+    _avg?: ScoreFlavorDescriptorAvgAggregateInputType
+    _sum?: ScoreFlavorDescriptorSumAggregateInputType
+    _min?: ScoreFlavorDescriptorMinAggregateInputType
+    _max?: ScoreFlavorDescriptorMaxAggregateInputType
+  }
+
+  export type ScoreFlavorDescriptorGroupByOutputType = {
+    id: string
+    scoreId: string
+    flavorDescriptorId: string
+    intensity: number
+    createdAt: Date
+    _count: ScoreFlavorDescriptorCountAggregateOutputType | null
+    _avg: ScoreFlavorDescriptorAvgAggregateOutputType | null
+    _sum: ScoreFlavorDescriptorSumAggregateOutputType | null
+    _min: ScoreFlavorDescriptorMinAggregateOutputType | null
+    _max: ScoreFlavorDescriptorMaxAggregateOutputType | null
+  }
+
+  type GetScoreFlavorDescriptorGroupByPayload<T extends ScoreFlavorDescriptorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScoreFlavorDescriptorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScoreFlavorDescriptorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScoreFlavorDescriptorGroupByOutputType[P]>
+            : GetScalarType<T[P], ScoreFlavorDescriptorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScoreFlavorDescriptorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+
+  export type ScoreFlavorDescriptorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+
+  export type ScoreFlavorDescriptorSelectScalar = {
+    id?: boolean
+    scoreId?: boolean
+    flavorDescriptorId?: boolean
+    intensity?: boolean
+    createdAt?: boolean
+  }
+
+  export type ScoreFlavorDescriptorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+  }
+  export type ScoreFlavorDescriptorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flavorDescriptor?: boolean | FlavorDescriptorDefaultArgs<ExtArgs>
+    score?: boolean | ScoreDefaultArgs<ExtArgs>
+  }
+
+  export type $ScoreFlavorDescriptorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ScoreFlavorDescriptor"
+    objects: {
+      flavorDescriptor: Prisma.$FlavorDescriptorPayload<ExtArgs>
+      score: Prisma.$ScorePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      scoreId: string
+      flavorDescriptorId: string
+      intensity: number
+      createdAt: Date
+    }, ExtArgs["result"]["scoreFlavorDescriptor"]>
+    composites: {}
+  }
+
+  type ScoreFlavorDescriptorGetPayload<S extends boolean | null | undefined | ScoreFlavorDescriptorDefaultArgs> = $Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload, S>
+
+  type ScoreFlavorDescriptorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ScoreFlavorDescriptorFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ScoreFlavorDescriptorCountAggregateInputType | true
+    }
+
+  export interface ScoreFlavorDescriptorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScoreFlavorDescriptor'], meta: { name: 'ScoreFlavorDescriptor' } }
+    /**
+     * Find zero or one ScoreFlavorDescriptor that matches the filter.
+     * @param {ScoreFlavorDescriptorFindUniqueArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScoreFlavorDescriptorFindUniqueArgs>(args: SelectSubset<T, ScoreFlavorDescriptorFindUniqueArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ScoreFlavorDescriptor that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ScoreFlavorDescriptorFindUniqueOrThrowArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScoreFlavorDescriptorFindUniqueOrThrowArgs>(args: SelectSubset<T, ScoreFlavorDescriptorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ScoreFlavorDescriptor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorFindFirstArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScoreFlavorDescriptorFindFirstArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorFindFirstArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ScoreFlavorDescriptor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorFindFirstOrThrowArgs} args - Arguments to find a ScoreFlavorDescriptor
+     * @example
+     * // Get one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScoreFlavorDescriptorFindFirstOrThrowArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ScoreFlavorDescriptors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ScoreFlavorDescriptors
+     * const scoreFlavorDescriptors = await prisma.scoreFlavorDescriptor.findMany()
+     * 
+     * // Get first 10 ScoreFlavorDescriptors
+     * const scoreFlavorDescriptors = await prisma.scoreFlavorDescriptor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const scoreFlavorDescriptorWithIdOnly = await prisma.scoreFlavorDescriptor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ScoreFlavorDescriptorFindManyArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorCreateArgs} args - Arguments to create a ScoreFlavorDescriptor.
+     * @example
+     * // Create one ScoreFlavorDescriptor
+     * const ScoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.create({
+     *   data: {
+     *     // ... data to create a ScoreFlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScoreFlavorDescriptorCreateArgs>(args: SelectSubset<T, ScoreFlavorDescriptorCreateArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ScoreFlavorDescriptors.
+     * @param {ScoreFlavorDescriptorCreateManyArgs} args - Arguments to create many ScoreFlavorDescriptors.
+     * @example
+     * // Create many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScoreFlavorDescriptorCreateManyArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ScoreFlavorDescriptors and returns the data saved in the database.
+     * @param {ScoreFlavorDescriptorCreateManyAndReturnArgs} args - Arguments to create many ScoreFlavorDescriptors.
+     * @example
+     * // Create many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ScoreFlavorDescriptors and only return the `id`
+     * const scoreFlavorDescriptorWithIdOnly = await prisma.scoreFlavorDescriptor.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScoreFlavorDescriptorCreateManyAndReturnArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorDeleteArgs} args - Arguments to delete one ScoreFlavorDescriptor.
+     * @example
+     * // Delete one ScoreFlavorDescriptor
+     * const ScoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.delete({
+     *   where: {
+     *     // ... filter to delete one ScoreFlavorDescriptor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScoreFlavorDescriptorDeleteArgs>(args: SelectSubset<T, ScoreFlavorDescriptorDeleteArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorUpdateArgs} args - Arguments to update one ScoreFlavorDescriptor.
+     * @example
+     * // Update one ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScoreFlavorDescriptorUpdateArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpdateArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ScoreFlavorDescriptors.
+     * @param {ScoreFlavorDescriptorDeleteManyArgs} args - Arguments to filter ScoreFlavorDescriptors to delete.
+     * @example
+     * // Delete a few ScoreFlavorDescriptors
+     * const { count } = await prisma.scoreFlavorDescriptor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScoreFlavorDescriptorDeleteManyArgs>(args?: SelectSubset<T, ScoreFlavorDescriptorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScoreFlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ScoreFlavorDescriptors
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScoreFlavorDescriptorUpdateManyArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ScoreFlavorDescriptor.
+     * @param {ScoreFlavorDescriptorUpsertArgs} args - Arguments to update or create a ScoreFlavorDescriptor.
+     * @example
+     * // Update or create a ScoreFlavorDescriptor
+     * const scoreFlavorDescriptor = await prisma.scoreFlavorDescriptor.upsert({
+     *   create: {
+     *     // ... data to create a ScoreFlavorDescriptor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ScoreFlavorDescriptor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScoreFlavorDescriptorUpsertArgs>(args: SelectSubset<T, ScoreFlavorDescriptorUpsertArgs<ExtArgs>>): Prisma__ScoreFlavorDescriptorClient<$Result.GetResult<Prisma.$ScoreFlavorDescriptorPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ScoreFlavorDescriptors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorCountArgs} args - Arguments to filter ScoreFlavorDescriptors to count.
+     * @example
+     * // Count the number of ScoreFlavorDescriptors
+     * const count = await prisma.scoreFlavorDescriptor.count({
+     *   where: {
+     *     // ... the filter for the ScoreFlavorDescriptors we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScoreFlavorDescriptorCountArgs>(
+      args?: Subset<T, ScoreFlavorDescriptorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScoreFlavorDescriptorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ScoreFlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScoreFlavorDescriptorAggregateArgs>(args: Subset<T, ScoreFlavorDescriptorAggregateArgs>): Prisma.PrismaPromise<GetScoreFlavorDescriptorAggregateType<T>>
+
+    /**
+     * Group by ScoreFlavorDescriptor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreFlavorDescriptorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScoreFlavorDescriptorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScoreFlavorDescriptorGroupByArgs['orderBy'] }
+        : { orderBy?: ScoreFlavorDescriptorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScoreFlavorDescriptorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScoreFlavorDescriptorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ScoreFlavorDescriptor model
+   */
+  readonly fields: ScoreFlavorDescriptorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ScoreFlavorDescriptor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScoreFlavorDescriptorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    flavorDescriptor<T extends FlavorDescriptorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlavorDescriptorDefaultArgs<ExtArgs>>): Prisma__FlavorDescriptorClient<$Result.GetResult<Prisma.$FlavorDescriptorPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    score<T extends ScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ScoreDefaultArgs<ExtArgs>>): Prisma__ScoreClient<$Result.GetResult<Prisma.$ScorePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ScoreFlavorDescriptor model
+   */ 
+  interface ScoreFlavorDescriptorFieldRefs {
+    readonly id: FieldRef<"ScoreFlavorDescriptor", 'String'>
+    readonly scoreId: FieldRef<"ScoreFlavorDescriptor", 'String'>
+    readonly flavorDescriptorId: FieldRef<"ScoreFlavorDescriptor", 'String'>
+    readonly intensity: FieldRef<"ScoreFlavorDescriptor", 'Int'>
+    readonly createdAt: FieldRef<"ScoreFlavorDescriptor", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ScoreFlavorDescriptor findUnique
+   */
+  export type ScoreFlavorDescriptorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor findUniqueOrThrow
+   */
+  export type ScoreFlavorDescriptorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor findFirst
+   */
+  export type ScoreFlavorDescriptorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScoreFlavorDescriptors.
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScoreFlavorDescriptors.
+     */
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * ScoreFlavorDescriptor findFirstOrThrow
+   */
+  export type ScoreFlavorDescriptorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptor to fetch.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScoreFlavorDescriptors.
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScoreFlavorDescriptors.
+     */
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * ScoreFlavorDescriptor findMany
+   */
+  export type ScoreFlavorDescriptorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter, which ScoreFlavorDescriptors to fetch.
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScoreFlavorDescriptors to fetch.
+     */
+    orderBy?: ScoreFlavorDescriptorOrderByWithRelationInput | ScoreFlavorDescriptorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ScoreFlavorDescriptors.
+     */
+    cursor?: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScoreFlavorDescriptors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScoreFlavorDescriptors.
+     */
+    skip?: number
+    distinct?: ScoreFlavorDescriptorScalarFieldEnum | ScoreFlavorDescriptorScalarFieldEnum[]
+  }
+
+  /**
+   * ScoreFlavorDescriptor create
+   */
+  export type ScoreFlavorDescriptorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ScoreFlavorDescriptor.
+     */
+    data: XOR<ScoreFlavorDescriptorCreateInput, ScoreFlavorDescriptorUncheckedCreateInput>
+  }
+
+  /**
+   * ScoreFlavorDescriptor createMany
+   */
+  export type ScoreFlavorDescriptorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ScoreFlavorDescriptors.
+     */
+    data: ScoreFlavorDescriptorCreateManyInput | ScoreFlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ScoreFlavorDescriptor createManyAndReturn
+   */
+  export type ScoreFlavorDescriptorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ScoreFlavorDescriptors.
+     */
+    data: ScoreFlavorDescriptorCreateManyInput | ScoreFlavorDescriptorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScoreFlavorDescriptor update
+   */
+  export type ScoreFlavorDescriptorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ScoreFlavorDescriptor.
+     */
+    data: XOR<ScoreFlavorDescriptorUpdateInput, ScoreFlavorDescriptorUncheckedUpdateInput>
+    /**
+     * Choose, which ScoreFlavorDescriptor to update.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor updateMany
+   */
+  export type ScoreFlavorDescriptorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ScoreFlavorDescriptors.
+     */
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyInput>
+    /**
+     * Filter which ScoreFlavorDescriptors to update
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor upsert
+   */
+  export type ScoreFlavorDescriptorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ScoreFlavorDescriptor to update in case it exists.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    /**
+     * In case the ScoreFlavorDescriptor found by the `where` argument doesn't exist, create a new ScoreFlavorDescriptor with this data.
+     */
+    create: XOR<ScoreFlavorDescriptorCreateInput, ScoreFlavorDescriptorUncheckedCreateInput>
+    /**
+     * In case the ScoreFlavorDescriptor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScoreFlavorDescriptorUpdateInput, ScoreFlavorDescriptorUncheckedUpdateInput>
+  }
+
+  /**
+   * ScoreFlavorDescriptor delete
+   */
+  export type ScoreFlavorDescriptorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
+    /**
+     * Filter which ScoreFlavorDescriptor to delete.
+     */
+    where: ScoreFlavorDescriptorWhereUniqueInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor deleteMany
+   */
+  export type ScoreFlavorDescriptorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScoreFlavorDescriptors to delete
+     */
+    where?: ScoreFlavorDescriptorWhereInput
+  }
+
+  /**
+   * ScoreFlavorDescriptor without action
+   */
+  export type ScoreFlavorDescriptorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreFlavorDescriptor
+     */
+    select?: ScoreFlavorDescriptorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScoreFlavorDescriptorInclude<ExtArgs> | null
   }
 
 
@@ -13740,6 +16098,63 @@ export namespace Prisma {
   export type ScoreScalarFieldEnum = (typeof ScoreScalarFieldEnum)[keyof typeof ScoreScalarFieldEnum]
 
 
+  export const GreenBeanGradingScalarFieldEnum: {
+    id: 'id',
+    sampleId: 'sampleId',
+    gradingSystem: 'gradingSystem',
+    primaryDefects: 'primaryDefects',
+    secondaryDefects: 'secondaryDefects',
+    fullDefectEquivalents: 'fullDefectEquivalents',
+    defectBreakdown: 'defectBreakdown',
+    screenSizeDistribution: 'screenSizeDistribution',
+    averageScreenSize: 'averageScreenSize',
+    uniformityPercentage: 'uniformityPercentage',
+    moistureContent: 'moistureContent',
+    waterActivity: 'waterActivity',
+    bulkDensity: 'bulkDensity',
+    uniformityScore: 'uniformityScore',
+    grade: 'grade',
+    classification: 'classification',
+    qualityScore: 'qualityScore',
+    gradedBy: 'gradedBy',
+    gradedAt: 'gradedAt',
+    certifiedBy: 'certifiedBy',
+    certificationDate: 'certificationDate',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    beanColorAssessment: 'beanColorAssessment'
+  };
+
+  export type GreenBeanGradingScalarFieldEnum = (typeof GreenBeanGradingScalarFieldEnum)[keyof typeof GreenBeanGradingScalarFieldEnum]
+
+
+  export const FlavorDescriptorScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    category: 'category',
+    description: 'description',
+    isDefault: 'isDefault',
+    organizationId: 'organizationId',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FlavorDescriptorScalarFieldEnum = (typeof FlavorDescriptorScalarFieldEnum)[keyof typeof FlavorDescriptorScalarFieldEnum]
+
+
+  export const ScoreFlavorDescriptorScalarFieldEnum: {
+    id: 'id',
+    scoreId: 'scoreId',
+    flavorDescriptorId: 'flavorDescriptorId',
+    intensity: 'intensity',
+    createdAt: 'createdAt'
+  };
+
+  export type ScoreFlavorDescriptorScalarFieldEnum = (typeof ScoreFlavorDescriptorScalarFieldEnum)[keyof typeof ScoreFlavorDescriptorScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -13753,6 +16168,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -13781,7 +16204,7 @@ export namespace Prisma {
 
 
   /**
-   * Field references
+   * Field references 
    */
 
 
@@ -13845,13 +16268,6 @@ export namespace Prisma {
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -13986,6 +16402,48 @@ export namespace Prisma {
    */
   export type ListEnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole[]'>
     
+
+
+  /**
+   * Reference to a field of type 'GradingSystem'
+   */
+  export type EnumGradingSystemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradingSystem'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradingSystem[]'
+   */
+  export type ListEnumGradingSystemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradingSystem[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradeClassification'
+   */
+  export type EnumGradeClassificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradeClassification'>
+    
+
+
+  /**
+   * Reference to a field of type 'GradeClassification[]'
+   */
+  export type ListEnumGradeClassificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradeClassification[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlavorCategory'
+   */
+  export type EnumFlavorCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlavorCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'FlavorCategory[]'
+   */
+  export type ListEnumFlavorCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlavorCategory[]'>
+    
   /**
    * Deep Input Types
    */
@@ -14011,11 +16469,12 @@ export namespace Prisma {
     settings?: JsonFilter<"Organization">
     createdAt?: DateTimeFilter<"Organization"> | Date | string
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
-    users?: UserListRelationFilter
     cuppingSessions?: CuppingSessionListRelationFilter
-    samples?: SampleListRelationFilter
     templates?: CuppingTemplateListRelationFilter
+    flavorDescriptors?: FlavorDescriptorListRelationFilter
     invitations?: InvitationListRelationFilter
+    samples?: SampleListRelationFilter
+    users?: UserListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -14035,11 +16494,12 @@ export namespace Prisma {
     settings?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    users?: UserOrderByRelationAggregateInput
     cuppingSessions?: CuppingSessionOrderByRelationAggregateInput
-    samples?: SampleOrderByRelationAggregateInput
     templates?: CuppingTemplateOrderByRelationAggregateInput
+    flavorDescriptors?: FlavorDescriptorOrderByRelationAggregateInput
     invitations?: InvitationOrderByRelationAggregateInput
+    samples?: SampleOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -14062,11 +16522,12 @@ export namespace Prisma {
     settings?: JsonFilter<"Organization">
     createdAt?: DateTimeFilter<"Organization"> | Date | string
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
-    users?: UserListRelationFilter
     cuppingSessions?: CuppingSessionListRelationFilter
-    samples?: SampleListRelationFilter
     templates?: CuppingTemplateListRelationFilter
+    flavorDescriptors?: FlavorDescriptorListRelationFilter
     invitations?: InvitationListRelationFilter
+    samples?: SampleListRelationFilter
+    users?: UserListRelationFilter
   }, "id" | "slug" | "domain" | "subdomain" | "stripeCustomerId">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -14134,11 +16595,12 @@ export namespace Prisma {
     preferences?: JsonFilter<"User">
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     cuppingSessions?: CuppingSessionListRelationFilter
+    createdTemplates?: CuppingTemplateListRelationFilter
+    flavorDescriptors?: FlavorDescriptorListRelationFilter
     scores?: ScoreListRelationFilter
     sessionParticipants?: SessionParticipantListRelationFilter
-    createdTemplates?: CuppingTemplateListRelationFilter
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14159,11 +16621,12 @@ export namespace Prisma {
     preferences?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
     cuppingSessions?: CuppingSessionOrderByRelationAggregateInput
+    createdTemplates?: CuppingTemplateOrderByRelationAggregateInput
+    flavorDescriptors?: FlavorDescriptorOrderByRelationAggregateInput
     scores?: ScoreOrderByRelationAggregateInput
     sessionParticipants?: SessionParticipantOrderByRelationAggregateInput
-    createdTemplates?: CuppingTemplateOrderByRelationAggregateInput
+    organization?: OrganizationOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14187,11 +16650,12 @@ export namespace Prisma {
     preferences?: JsonFilter<"User">
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     cuppingSessions?: CuppingSessionListRelationFilter
+    createdTemplates?: CuppingTemplateListRelationFilter
+    flavorDescriptors?: FlavorDescriptorListRelationFilter
     scores?: ScoreListRelationFilter
     sessionParticipants?: SessionParticipantListRelationFilter
-    createdTemplates?: CuppingTemplateListRelationFilter
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14254,7 +16718,7 @@ export namespace Prisma {
     invitedBy?: StringFilter<"Invitation"> | string
     createdAt?: DateTimeFilter<"Invitation"> | Date | string
     updatedAt?: DateTimeFilter<"Invitation"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
   }
 
   export type InvitationOrderByWithRelationInput = {
@@ -14286,7 +16750,7 @@ export namespace Prisma {
     invitedBy?: StringFilter<"Invitation"> | string
     createdAt?: DateTimeFilter<"Invitation"> | Date | string
     updatedAt?: DateTimeFilter<"Invitation"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
   }, "id" | "token" | "email_organizationId">
 
   export type InvitationOrderByWithAggregationInput = {
@@ -14349,9 +16813,10 @@ export namespace Prisma {
     tags?: StringNullableListFilter<"Sample">
     createdAt?: DateTimeFilter<"Sample"> | Date | string
     updatedAt?: DateTimeFilter<"Sample"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    sessionSamples?: SessionSampleListRelationFilter
+    greenBeanGrading?: XOR<GreenBeanGradingNullableRelationFilter, GreenBeanGradingWhereInput> | null
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
     scores?: ScoreListRelationFilter
+    sessionSamples?: SessionSampleListRelationFilter
   }
 
   export type SampleOrderByWithRelationInput = {
@@ -14379,9 +16844,10 @@ export namespace Prisma {
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    greenBeanGrading?: GreenBeanGradingOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
-    sessionSamples?: SessionSampleOrderByRelationAggregateInput
     scores?: ScoreOrderByRelationAggregateInput
+    sessionSamples?: SessionSampleOrderByRelationAggregateInput
   }
 
   export type SampleWhereUniqueInput = Prisma.AtLeast<{
@@ -14412,9 +16878,10 @@ export namespace Prisma {
     tags?: StringNullableListFilter<"Sample">
     createdAt?: DateTimeFilter<"Sample"> | Date | string
     updatedAt?: DateTimeFilter<"Sample"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    sessionSamples?: SessionSampleListRelationFilter
+    greenBeanGrading?: XOR<GreenBeanGradingNullableRelationFilter, GreenBeanGradingWhereInput> | null
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
     scores?: ScoreListRelationFilter
+    sessionSamples?: SessionSampleListRelationFilter
   }, "id">
 
   export type SampleOrderByWithAggregationInput = {
@@ -14495,9 +16962,9 @@ export namespace Prisma {
     categories?: JsonFilter<"CuppingTemplate">
     createdAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     cuppingSessions?: CuppingSessionListRelationFilter
+    creator?: XOR<UserRelationFilter, UserWhereInput>
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
   }
 
   export type CuppingTemplateOrderByWithRelationInput = {
@@ -14513,9 +16980,9 @@ export namespace Prisma {
     categories?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
-    creator?: UserOrderByWithRelationInput
     cuppingSessions?: CuppingSessionOrderByRelationAggregateInput
+    creator?: UserOrderByWithRelationInput
+    organization?: OrganizationOrderByWithRelationInput
   }
 
   export type CuppingTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -14534,9 +17001,9 @@ export namespace Prisma {
     categories?: JsonFilter<"CuppingTemplate">
     createdAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     cuppingSessions?: CuppingSessionListRelationFilter
+    creator?: XOR<UserRelationFilter, UserWhereInput>
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
   }, "id">
 
   export type CuppingTemplateOrderByWithAggregationInput = {
@@ -14600,12 +17067,12 @@ export namespace Prisma {
     settings?: JsonFilter<"CuppingSession">
     createdAt?: DateTimeFilter<"CuppingSession"> | Date | string
     updatedAt?: DateTimeFilter<"CuppingSession"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
-    template?: XOR<CuppingTemplateNullableScalarRelationFilter, CuppingTemplateWhereInput> | null
+    creator?: XOR<UserRelationFilter, UserWhereInput>
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
+    template?: XOR<CuppingTemplateNullableRelationFilter, CuppingTemplateWhereInput> | null
+    scores?: ScoreListRelationFilter
     participants?: SessionParticipantListRelationFilter
     samples?: SessionSampleListRelationFilter
-    scores?: ScoreListRelationFilter
   }
 
   export type CuppingSessionOrderByWithRelationInput = {
@@ -14628,12 +17095,12 @@ export namespace Prisma {
     settings?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
     creator?: UserOrderByWithRelationInput
+    organization?: OrganizationOrderByWithRelationInput
     template?: CuppingTemplateOrderByWithRelationInput
+    scores?: ScoreOrderByRelationAggregateInput
     participants?: SessionParticipantOrderByRelationAggregateInput
     samples?: SessionSampleOrderByRelationAggregateInput
-    scores?: ScoreOrderByRelationAggregateInput
   }
 
   export type CuppingSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -14659,12 +17126,12 @@ export namespace Prisma {
     settings?: JsonFilter<"CuppingSession">
     createdAt?: DateTimeFilter<"CuppingSession"> | Date | string
     updatedAt?: DateTimeFilter<"CuppingSession"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
-    template?: XOR<CuppingTemplateNullableScalarRelationFilter, CuppingTemplateWhereInput> | null
+    creator?: XOR<UserRelationFilter, UserWhereInput>
+    organization?: XOR<OrganizationRelationFilter, OrganizationWhereInput>
+    template?: XOR<CuppingTemplateNullableRelationFilter, CuppingTemplateWhereInput> | null
+    scores?: ScoreListRelationFilter
     participants?: SessionParticipantListRelationFilter
     samples?: SessionSampleListRelationFilter
-    scores?: ScoreListRelationFilter
   }, "id">
 
   export type CuppingSessionOrderByWithAggregationInput = {
@@ -14730,8 +17197,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"SessionParticipant"> | boolean
     isCalibrated?: BoolFilter<"SessionParticipant"> | boolean
     calibratedAt?: DateTimeNullableFilter<"SessionParticipant"> | Date | string | null
-    session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    session?: XOR<CuppingSessionRelationFilter, CuppingSessionWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
   export type SessionParticipantOrderByWithRelationInput = {
@@ -14762,8 +17229,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"SessionParticipant"> | boolean
     isCalibrated?: BoolFilter<"SessionParticipant"> | boolean
     calibratedAt?: DateTimeNullableFilter<"SessionParticipant"> | Date | string | null
-    session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    session?: XOR<CuppingSessionRelationFilter, CuppingSessionWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id" | "sessionId_userId">
 
   export type SessionParticipantOrderByWithAggregationInput = {
@@ -14811,9 +17278,9 @@ export namespace Prisma {
     brewRatio?: StringNullableFilter<"SessionSample"> | string | null
     steepTime?: IntNullableFilter<"SessionSample"> | number | null
     addedAt?: DateTimeFilter<"SessionSample"> | Date | string
-    session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
-    sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
     scores?: ScoreListRelationFilter
+    sample?: XOR<SampleRelationFilter, SampleWhereInput>
+    session?: XOR<CuppingSessionRelationFilter, CuppingSessionWhereInput>
   }
 
   export type SessionSampleOrderByWithRelationInput = {
@@ -14828,9 +17295,9 @@ export namespace Prisma {
     brewRatio?: SortOrderInput | SortOrder
     steepTime?: SortOrderInput | SortOrder
     addedAt?: SortOrder
-    session?: CuppingSessionOrderByWithRelationInput
-    sample?: SampleOrderByWithRelationInput
     scores?: ScoreOrderByRelationAggregateInput
+    sample?: SampleOrderByWithRelationInput
+    session?: CuppingSessionOrderByWithRelationInput
   }
 
   export type SessionSampleWhereUniqueInput = Prisma.AtLeast<{
@@ -14850,9 +17317,9 @@ export namespace Prisma {
     brewRatio?: StringNullableFilter<"SessionSample"> | string | null
     steepTime?: IntNullableFilter<"SessionSample"> | number | null
     addedAt?: DateTimeFilter<"SessionSample"> | Date | string
-    session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
-    sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
     scores?: ScoreListRelationFilter
+    sample?: XOR<SampleRelationFilter, SampleWhereInput>
+    session?: XOR<CuppingSessionRelationFilter, CuppingSessionWhereInput>
   }, "id" | "sessionId_sampleId" | "sessionId_position">
 
   export type SessionSampleOrderByWithAggregationInput = {
@@ -14923,10 +17390,11 @@ export namespace Prisma {
     submittedAt?: DateTimeNullableFilter<"Score"> | Date | string | null
     createdAt?: DateTimeFilter<"Score"> | Date | string
     updatedAt?: DateTimeFilter<"Score"> | Date | string
-    session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
-    sessionSample?: XOR<SessionSampleScalarRelationFilter, SessionSampleWhereInput>
-    sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    flavorDescriptors?: ScoreFlavorDescriptorListRelationFilter
+    sample?: XOR<SampleRelationFilter, SampleWhereInput>
+    session?: XOR<CuppingSessionRelationFilter, CuppingSessionWhereInput>
+    sessionSample?: XOR<SessionSampleRelationFilter, SessionSampleWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
   export type ScoreOrderByWithRelationInput = {
@@ -14958,9 +17426,10 @@ export namespace Prisma {
     submittedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    flavorDescriptors?: ScoreFlavorDescriptorOrderByRelationAggregateInput
+    sample?: SampleOrderByWithRelationInput
     session?: CuppingSessionOrderByWithRelationInput
     sessionSample?: SessionSampleOrderByWithRelationInput
-    sample?: SampleOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -14997,10 +17466,11 @@ export namespace Prisma {
     submittedAt?: DateTimeNullableFilter<"Score"> | Date | string | null
     createdAt?: DateTimeFilter<"Score"> | Date | string
     updatedAt?: DateTimeFilter<"Score"> | Date | string
-    session?: XOR<CuppingSessionScalarRelationFilter, CuppingSessionWhereInput>
-    sessionSample?: XOR<SessionSampleScalarRelationFilter, SessionSampleWhereInput>
-    sample?: XOR<SampleScalarRelationFilter, SampleWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    flavorDescriptors?: ScoreFlavorDescriptorListRelationFilter
+    sample?: XOR<SampleRelationFilter, SampleWhereInput>
+    session?: XOR<CuppingSessionRelationFilter, CuppingSessionWhereInput>
+    sessionSample?: XOR<SessionSampleRelationFilter, SessionSampleWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id" | "sessionId_sampleId_userId">
 
   export type ScoreOrderByWithAggregationInput = {
@@ -15073,6 +17543,306 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Score"> | Date | string
   }
 
+  export type GreenBeanGradingWhereInput = {
+    AND?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    OR?: GreenBeanGradingWhereInput[]
+    NOT?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    id?: StringFilter<"GreenBeanGrading"> | string
+    sampleId?: StringFilter<"GreenBeanGrading"> | string
+    gradingSystem?: EnumGradingSystemFilter<"GreenBeanGrading"> | $Enums.GradingSystem
+    primaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    secondaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    fullDefectEquivalents?: FloatFilter<"GreenBeanGrading"> | number
+    defectBreakdown?: JsonFilter<"GreenBeanGrading">
+    screenSizeDistribution?: JsonNullableFilter<"GreenBeanGrading">
+    averageScreenSize?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityPercentage?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    moistureContent?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    waterActivity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    bulkDensity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityScore?: IntNullableFilter<"GreenBeanGrading"> | number | null
+    grade?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    classification?: EnumGradeClassificationNullableFilter<"GreenBeanGrading"> | $Enums.GradeClassification | null
+    qualityScore?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    gradedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    gradedAt?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    certifiedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    certificationDate?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    notes?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    createdAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    updatedAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    beanColorAssessment?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    sample?: XOR<SampleRelationFilter, SampleWhereInput>
+  }
+
+  export type GreenBeanGradingOrderByWithRelationInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    defectBreakdown?: SortOrder
+    screenSizeDistribution?: SortOrderInput | SortOrder
+    averageScreenSize?: SortOrderInput | SortOrder
+    uniformityPercentage?: SortOrderInput | SortOrder
+    moistureContent?: SortOrderInput | SortOrder
+    waterActivity?: SortOrderInput | SortOrder
+    bulkDensity?: SortOrderInput | SortOrder
+    uniformityScore?: SortOrderInput | SortOrder
+    grade?: SortOrderInput | SortOrder
+    classification?: SortOrderInput | SortOrder
+    qualityScore?: SortOrderInput | SortOrder
+    gradedBy?: SortOrderInput | SortOrder
+    gradedAt?: SortOrderInput | SortOrder
+    certifiedBy?: SortOrderInput | SortOrder
+    certificationDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beanColorAssessment?: SortOrderInput | SortOrder
+    sample?: SampleOrderByWithRelationInput
+  }
+
+  export type GreenBeanGradingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sampleId?: string
+    AND?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    OR?: GreenBeanGradingWhereInput[]
+    NOT?: GreenBeanGradingWhereInput | GreenBeanGradingWhereInput[]
+    gradingSystem?: EnumGradingSystemFilter<"GreenBeanGrading"> | $Enums.GradingSystem
+    primaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    secondaryDefects?: IntFilter<"GreenBeanGrading"> | number
+    fullDefectEquivalents?: FloatFilter<"GreenBeanGrading"> | number
+    defectBreakdown?: JsonFilter<"GreenBeanGrading">
+    screenSizeDistribution?: JsonNullableFilter<"GreenBeanGrading">
+    averageScreenSize?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityPercentage?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    moistureContent?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    waterActivity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    bulkDensity?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    uniformityScore?: IntNullableFilter<"GreenBeanGrading"> | number | null
+    grade?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    classification?: EnumGradeClassificationNullableFilter<"GreenBeanGrading"> | $Enums.GradeClassification | null
+    qualityScore?: FloatNullableFilter<"GreenBeanGrading"> | number | null
+    gradedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    gradedAt?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    certifiedBy?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    certificationDate?: DateTimeNullableFilter<"GreenBeanGrading"> | Date | string | null
+    notes?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    createdAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    updatedAt?: DateTimeFilter<"GreenBeanGrading"> | Date | string
+    beanColorAssessment?: StringNullableFilter<"GreenBeanGrading"> | string | null
+    sample?: XOR<SampleRelationFilter, SampleWhereInput>
+  }, "id" | "sampleId">
+
+  export type GreenBeanGradingOrderByWithAggregationInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    defectBreakdown?: SortOrder
+    screenSizeDistribution?: SortOrderInput | SortOrder
+    averageScreenSize?: SortOrderInput | SortOrder
+    uniformityPercentage?: SortOrderInput | SortOrder
+    moistureContent?: SortOrderInput | SortOrder
+    waterActivity?: SortOrderInput | SortOrder
+    bulkDensity?: SortOrderInput | SortOrder
+    uniformityScore?: SortOrderInput | SortOrder
+    grade?: SortOrderInput | SortOrder
+    classification?: SortOrderInput | SortOrder
+    qualityScore?: SortOrderInput | SortOrder
+    gradedBy?: SortOrderInput | SortOrder
+    gradedAt?: SortOrderInput | SortOrder
+    certifiedBy?: SortOrderInput | SortOrder
+    certificationDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beanColorAssessment?: SortOrderInput | SortOrder
+    _count?: GreenBeanGradingCountOrderByAggregateInput
+    _avg?: GreenBeanGradingAvgOrderByAggregateInput
+    _max?: GreenBeanGradingMaxOrderByAggregateInput
+    _min?: GreenBeanGradingMinOrderByAggregateInput
+    _sum?: GreenBeanGradingSumOrderByAggregateInput
+  }
+
+  export type GreenBeanGradingScalarWhereWithAggregatesInput = {
+    AND?: GreenBeanGradingScalarWhereWithAggregatesInput | GreenBeanGradingScalarWhereWithAggregatesInput[]
+    OR?: GreenBeanGradingScalarWhereWithAggregatesInput[]
+    NOT?: GreenBeanGradingScalarWhereWithAggregatesInput | GreenBeanGradingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GreenBeanGrading"> | string
+    sampleId?: StringWithAggregatesFilter<"GreenBeanGrading"> | string
+    gradingSystem?: EnumGradingSystemWithAggregatesFilter<"GreenBeanGrading"> | $Enums.GradingSystem
+    primaryDefects?: IntWithAggregatesFilter<"GreenBeanGrading"> | number
+    secondaryDefects?: IntWithAggregatesFilter<"GreenBeanGrading"> | number
+    fullDefectEquivalents?: FloatWithAggregatesFilter<"GreenBeanGrading"> | number
+    defectBreakdown?: JsonWithAggregatesFilter<"GreenBeanGrading">
+    screenSizeDistribution?: JsonNullableWithAggregatesFilter<"GreenBeanGrading">
+    averageScreenSize?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    uniformityPercentage?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    moistureContent?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    waterActivity?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    bulkDensity?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    uniformityScore?: IntNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    grade?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    classification?: EnumGradeClassificationNullableWithAggregatesFilter<"GreenBeanGrading"> | $Enums.GradeClassification | null
+    qualityScore?: FloatNullableWithAggregatesFilter<"GreenBeanGrading"> | number | null
+    gradedBy?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    gradedAt?: DateTimeNullableWithAggregatesFilter<"GreenBeanGrading"> | Date | string | null
+    certifiedBy?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    certificationDate?: DateTimeNullableWithAggregatesFilter<"GreenBeanGrading"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GreenBeanGrading"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GreenBeanGrading"> | Date | string
+    beanColorAssessment?: StringNullableWithAggregatesFilter<"GreenBeanGrading"> | string | null
+  }
+
+  export type FlavorDescriptorWhereInput = {
+    AND?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    OR?: FlavorDescriptorWhereInput[]
+    NOT?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    id?: StringFilter<"FlavorDescriptor"> | string
+    name?: StringFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    creator?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    organization?: XOR<OrganizationNullableRelationFilter, OrganizationWhereInput> | null
+    scoreDescriptors?: ScoreFlavorDescriptorListRelationFilter
+  }
+
+  export type FlavorDescriptorOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    creator?: UserOrderByWithRelationInput
+    organization?: OrganizationOrderByWithRelationInput
+    scoreDescriptors?: ScoreFlavorDescriptorOrderByRelationAggregateInput
+  }
+
+  export type FlavorDescriptorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name_organizationId?: FlavorDescriptorNameOrganizationIdCompoundUniqueInput
+    AND?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    OR?: FlavorDescriptorWhereInput[]
+    NOT?: FlavorDescriptorWhereInput | FlavorDescriptorWhereInput[]
+    name?: StringFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    creator?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    organization?: XOR<OrganizationNullableRelationFilter, OrganizationWhereInput> | null
+    scoreDescriptors?: ScoreFlavorDescriptorListRelationFilter
+  }, "id" | "name_organizationId">
+
+  export type FlavorDescriptorOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FlavorDescriptorCountOrderByAggregateInput
+    _max?: FlavorDescriptorMaxOrderByAggregateInput
+    _min?: FlavorDescriptorMinOrderByAggregateInput
+  }
+
+  export type FlavorDescriptorScalarWhereWithAggregatesInput = {
+    AND?: FlavorDescriptorScalarWhereWithAggregatesInput | FlavorDescriptorScalarWhereWithAggregatesInput[]
+    OR?: FlavorDescriptorScalarWhereWithAggregatesInput[]
+    NOT?: FlavorDescriptorScalarWhereWithAggregatesInput | FlavorDescriptorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FlavorDescriptor"> | string
+    name?: StringWithAggregatesFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryWithAggregatesFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableWithAggregatesFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolWithAggregatesFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableWithAggregatesFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableWithAggregatesFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FlavorDescriptor"> | Date | string
+  }
+
+  export type ScoreFlavorDescriptorWhereInput = {
+    AND?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    OR?: ScoreFlavorDescriptorWhereInput[]
+    NOT?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    id?: StringFilter<"ScoreFlavorDescriptor"> | string
+    scoreId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeFilter<"ScoreFlavorDescriptor"> | Date | string
+    flavorDescriptor?: XOR<FlavorDescriptorRelationFilter, FlavorDescriptorWhereInput>
+    score?: XOR<ScoreRelationFilter, ScoreWhereInput>
+  }
+
+  export type ScoreFlavorDescriptorOrderByWithRelationInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+    flavorDescriptor?: FlavorDescriptorOrderByWithRelationInput
+    score?: ScoreOrderByWithRelationInput
+  }
+
+  export type ScoreFlavorDescriptorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    scoreId_flavorDescriptorId?: ScoreFlavorDescriptorScoreIdFlavorDescriptorIdCompoundUniqueInput
+    AND?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    OR?: ScoreFlavorDescriptorWhereInput[]
+    NOT?: ScoreFlavorDescriptorWhereInput | ScoreFlavorDescriptorWhereInput[]
+    scoreId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeFilter<"ScoreFlavorDescriptor"> | Date | string
+    flavorDescriptor?: XOR<FlavorDescriptorRelationFilter, FlavorDescriptorWhereInput>
+    score?: XOR<ScoreRelationFilter, ScoreWhereInput>
+  }, "id" | "scoreId_flavorDescriptorId">
+
+  export type ScoreFlavorDescriptorOrderByWithAggregationInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+    _count?: ScoreFlavorDescriptorCountOrderByAggregateInput
+    _avg?: ScoreFlavorDescriptorAvgOrderByAggregateInput
+    _max?: ScoreFlavorDescriptorMaxOrderByAggregateInput
+    _min?: ScoreFlavorDescriptorMinOrderByAggregateInput
+    _sum?: ScoreFlavorDescriptorSumOrderByAggregateInput
+  }
+
+  export type ScoreFlavorDescriptorScalarWhereWithAggregatesInput = {
+    AND?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput | ScoreFlavorDescriptorScalarWhereWithAggregatesInput[]
+    OR?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput[]
+    NOT?: ScoreFlavorDescriptorScalarWhereWithAggregatesInput | ScoreFlavorDescriptorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ScoreFlavorDescriptor"> | string
+    scoreId?: StringWithAggregatesFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringWithAggregatesFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntWithAggregatesFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ScoreFlavorDescriptor"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -15090,11 +17860,12 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
-    samples?: SampleCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -15114,11 +17885,12 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
-    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -15138,11 +17910,12 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -15162,11 +17935,12 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -15243,11 +18017,12 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
+    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
     scores?: ScoreCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
-    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15269,9 +18044,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
+    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
-    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUpdateInput = {
@@ -15291,11 +18067,12 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
+    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
-    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15317,9 +18094,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
-    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15495,9 +18273,10 @@ export namespace Prisma {
     tags?: SampleCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
     organization: OrganizationCreateNestedOneWithoutSamplesInput
-    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
     scores?: ScoreCreateNestedManyWithoutSampleInput
+    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
   }
 
   export type SampleUncheckedCreateInput = {
@@ -15525,8 +18304,9 @@ export namespace Prisma {
     tags?: SampleCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
-    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
     scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
   }
 
   export type SampleUpdateInput = {
@@ -15553,9 +18333,10 @@ export namespace Prisma {
     tags?: SampleUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
-    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
     scores?: ScoreUpdateManyWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
   }
 
   export type SampleUncheckedUpdateInput = {
@@ -15583,8 +18364,9 @@ export namespace Prisma {
     tags?: SampleUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
   }
 
   export type SampleCreateManyInput = {
@@ -15678,9 +18460,9 @@ export namespace Prisma {
     categories: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutTemplatesInput
-    creator: UserCreateNestedOneWithoutCreatedTemplatesInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutTemplateInput
+    creator: UserCreateNestedOneWithoutCreatedTemplatesInput
+    organization: OrganizationCreateNestedOneWithoutTemplatesInput
   }
 
   export type CuppingTemplateUncheckedCreateInput = {
@@ -15710,9 +18492,9 @@ export namespace Prisma {
     categories?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
-    creator?: UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutTemplateNestedInput
+    creator?: UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
   }
 
   export type CuppingTemplateUncheckedUpdateInput = {
@@ -15791,12 +18573,12 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     creator: UserCreateNestedOneWithoutCuppingSessionsInput
+    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
+    scores?: ScoreCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantCreateNestedManyWithoutSessionInput
     samples?: SessionSampleCreateNestedManyWithoutSessionInput
-    scores?: ScoreCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionUncheckedCreateInput = {
@@ -15819,9 +18601,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantUncheckedCreateNestedManyWithoutSessionInput
     samples?: SessionSampleUncheckedCreateNestedManyWithoutSessionInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionUpdateInput = {
@@ -15841,12 +18623,12 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
+    scores?: ScoreUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateInput = {
@@ -15869,9 +18651,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUncheckedUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUncheckedUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionCreateManyInput = {
@@ -16029,9 +18811,9 @@ export namespace Prisma {
     brewRatio?: string | null
     steepTime?: number | null
     addedAt?: Date | string
-    session: CuppingSessionCreateNestedOneWithoutSamplesInput
-    sample: SampleCreateNestedOneWithoutSessionSamplesInput
     scores?: ScoreCreateNestedManyWithoutSessionSampleInput
+    sample: SampleCreateNestedOneWithoutSessionSamplesInput
+    session: CuppingSessionCreateNestedOneWithoutSamplesInput
   }
 
   export type SessionSampleUncheckedCreateInput = {
@@ -16059,9 +18841,9 @@ export namespace Prisma {
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
-    sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
     scores?: ScoreUpdateManyWithoutSessionSampleNestedInput
+    sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
+    session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
   }
 
   export type SessionSampleUncheckedUpdateInput = {
@@ -16144,9 +18926,10 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
+    sample: SampleCreateNestedOneWithoutScoresInput
     session: CuppingSessionCreateNestedOneWithoutScoresInput
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
-    sample: SampleCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
   }
 
@@ -16179,6 +18962,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreUpdateInput = {
@@ -16206,9 +18990,10 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
+    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
     session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
-    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
   }
 
@@ -16241,6 +19026,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreCreateManyInput = {
@@ -16332,6 +19118,341 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GreenBeanGradingCreateInput = {
+    id?: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beanColorAssessment?: string | null
+    sample: SampleCreateNestedOneWithoutGreenBeanGradingInput
+  }
+
+  export type GreenBeanGradingUncheckedCreateInput = {
+    id?: string
+    sampleId: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beanColorAssessment?: string | null
+  }
+
+  export type GreenBeanGradingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beanColorAssessment?: NullableStringFieldUpdateOperationsInput | string | null
+    sample?: SampleUpdateOneRequiredWithoutGreenBeanGradingNestedInput
+  }
+
+  export type GreenBeanGradingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beanColorAssessment?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GreenBeanGradingCreateManyInput = {
+    id?: string
+    sampleId: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beanColorAssessment?: string | null
+  }
+
+  export type GreenBeanGradingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beanColorAssessment?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GreenBeanGradingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beanColorAssessment?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FlavorDescriptorCreateInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator?: UserCreateNestedOneWithoutFlavorDescriptorsInput
+    organization?: OrganizationCreateNestedOneWithoutFlavorDescriptorsInput
+    scoreDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneWithoutFlavorDescriptorsNestedInput
+    organization?: OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput
+    scoreDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorCreateManyInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateInput = {
+    id?: string
+    intensity?: number
+    createdAt?: Date | string
+    flavorDescriptor: FlavorDescriptorCreateNestedOneWithoutScoreDescriptorsInput
+    score: ScoreCreateNestedOneWithoutFlavorDescriptorsInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateInput = {
+    id?: string
+    scoreId: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptor?: FlavorDescriptorUpdateOneRequiredWithoutScoreDescriptorsNestedInput
+    score?: ScoreUpdateOneRequiredWithoutFlavorDescriptorsNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateManyInput = {
+    id?: string
+    scoreId: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -16386,7 +19507,7 @@ export namespace Prisma {
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
-  export type JsonFilter<$PrismaModel = never> =
+  export type JsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
         Required<JsonFilterBase<$PrismaModel>>
@@ -16396,13 +19517,12 @@ export namespace Prisma {
   export type JsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -16421,22 +19541,10 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
-  }
-
   export type CuppingSessionListRelationFilter = {
     every?: CuppingSessionWhereInput
     some?: CuppingSessionWhereInput
     none?: CuppingSessionWhereInput
-  }
-
-  export type SampleListRelationFilter = {
-    every?: SampleWhereInput
-    some?: SampleWhereInput
-    none?: SampleWhereInput
   }
 
   export type CuppingTemplateListRelationFilter = {
@@ -16445,10 +19553,28 @@ export namespace Prisma {
     none?: CuppingTemplateWhereInput
   }
 
+  export type FlavorDescriptorListRelationFilter = {
+    every?: FlavorDescriptorWhereInput
+    some?: FlavorDescriptorWhereInput
+    none?: FlavorDescriptorWhereInput
+  }
+
   export type InvitationListRelationFilter = {
     every?: InvitationWhereInput
     some?: InvitationWhereInput
     none?: InvitationWhereInput
+  }
+
+  export type SampleListRelationFilter = {
+    every?: SampleWhereInput
+    some?: SampleWhereInput
+    none?: SampleWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
   }
 
   export type SortOrderInput = {
@@ -16456,15 +19582,7 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type CuppingSessionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type SampleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16472,7 +19590,19 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type FlavorDescriptorOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type InvitationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SampleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16600,7 +19730,7 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
         Required<JsonWithAggregatesFilterBase<$PrismaModel>>
@@ -16610,13 +19740,12 @@ export namespace Prisma {
   export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -16653,11 +19782,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type OrganizationScalarRelationFilter = {
-    is?: OrganizationWhereInput
-    isNot?: OrganizationWhereInput
-  }
-
   export type ScoreListRelationFilter = {
     every?: ScoreWhereInput
     some?: ScoreWhereInput
@@ -16668,6 +19792,11 @@ export namespace Prisma {
     every?: SessionParticipantWhereInput
     some?: SessionParticipantWhereInput
     none?: SessionParticipantWhereInput
+  }
+
+  export type OrganizationRelationFilter = {
+    is?: OrganizationWhereInput
+    isNot?: OrganizationWhereInput
   }
 
   export type ScoreOrderByRelationAggregateInput = {
@@ -16859,6 +19988,11 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type GreenBeanGradingNullableRelationFilter = {
+    is?: GreenBeanGradingWhereInput | null
+    isNot?: GreenBeanGradingWhereInput | null
+  }
+
   export type SessionSampleListRelationFilter = {
     every?: SessionSampleWhereInput
     some?: SessionSampleWhereInput
@@ -17030,7 +20164,7 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type UserScalarRelationFilter = {
+  export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
   }
@@ -17119,7 +20253,7 @@ export namespace Prisma {
     not?: NestedEnumSessionStatusFilter<$PrismaModel> | $Enums.SessionStatus
   }
 
-  export type CuppingTemplateNullableScalarRelationFilter = {
+  export type CuppingTemplateNullableRelationFilter = {
     is?: CuppingTemplateWhereInput | null
     isNot?: CuppingTemplateWhereInput | null
   }
@@ -17203,7 +20337,7 @@ export namespace Prisma {
     not?: NestedEnumParticipantRoleFilter<$PrismaModel> | $Enums.ParticipantRole
   }
 
-  export type CuppingSessionScalarRelationFilter = {
+  export type CuppingSessionRelationFilter = {
     is?: CuppingSessionWhereInput
     isNot?: CuppingSessionWhereInput
   }
@@ -17259,7 +20393,7 @@ export namespace Prisma {
     _max?: NestedEnumParticipantRoleFilter<$PrismaModel>
   }
 
-  export type SampleScalarRelationFilter = {
+  export type SampleRelationFilter = {
     is?: SampleWhereInput
     isNot?: SampleWhereInput
   }
@@ -17339,9 +20473,19 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type SessionSampleScalarRelationFilter = {
+  export type ScoreFlavorDescriptorListRelationFilter = {
+    every?: ScoreFlavorDescriptorWhereInput
+    some?: ScoreFlavorDescriptorWhereInput
+    none?: ScoreFlavorDescriptorWhereInput
+  }
+
+  export type SessionSampleRelationFilter = {
     is?: SessionSampleWhereInput
     isNot?: SessionSampleWhereInput
+  }
+
+  export type ScoreFlavorDescriptorOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ScoreSessionIdSampleIdUserIdCompoundUniqueInput = {
@@ -17485,11 +20629,306 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type UserCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
-    createMany?: UserCreateManyOrganizationInputEnvelope
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type EnumGradingSystemFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemFilter<$PrismaModel> | $Enums.GradingSystem
+  }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumGradeClassificationNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableFilter<$PrismaModel> | $Enums.GradeClassification | null
+  }
+
+  export type GreenBeanGradingCountOrderByAggregateInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    defectBreakdown?: SortOrder
+    screenSizeDistribution?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    uniformityScore?: SortOrder
+    grade?: SortOrder
+    classification?: SortOrder
+    qualityScore?: SortOrder
+    gradedBy?: SortOrder
+    gradedAt?: SortOrder
+    certifiedBy?: SortOrder
+    certificationDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beanColorAssessment?: SortOrder
+  }
+
+  export type GreenBeanGradingAvgOrderByAggregateInput = {
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    uniformityScore?: SortOrder
+    qualityScore?: SortOrder
+  }
+
+  export type GreenBeanGradingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    uniformityScore?: SortOrder
+    grade?: SortOrder
+    classification?: SortOrder
+    qualityScore?: SortOrder
+    gradedBy?: SortOrder
+    gradedAt?: SortOrder
+    certifiedBy?: SortOrder
+    certificationDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beanColorAssessment?: SortOrder
+  }
+
+  export type GreenBeanGradingMinOrderByAggregateInput = {
+    id?: SortOrder
+    sampleId?: SortOrder
+    gradingSystem?: SortOrder
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    uniformityScore?: SortOrder
+    grade?: SortOrder
+    classification?: SortOrder
+    qualityScore?: SortOrder
+    gradedBy?: SortOrder
+    gradedAt?: SortOrder
+    certifiedBy?: SortOrder
+    certificationDate?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beanColorAssessment?: SortOrder
+  }
+
+  export type GreenBeanGradingSumOrderByAggregateInput = {
+    primaryDefects?: SortOrder
+    secondaryDefects?: SortOrder
+    fullDefectEquivalents?: SortOrder
+    averageScreenSize?: SortOrder
+    uniformityPercentage?: SortOrder
+    moistureContent?: SortOrder
+    waterActivity?: SortOrder
+    bulkDensity?: SortOrder
+    uniformityScore?: SortOrder
+    qualityScore?: SortOrder
+  }
+
+  export type EnumGradingSystemWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemWithAggregatesFilter<$PrismaModel> | $Enums.GradingSystem
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGradingSystemFilter<$PrismaModel>
+    _max?: NestedEnumGradingSystemFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel> | $Enums.GradeClassification | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+    _max?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+  }
+
+  export type EnumFlavorCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryFilter<$PrismaModel> | $Enums.FlavorCategory
+  }
+
+  export type UserNullableRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type OrganizationNullableRelationFilter = {
+    is?: OrganizationWhereInput | null
+    isNot?: OrganizationWhereInput | null
+  }
+
+  export type FlavorDescriptorNameOrganizationIdCompoundUniqueInput = {
+    name: string
+    organizationId: string
+  }
+
+  export type FlavorDescriptorCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlavorDescriptorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FlavorDescriptorMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isDefault?: SortOrder
+    organizationId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumFlavorCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryWithAggregatesFilter<$PrismaModel> | $Enums.FlavorCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+    _max?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+  }
+
+  export type FlavorDescriptorRelationFilter = {
+    is?: FlavorDescriptorWhereInput
+    isNot?: FlavorDescriptorWhereInput
+  }
+
+  export type ScoreRelationFilter = {
+    is?: ScoreWhereInput
+    isNot?: ScoreWhereInput
+  }
+
+  export type ScoreFlavorDescriptorScoreIdFlavorDescriptorIdCompoundUniqueInput = {
+    scoreId: string
+    flavorDescriptorId: string
+  }
+
+  export type ScoreFlavorDescriptorCountOrderByAggregateInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorAvgOrderByAggregateInput = {
+    intensity?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorMinOrderByAggregateInput = {
+    id?: SortOrder
+    scoreId?: SortOrder
+    flavorDescriptorId?: SortOrder
+    intensity?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScoreFlavorDescriptorSumOrderByAggregateInput = {
+    intensity?: SortOrder
   }
 
   export type CuppingSessionCreateNestedManyWithoutOrganizationInput = {
@@ -17499,18 +20938,18 @@ export namespace Prisma {
     connect?: CuppingSessionWhereUniqueInput | CuppingSessionWhereUniqueInput[]
   }
 
-  export type SampleCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
-    createMany?: SampleCreateManyOrganizationInputEnvelope
-    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-  }
-
   export type CuppingTemplateCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<CuppingTemplateCreateWithoutOrganizationInput, CuppingTemplateUncheckedCreateWithoutOrganizationInput> | CuppingTemplateCreateWithoutOrganizationInput[] | CuppingTemplateUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: CuppingTemplateCreateOrConnectWithoutOrganizationInput | CuppingTemplateCreateOrConnectWithoutOrganizationInput[]
     createMany?: CuppingTemplateCreateManyOrganizationInputEnvelope
     connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+  }
+
+  export type FlavorDescriptorCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
   }
 
   export type InvitationCreateNestedManyWithoutOrganizationInput = {
@@ -17520,7 +20959,14 @@ export namespace Prisma {
     connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
+  export type SampleCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
+    createMany?: SampleCreateManyOrganizationInputEnvelope
+    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
     createMany?: UserCreateManyOrganizationInputEnvelope
@@ -17534,13 +20980,6 @@ export namespace Prisma {
     connect?: CuppingSessionWhereUniqueInput | CuppingSessionWhereUniqueInput[]
   }
 
-  export type SampleUncheckedCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
-    createMany?: SampleCreateManyOrganizationInputEnvelope
-    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-  }
-
   export type CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<CuppingTemplateCreateWithoutOrganizationInput, CuppingTemplateUncheckedCreateWithoutOrganizationInput> | CuppingTemplateCreateWithoutOrganizationInput[] | CuppingTemplateUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: CuppingTemplateCreateOrConnectWithoutOrganizationInput | CuppingTemplateCreateOrConnectWithoutOrganizationInput[]
@@ -17548,11 +20987,32 @@ export namespace Prisma {
     connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
   }
 
+  export type FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+  }
+
   export type InvitationUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<InvitationCreateWithoutOrganizationInput, InvitationUncheckedCreateWithoutOrganizationInput> | InvitationCreateWithoutOrganizationInput[] | InvitationUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: InvitationCreateOrConnectWithoutOrganizationInput | InvitationCreateOrConnectWithoutOrganizationInput[]
     createMany?: InvitationCreateManyOrganizationInputEnvelope
     connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type SampleUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
+    createMany?: SampleCreateManyOrganizationInputEnvelope
+    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -17579,20 +21039,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type UserUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: UserCreateManyOrganizationInputEnvelope
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
-  }
-
   export type CuppingSessionUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<CuppingSessionCreateWithoutOrganizationInput, CuppingSessionUncheckedCreateWithoutOrganizationInput> | CuppingSessionCreateWithoutOrganizationInput[] | CuppingSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutOrganizationInput | CuppingSessionCreateOrConnectWithoutOrganizationInput[]
@@ -17605,20 +21051,6 @@ export namespace Prisma {
     update?: CuppingSessionUpdateWithWhereUniqueWithoutOrganizationInput | CuppingSessionUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: CuppingSessionUpdateManyWithWhereWithoutOrganizationInput | CuppingSessionUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: CuppingSessionScalarWhereInput | CuppingSessionScalarWhereInput[]
-  }
-
-  export type SampleUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
-    upsert?: SampleUpsertWithWhereUniqueWithoutOrganizationInput | SampleUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: SampleCreateManyOrganizationInputEnvelope
-    set?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    disconnect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    delete?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    update?: SampleUpdateWithWhereUniqueWithoutOrganizationInput | SampleUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: SampleUpdateManyWithWhereWithoutOrganizationInput | SampleUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: SampleScalarWhereInput | SampleScalarWhereInput[]
   }
 
   export type CuppingTemplateUpdateManyWithoutOrganizationNestedInput = {
@@ -17635,6 +21067,20 @@ export namespace Prisma {
     deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
   }
 
+  export type FlavorDescriptorUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput | FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+  }
+
   export type InvitationUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<InvitationCreateWithoutOrganizationInput, InvitationUncheckedCreateWithoutOrganizationInput> | InvitationCreateWithoutOrganizationInput[] | InvitationUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: InvitationCreateOrConnectWithoutOrganizationInput | InvitationCreateOrConnectWithoutOrganizationInput[]
@@ -17649,7 +21095,21 @@ export namespace Prisma {
     deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  export type SampleUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
+    upsert?: SampleUpsertWithWhereUniqueWithoutOrganizationInput | SampleUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: SampleCreateManyOrganizationInputEnvelope
+    set?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    disconnect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    delete?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    update?: SampleUpdateWithWhereUniqueWithoutOrganizationInput | SampleUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: SampleUpdateManyWithWhereWithoutOrganizationInput | SampleUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: SampleScalarWhereInput | SampleScalarWhereInput[]
+  }
+
+  export type UserUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
     upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
@@ -17677,20 +21137,6 @@ export namespace Prisma {
     deleteMany?: CuppingSessionScalarWhereInput | CuppingSessionScalarWhereInput[]
   }
 
-  export type SampleUncheckedUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
-    upsert?: SampleUpsertWithWhereUniqueWithoutOrganizationInput | SampleUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: SampleCreateManyOrganizationInputEnvelope
-    set?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    disconnect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    delete?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
-    update?: SampleUpdateWithWhereUniqueWithoutOrganizationInput | SampleUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: SampleUpdateManyWithWhereWithoutOrganizationInput | SampleUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: SampleScalarWhereInput | SampleScalarWhereInput[]
-  }
-
   export type CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<CuppingTemplateCreateWithoutOrganizationInput, CuppingTemplateUncheckedCreateWithoutOrganizationInput> | CuppingTemplateCreateWithoutOrganizationInput[] | CuppingTemplateUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: CuppingTemplateCreateOrConnectWithoutOrganizationInput | CuppingTemplateCreateOrConnectWithoutOrganizationInput[]
@@ -17703,6 +21149,20 @@ export namespace Prisma {
     update?: CuppingTemplateUpdateWithWhereUniqueWithoutOrganizationInput | CuppingTemplateUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: CuppingTemplateUpdateManyWithWhereWithoutOrganizationInput | CuppingTemplateUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput> | FlavorDescriptorCreateWithoutOrganizationInput[] | FlavorDescriptorUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutOrganizationInput | FlavorDescriptorCreateOrConnectWithoutOrganizationInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: FlavorDescriptorCreateManyOrganizationInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput | FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput | FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
   }
 
   export type InvitationUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -17719,10 +21179,32 @@ export namespace Prisma {
     deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
-  export type OrganizationCreateNestedOneWithoutUsersInput = {
-    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
-    connect?: OrganizationWhereUniqueInput
+  export type SampleUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput> | SampleCreateWithoutOrganizationInput[] | SampleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: SampleCreateOrConnectWithoutOrganizationInput | SampleCreateOrConnectWithoutOrganizationInput[]
+    upsert?: SampleUpsertWithWhereUniqueWithoutOrganizationInput | SampleUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: SampleCreateManyOrganizationInputEnvelope
+    set?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    disconnect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    delete?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    connect?: SampleWhereUniqueInput | SampleWhereUniqueInput[]
+    update?: SampleUpdateWithWhereUniqueWithoutOrganizationInput | SampleUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: SampleUpdateManyWithWhereWithoutOrganizationInput | SampleUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: SampleScalarWhereInput | SampleScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type CuppingSessionCreateNestedManyWithoutCreatorInput = {
@@ -17730,6 +21212,20 @@ export namespace Prisma {
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutCreatorInput | CuppingSessionCreateOrConnectWithoutCreatorInput[]
     createMany?: CuppingSessionCreateManyCreatorInputEnvelope
     connect?: CuppingSessionWhereUniqueInput | CuppingSessionWhereUniqueInput[]
+  }
+
+  export type CuppingTemplateCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
+    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
+    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+  }
+
+  export type FlavorDescriptorCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
   }
 
   export type ScoreCreateNestedManyWithoutUserInput = {
@@ -17746,11 +21242,10 @@ export namespace Prisma {
     connect?: SessionParticipantWhereUniqueInput | SessionParticipantWhereUniqueInput[]
   }
 
-  export type CuppingTemplateCreateNestedManyWithoutCreatorInput = {
-    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
-    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
-    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+  export type OrganizationCreateNestedOneWithoutUsersInput = {
+    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
+    connect?: OrganizationWhereUniqueInput
   }
 
   export type CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput = {
@@ -17758,6 +21253,20 @@ export namespace Prisma {
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutCreatorInput | CuppingSessionCreateOrConnectWithoutCreatorInput[]
     createMany?: CuppingSessionCreateManyCreatorInputEnvelope
     connect?: CuppingSessionWhereUniqueInput | CuppingSessionWhereUniqueInput[]
+  }
+
+  export type CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
+    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
+    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+  }
+
+  export type FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
   }
 
   export type ScoreUncheckedCreateNestedManyWithoutUserInput = {
@@ -17774,27 +21283,12 @@ export namespace Prisma {
     connect?: SessionParticipantWhereUniqueInput | SessionParticipantWhereUniqueInput[]
   }
 
-  export type CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput = {
-    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
-    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
-    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-  }
-
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
-  }
-
-  export type OrganizationUpdateOneRequiredWithoutUsersNestedInput = {
-    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
-    upsert?: OrganizationUpsertWithoutUsersInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutUsersInput, OrganizationUpdateWithoutUsersInput>, OrganizationUncheckedUpdateWithoutUsersInput>
   }
 
   export type CuppingSessionUpdateManyWithoutCreatorNestedInput = {
@@ -17809,6 +21303,34 @@ export namespace Prisma {
     update?: CuppingSessionUpdateWithWhereUniqueWithoutCreatorInput | CuppingSessionUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: CuppingSessionUpdateManyWithWhereWithoutCreatorInput | CuppingSessionUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: CuppingSessionScalarWhereInput | CuppingSessionScalarWhereInput[]
+  }
+
+  export type CuppingTemplateUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
+    upsert?: CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
+    set?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    disconnect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    delete?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    update?: CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: CuppingTemplateUpdateManyWithWhereWithoutCreatorInput | CuppingTemplateUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+  }
+
+  export type FlavorDescriptorUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput | FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
   }
 
   export type ScoreUpdateManyWithoutUserNestedInput = {
@@ -17839,18 +21361,12 @@ export namespace Prisma {
     deleteMany?: SessionParticipantScalarWhereInput | SessionParticipantScalarWhereInput[]
   }
 
-  export type CuppingTemplateUpdateManyWithoutCreatorNestedInput = {
-    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
-    upsert?: CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput[]
-    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
-    set?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    disconnect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    delete?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    update?: CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput[]
-    updateMany?: CuppingTemplateUpdateManyWithWhereWithoutCreatorInput | CuppingTemplateUpdateManyWithWhereWithoutCreatorInput[]
-    deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+  export type OrganizationUpdateOneRequiredWithoutUsersNestedInput = {
+    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
+    upsert?: OrganizationUpsertWithoutUsersInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutUsersInput, OrganizationUpdateWithoutUsersInput>, OrganizationUncheckedUpdateWithoutUsersInput>
   }
 
   export type CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput = {
@@ -17865,6 +21381,34 @@ export namespace Prisma {
     update?: CuppingSessionUpdateWithWhereUniqueWithoutCreatorInput | CuppingSessionUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: CuppingSessionUpdateManyWithWhereWithoutCreatorInput | CuppingSessionUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: CuppingSessionScalarWhereInput | CuppingSessionScalarWhereInput[]
+  }
+
+  export type CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
+    upsert?: CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
+    set?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    disconnect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    delete?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
+    update?: CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: CuppingTemplateUpdateManyWithWhereWithoutCreatorInput | CuppingTemplateUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput> | FlavorDescriptorCreateWithoutCreatorInput[] | FlavorDescriptorUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutCreatorInput | FlavorDescriptorCreateOrConnectWithoutCreatorInput[]
+    upsert?: FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: FlavorDescriptorCreateManyCreatorInputEnvelope
+    set?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    disconnect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    delete?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    connect?: FlavorDescriptorWhereUniqueInput | FlavorDescriptorWhereUniqueInput[]
+    update?: FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput | FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput | FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
   }
 
   export type ScoreUncheckedUpdateManyWithoutUserNestedInput = {
@@ -17895,20 +21439,6 @@ export namespace Prisma {
     deleteMany?: SessionParticipantScalarWhereInput | SessionParticipantScalarWhereInput[]
   }
 
-  export type CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput = {
-    create?: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput> | CuppingTemplateCreateWithoutCreatorInput[] | CuppingTemplateUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCreatorInput | CuppingTemplateCreateOrConnectWithoutCreatorInput[]
-    upsert?: CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput[]
-    createMany?: CuppingTemplateCreateManyCreatorInputEnvelope
-    set?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    disconnect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    delete?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    connect?: CuppingTemplateWhereUniqueInput | CuppingTemplateWhereUniqueInput[]
-    update?: CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput | CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput[]
-    updateMany?: CuppingTemplateUpdateManyWithWhereWithoutCreatorInput | CuppingTemplateUpdateManyWithWhereWithoutCreatorInput[]
-    deleteMany?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
-  }
-
   export type OrganizationCreateNestedOneWithoutInvitationsInput = {
     create?: XOR<OrganizationCreateWithoutInvitationsInput, OrganizationUncheckedCreateWithoutInvitationsInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutInvitationsInput
@@ -17931,10 +21461,23 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type GreenBeanGradingCreateNestedOneWithoutSampleInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    connect?: GreenBeanGradingWhereUniqueInput
+  }
+
   export type OrganizationCreateNestedOneWithoutSamplesInput = {
     create?: XOR<OrganizationCreateWithoutSamplesInput, OrganizationUncheckedCreateWithoutSamplesInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutSamplesInput
     connect?: OrganizationWhereUniqueInput
+  }
+
+  export type ScoreCreateNestedManyWithoutSampleInput = {
+    create?: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput> | ScoreCreateWithoutSampleInput[] | ScoreUncheckedCreateWithoutSampleInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
+    createMany?: ScoreCreateManySampleInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
   export type SessionSampleCreateNestedManyWithoutSampleInput = {
@@ -17944,7 +21487,13 @@ export namespace Prisma {
     connect?: SessionSampleWhereUniqueInput | SessionSampleWhereUniqueInput[]
   }
 
-  export type ScoreCreateNestedManyWithoutSampleInput = {
+  export type GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    connect?: GreenBeanGradingWhereUniqueInput
+  }
+
+  export type ScoreUncheckedCreateNestedManyWithoutSampleInput = {
     create?: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput> | ScoreCreateWithoutSampleInput[] | ScoreUncheckedCreateWithoutSampleInput[]
     connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
     createMany?: ScoreCreateManySampleInputEnvelope
@@ -17956,13 +21505,6 @@ export namespace Prisma {
     connectOrCreate?: SessionSampleCreateOrConnectWithoutSampleInput | SessionSampleCreateOrConnectWithoutSampleInput[]
     createMany?: SessionSampleCreateManySampleInputEnvelope
     connect?: SessionSampleWhereUniqueInput | SessionSampleWhereUniqueInput[]
-  }
-
-  export type ScoreUncheckedCreateNestedManyWithoutSampleInput = {
-    create?: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput> | ScoreCreateWithoutSampleInput[] | ScoreUncheckedCreateWithoutSampleInput[]
-    connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
-    createMany?: ScoreCreateManySampleInputEnvelope
-    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -17994,12 +21536,36 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type GreenBeanGradingUpdateOneWithoutSampleNestedInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    upsert?: GreenBeanGradingUpsertWithoutSampleInput
+    disconnect?: GreenBeanGradingWhereInput | boolean
+    delete?: GreenBeanGradingWhereInput | boolean
+    connect?: GreenBeanGradingWhereUniqueInput
+    update?: XOR<XOR<GreenBeanGradingUpdateToOneWithWhereWithoutSampleInput, GreenBeanGradingUpdateWithoutSampleInput>, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+  }
+
   export type OrganizationUpdateOneRequiredWithoutSamplesNestedInput = {
     create?: XOR<OrganizationCreateWithoutSamplesInput, OrganizationUncheckedCreateWithoutSamplesInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutSamplesInput
     upsert?: OrganizationUpsertWithoutSamplesInput
     connect?: OrganizationWhereUniqueInput
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutSamplesInput, OrganizationUpdateWithoutSamplesInput>, OrganizationUncheckedUpdateWithoutSamplesInput>
+  }
+
+  export type ScoreUpdateManyWithoutSampleNestedInput = {
+    create?: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput> | ScoreCreateWithoutSampleInput[] | ScoreUncheckedCreateWithoutSampleInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutSampleInput | ScoreUpsertWithWhereUniqueWithoutSampleInput[]
+    createMany?: ScoreCreateManySampleInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutSampleInput | ScoreUpdateWithWhereUniqueWithoutSampleInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutSampleInput | ScoreUpdateManyWithWhereWithoutSampleInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
   }
 
   export type SessionSampleUpdateManyWithoutSampleNestedInput = {
@@ -18016,7 +21582,17 @@ export namespace Prisma {
     deleteMany?: SessionSampleScalarWhereInput | SessionSampleScalarWhereInput[]
   }
 
-  export type ScoreUpdateManyWithoutSampleNestedInput = {
+  export type GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput = {
+    create?: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    connectOrCreate?: GreenBeanGradingCreateOrConnectWithoutSampleInput
+    upsert?: GreenBeanGradingUpsertWithoutSampleInput
+    disconnect?: GreenBeanGradingWhereInput | boolean
+    delete?: GreenBeanGradingWhereInput | boolean
+    connect?: GreenBeanGradingWhereUniqueInput
+    update?: XOR<XOR<GreenBeanGradingUpdateToOneWithWhereWithoutSampleInput, GreenBeanGradingUpdateWithoutSampleInput>, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+  }
+
+  export type ScoreUncheckedUpdateManyWithoutSampleNestedInput = {
     create?: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput> | ScoreCreateWithoutSampleInput[] | ScoreUncheckedCreateWithoutSampleInput[]
     connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
     upsert?: ScoreUpsertWithWhereUniqueWithoutSampleInput | ScoreUpsertWithWhereUniqueWithoutSampleInput[]
@@ -18044,24 +21620,11 @@ export namespace Prisma {
     deleteMany?: SessionSampleScalarWhereInput | SessionSampleScalarWhereInput[]
   }
 
-  export type ScoreUncheckedUpdateManyWithoutSampleNestedInput = {
-    create?: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput> | ScoreCreateWithoutSampleInput[] | ScoreUncheckedCreateWithoutSampleInput[]
-    connectOrCreate?: ScoreCreateOrConnectWithoutSampleInput | ScoreCreateOrConnectWithoutSampleInput[]
-    upsert?: ScoreUpsertWithWhereUniqueWithoutSampleInput | ScoreUpsertWithWhereUniqueWithoutSampleInput[]
-    createMany?: ScoreCreateManySampleInputEnvelope
-    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    update?: ScoreUpdateWithWhereUniqueWithoutSampleInput | ScoreUpdateWithWhereUniqueWithoutSampleInput[]
-    updateMany?: ScoreUpdateManyWithWhereWithoutSampleInput | ScoreUpdateManyWithWhereWithoutSampleInput[]
-    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
-  }
-
-  export type OrganizationCreateNestedOneWithoutTemplatesInput = {
-    create?: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutTemplatesInput
-    connect?: OrganizationWhereUniqueInput
+  export type CuppingSessionCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<CuppingSessionCreateWithoutTemplateInput, CuppingSessionUncheckedCreateWithoutTemplateInput> | CuppingSessionCreateWithoutTemplateInput[] | CuppingSessionUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: CuppingSessionCreateOrConnectWithoutTemplateInput | CuppingSessionCreateOrConnectWithoutTemplateInput[]
+    createMany?: CuppingSessionCreateManyTemplateInputEnvelope
+    connect?: CuppingSessionWhereUniqueInput | CuppingSessionWhereUniqueInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedTemplatesInput = {
@@ -18070,11 +21633,10 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type CuppingSessionCreateNestedManyWithoutTemplateInput = {
-    create?: XOR<CuppingSessionCreateWithoutTemplateInput, CuppingSessionUncheckedCreateWithoutTemplateInput> | CuppingSessionCreateWithoutTemplateInput[] | CuppingSessionUncheckedCreateWithoutTemplateInput[]
-    connectOrCreate?: CuppingSessionCreateOrConnectWithoutTemplateInput | CuppingSessionCreateOrConnectWithoutTemplateInput[]
-    createMany?: CuppingSessionCreateManyTemplateInputEnvelope
-    connect?: CuppingSessionWhereUniqueInput | CuppingSessionWhereUniqueInput[]
+  export type OrganizationCreateNestedOneWithoutTemplatesInput = {
+    create?: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutTemplatesInput
+    connect?: OrganizationWhereUniqueInput
   }
 
   export type CuppingSessionUncheckedCreateNestedManyWithoutTemplateInput = {
@@ -18096,22 +21658,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type OrganizationUpdateOneRequiredWithoutTemplatesNestedInput = {
-    create?: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutTemplatesInput
-    upsert?: OrganizationUpsertWithoutTemplatesInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutTemplatesInput, OrganizationUpdateWithoutTemplatesInput>, OrganizationUncheckedUpdateWithoutTemplatesInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput = {
-    create?: XOR<UserCreateWithoutCreatedTemplatesInput, UserUncheckedCreateWithoutCreatedTemplatesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTemplatesInput
-    upsert?: UserUpsertWithoutCreatedTemplatesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedTemplatesInput, UserUpdateWithoutCreatedTemplatesInput>, UserUncheckedUpdateWithoutCreatedTemplatesInput>
-  }
-
   export type CuppingSessionUpdateManyWithoutTemplateNestedInput = {
     create?: XOR<CuppingSessionCreateWithoutTemplateInput, CuppingSessionUncheckedCreateWithoutTemplateInput> | CuppingSessionCreateWithoutTemplateInput[] | CuppingSessionUncheckedCreateWithoutTemplateInput[]
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutTemplateInput | CuppingSessionCreateOrConnectWithoutTemplateInput[]
@@ -18124,6 +21670,22 @@ export namespace Prisma {
     update?: CuppingSessionUpdateWithWhereUniqueWithoutTemplateInput | CuppingSessionUpdateWithWhereUniqueWithoutTemplateInput[]
     updateMany?: CuppingSessionUpdateManyWithWhereWithoutTemplateInput | CuppingSessionUpdateManyWithWhereWithoutTemplateInput[]
     deleteMany?: CuppingSessionScalarWhereInput | CuppingSessionScalarWhereInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedTemplatesInput, UserUncheckedCreateWithoutCreatedTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedTemplatesInput
+    upsert?: UserUpsertWithoutCreatedTemplatesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedTemplatesInput, UserUpdateWithoutCreatedTemplatesInput>, UserUncheckedUpdateWithoutCreatedTemplatesInput>
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutTemplatesNestedInput = {
+    create?: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutTemplatesInput
+    upsert?: OrganizationUpsertWithoutTemplatesInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutTemplatesInput, OrganizationUpdateWithoutTemplatesInput>, OrganizationUncheckedUpdateWithoutTemplatesInput>
   }
 
   export type CuppingSessionUncheckedUpdateManyWithoutTemplateNestedInput = {
@@ -18144,22 +21706,29 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type OrganizationCreateNestedOneWithoutCuppingSessionsInput = {
-    create?: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutCuppingSessionsInput
-    connect?: OrganizationWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutCuppingSessionsInput = {
     create?: XOR<UserCreateWithoutCuppingSessionsInput, UserUncheckedCreateWithoutCuppingSessionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutCuppingSessionsInput
     connect?: UserWhereUniqueInput
   }
 
+  export type OrganizationCreateNestedOneWithoutCuppingSessionsInput = {
+    create?: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutCuppingSessionsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
   export type CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput = {
     create?: XOR<CuppingTemplateCreateWithoutCuppingSessionsInput, CuppingTemplateUncheckedCreateWithoutCuppingSessionsInput>
     connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCuppingSessionsInput
     connect?: CuppingTemplateWhereUniqueInput
+  }
+
+  export type ScoreCreateNestedManyWithoutSessionInput = {
+    create?: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput> | ScoreCreateWithoutSessionInput[] | ScoreUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutSessionInput | ScoreCreateOrConnectWithoutSessionInput[]
+    createMany?: ScoreCreateManySessionInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
   export type SessionParticipantCreateNestedManyWithoutSessionInput = {
@@ -18176,7 +21745,7 @@ export namespace Prisma {
     connect?: SessionSampleWhereUniqueInput | SessionSampleWhereUniqueInput[]
   }
 
-  export type ScoreCreateNestedManyWithoutSessionInput = {
+  export type ScoreUncheckedCreateNestedManyWithoutSessionInput = {
     create?: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput> | ScoreCreateWithoutSessionInput[] | ScoreUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: ScoreCreateOrConnectWithoutSessionInput | ScoreCreateOrConnectWithoutSessionInput[]
     createMany?: ScoreCreateManySessionInputEnvelope
@@ -18197,13 +21766,6 @@ export namespace Prisma {
     connect?: SessionSampleWhereUniqueInput | SessionSampleWhereUniqueInput[]
   }
 
-  export type ScoreUncheckedCreateNestedManyWithoutSessionInput = {
-    create?: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput> | ScoreCreateWithoutSessionInput[] | ScoreUncheckedCreateWithoutSessionInput[]
-    connectOrCreate?: ScoreCreateOrConnectWithoutSessionInput | ScoreCreateOrConnectWithoutSessionInput[]
-    createMany?: ScoreCreateManySessionInputEnvelope
-    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-  }
-
   export type EnumSessionStatusFieldUpdateOperationsInput = {
     set?: $Enums.SessionStatus
   }
@@ -18211,14 +21773,6 @@ export namespace Prisma {
   export type CuppingSessionUpdatetagsInput = {
     set?: string[]
     push?: string | string[]
-  }
-
-  export type OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput = {
-    create?: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutCuppingSessionsInput
-    upsert?: OrganizationUpsertWithoutCuppingSessionsInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutCuppingSessionsInput, OrganizationUpdateWithoutCuppingSessionsInput>, OrganizationUncheckedUpdateWithoutCuppingSessionsInput>
   }
 
   export type UserUpdateOneRequiredWithoutCuppingSessionsNestedInput = {
@@ -18229,6 +21783,14 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCuppingSessionsInput, UserUpdateWithoutCuppingSessionsInput>, UserUncheckedUpdateWithoutCuppingSessionsInput>
   }
 
+  export type OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutCuppingSessionsInput
+    upsert?: OrganizationUpsertWithoutCuppingSessionsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutCuppingSessionsInput, OrganizationUpdateWithoutCuppingSessionsInput>, OrganizationUncheckedUpdateWithoutCuppingSessionsInput>
+  }
+
   export type CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput = {
     create?: XOR<CuppingTemplateCreateWithoutCuppingSessionsInput, CuppingTemplateUncheckedCreateWithoutCuppingSessionsInput>
     connectOrCreate?: CuppingTemplateCreateOrConnectWithoutCuppingSessionsInput
@@ -18237,6 +21799,20 @@ export namespace Prisma {
     delete?: CuppingTemplateWhereInput | boolean
     connect?: CuppingTemplateWhereUniqueInput
     update?: XOR<XOR<CuppingTemplateUpdateToOneWithWhereWithoutCuppingSessionsInput, CuppingTemplateUpdateWithoutCuppingSessionsInput>, CuppingTemplateUncheckedUpdateWithoutCuppingSessionsInput>
+  }
+
+  export type ScoreUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput> | ScoreCreateWithoutSessionInput[] | ScoreUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutSessionInput | ScoreCreateOrConnectWithoutSessionInput[]
+    upsert?: ScoreUpsertWithWhereUniqueWithoutSessionInput | ScoreUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: ScoreCreateManySessionInputEnvelope
+    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+    update?: ScoreUpdateWithWhereUniqueWithoutSessionInput | ScoreUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: ScoreUpdateManyWithWhereWithoutSessionInput | ScoreUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
   }
 
   export type SessionParticipantUpdateManyWithoutSessionNestedInput = {
@@ -18267,7 +21843,7 @@ export namespace Prisma {
     deleteMany?: SessionSampleScalarWhereInput | SessionSampleScalarWhereInput[]
   }
 
-  export type ScoreUpdateManyWithoutSessionNestedInput = {
+  export type ScoreUncheckedUpdateManyWithoutSessionNestedInput = {
     create?: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput> | ScoreCreateWithoutSessionInput[] | ScoreUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: ScoreCreateOrConnectWithoutSessionInput | ScoreCreateOrConnectWithoutSessionInput[]
     upsert?: ScoreUpsertWithWhereUniqueWithoutSessionInput | ScoreUpsertWithWhereUniqueWithoutSessionInput[]
@@ -18309,20 +21885,6 @@ export namespace Prisma {
     deleteMany?: SessionSampleScalarWhereInput | SessionSampleScalarWhereInput[]
   }
 
-  export type ScoreUncheckedUpdateManyWithoutSessionNestedInput = {
-    create?: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput> | ScoreCreateWithoutSessionInput[] | ScoreUncheckedCreateWithoutSessionInput[]
-    connectOrCreate?: ScoreCreateOrConnectWithoutSessionInput | ScoreCreateOrConnectWithoutSessionInput[]
-    upsert?: ScoreUpsertWithWhereUniqueWithoutSessionInput | ScoreUpsertWithWhereUniqueWithoutSessionInput[]
-    createMany?: ScoreCreateManySessionInputEnvelope
-    set?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    disconnect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    delete?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-    update?: ScoreUpdateWithWhereUniqueWithoutSessionInput | ScoreUpdateWithWhereUniqueWithoutSessionInput[]
-    updateMany?: ScoreUpdateManyWithWhereWithoutSessionInput | ScoreUpdateManyWithWhereWithoutSessionInput[]
-    deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
-  }
-
   export type CuppingSessionCreateNestedOneWithoutParticipantsInput = {
     create?: XOR<CuppingSessionCreateWithoutParticipantsInput, CuppingSessionUncheckedCreateWithoutParticipantsInput>
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutParticipantsInput
@@ -18355,10 +21917,11 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionParticipantsInput, UserUpdateWithoutSessionParticipantsInput>, UserUncheckedUpdateWithoutSessionParticipantsInput>
   }
 
-  export type CuppingSessionCreateNestedOneWithoutSamplesInput = {
-    create?: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
-    connectOrCreate?: CuppingSessionCreateOrConnectWithoutSamplesInput
-    connect?: CuppingSessionWhereUniqueInput
+  export type ScoreCreateNestedManyWithoutSessionSampleInput = {
+    create?: XOR<ScoreCreateWithoutSessionSampleInput, ScoreUncheckedCreateWithoutSessionSampleInput> | ScoreCreateWithoutSessionSampleInput[] | ScoreUncheckedCreateWithoutSessionSampleInput[]
+    connectOrCreate?: ScoreCreateOrConnectWithoutSessionSampleInput | ScoreCreateOrConnectWithoutSessionSampleInput[]
+    createMany?: ScoreCreateManySessionSampleInputEnvelope
+    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
   }
 
   export type SampleCreateNestedOneWithoutSessionSamplesInput = {
@@ -18367,11 +21930,10 @@ export namespace Prisma {
     connect?: SampleWhereUniqueInput
   }
 
-  export type ScoreCreateNestedManyWithoutSessionSampleInput = {
-    create?: XOR<ScoreCreateWithoutSessionSampleInput, ScoreUncheckedCreateWithoutSessionSampleInput> | ScoreCreateWithoutSessionSampleInput[] | ScoreUncheckedCreateWithoutSessionSampleInput[]
-    connectOrCreate?: ScoreCreateOrConnectWithoutSessionSampleInput | ScoreCreateOrConnectWithoutSessionSampleInput[]
-    createMany?: ScoreCreateManySessionSampleInputEnvelope
-    connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
+  export type CuppingSessionCreateNestedOneWithoutSamplesInput = {
+    create?: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
+    connectOrCreate?: CuppingSessionCreateOrConnectWithoutSamplesInput
+    connect?: CuppingSessionWhereUniqueInput
   }
 
   export type ScoreUncheckedCreateNestedManyWithoutSessionSampleInput = {
@@ -18379,22 +21941,6 @@ export namespace Prisma {
     connectOrCreate?: ScoreCreateOrConnectWithoutSessionSampleInput | ScoreCreateOrConnectWithoutSessionSampleInput[]
     createMany?: ScoreCreateManySessionSampleInputEnvelope
     connect?: ScoreWhereUniqueInput | ScoreWhereUniqueInput[]
-  }
-
-  export type CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput = {
-    create?: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
-    connectOrCreate?: CuppingSessionCreateOrConnectWithoutSamplesInput
-    upsert?: CuppingSessionUpsertWithoutSamplesInput
-    connect?: CuppingSessionWhereUniqueInput
-    update?: XOR<XOR<CuppingSessionUpdateToOneWithWhereWithoutSamplesInput, CuppingSessionUpdateWithoutSamplesInput>, CuppingSessionUncheckedUpdateWithoutSamplesInput>
-  }
-
-  export type SampleUpdateOneRequiredWithoutSessionSamplesNestedInput = {
-    create?: XOR<SampleCreateWithoutSessionSamplesInput, SampleUncheckedCreateWithoutSessionSamplesInput>
-    connectOrCreate?: SampleCreateOrConnectWithoutSessionSamplesInput
-    upsert?: SampleUpsertWithoutSessionSamplesInput
-    connect?: SampleWhereUniqueInput
-    update?: XOR<XOR<SampleUpdateToOneWithWhereWithoutSessionSamplesInput, SampleUpdateWithoutSessionSamplesInput>, SampleUncheckedUpdateWithoutSessionSamplesInput>
   }
 
   export type ScoreUpdateManyWithoutSessionSampleNestedInput = {
@@ -18411,6 +21957,22 @@ export namespace Prisma {
     deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
   }
 
+  export type SampleUpdateOneRequiredWithoutSessionSamplesNestedInput = {
+    create?: XOR<SampleCreateWithoutSessionSamplesInput, SampleUncheckedCreateWithoutSessionSamplesInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutSessionSamplesInput
+    upsert?: SampleUpsertWithoutSessionSamplesInput
+    connect?: SampleWhereUniqueInput
+    update?: XOR<XOR<SampleUpdateToOneWithWhereWithoutSessionSamplesInput, SampleUpdateWithoutSessionSamplesInput>, SampleUncheckedUpdateWithoutSessionSamplesInput>
+  }
+
+  export type CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput = {
+    create?: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
+    connectOrCreate?: CuppingSessionCreateOrConnectWithoutSamplesInput
+    upsert?: CuppingSessionUpsertWithoutSamplesInput
+    connect?: CuppingSessionWhereUniqueInput
+    update?: XOR<XOR<CuppingSessionUpdateToOneWithWhereWithoutSamplesInput, CuppingSessionUpdateWithoutSamplesInput>, CuppingSessionUncheckedUpdateWithoutSamplesInput>
+  }
+
   export type ScoreUncheckedUpdateManyWithoutSessionSampleNestedInput = {
     create?: XOR<ScoreCreateWithoutSessionSampleInput, ScoreUncheckedCreateWithoutSessionSampleInput> | ScoreCreateWithoutSessionSampleInput[] | ScoreUncheckedCreateWithoutSessionSampleInput[]
     connectOrCreate?: ScoreCreateOrConnectWithoutSessionSampleInput | ScoreCreateOrConnectWithoutSessionSampleInput[]
@@ -18425,6 +21987,19 @@ export namespace Prisma {
     deleteMany?: ScoreScalarWhereInput | ScoreScalarWhereInput[]
   }
 
+  export type ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
+  export type SampleCreateNestedOneWithoutScoresInput = {
+    create?: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutScoresInput
+    connect?: SampleWhereUniqueInput
+  }
+
   export type CuppingSessionCreateNestedOneWithoutScoresInput = {
     create?: XOR<CuppingSessionCreateWithoutScoresInput, CuppingSessionUncheckedCreateWithoutScoresInput>
     connectOrCreate?: CuppingSessionCreateOrConnectWithoutScoresInput
@@ -18437,16 +22012,17 @@ export namespace Prisma {
     connect?: SessionSampleWhereUniqueInput
   }
 
-  export type SampleCreateNestedOneWithoutScoresInput = {
-    create?: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
-    connectOrCreate?: SampleCreateOrConnectWithoutScoresInput
-    connect?: SampleWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutScoresInput = {
     create?: XOR<UserCreateWithoutScoresInput, UserUncheckedCreateWithoutScoresInput>
     connectOrCreate?: UserCreateOrConnectWithoutScoresInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -18455,6 +22031,28 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type SampleUpdateOneRequiredWithoutScoresNestedInput = {
+    create?: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutScoresInput
+    upsert?: SampleUpsertWithoutScoresInput
+    connect?: SampleWhereUniqueInput
+    update?: XOR<XOR<SampleUpdateToOneWithWhereWithoutScoresInput, SampleUpdateWithoutScoresInput>, SampleUncheckedUpdateWithoutScoresInput>
   }
 
   export type CuppingSessionUpdateOneRequiredWithoutScoresNestedInput = {
@@ -18473,20 +22071,154 @@ export namespace Prisma {
     update?: XOR<XOR<SessionSampleUpdateToOneWithWhereWithoutScoresInput, SessionSampleUpdateWithoutScoresInput>, SessionSampleUncheckedUpdateWithoutScoresInput>
   }
 
-  export type SampleUpdateOneRequiredWithoutScoresNestedInput = {
-    create?: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
-    connectOrCreate?: SampleCreateOrConnectWithoutScoresInput
-    upsert?: SampleUpsertWithoutScoresInput
-    connect?: SampleWhereUniqueInput
-    update?: XOR<XOR<SampleUpdateToOneWithWhereWithoutScoresInput, SampleUpdateWithoutScoresInput>, SampleUncheckedUpdateWithoutScoresInput>
-  }
-
   export type UserUpdateOneRequiredWithoutScoresNestedInput = {
     create?: XOR<UserCreateWithoutScoresInput, UserUncheckedCreateWithoutScoresInput>
     connectOrCreate?: UserCreateOrConnectWithoutScoresInput
     upsert?: UserUpsertWithoutScoresInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutScoresInput, UserUpdateWithoutScoresInput>, UserUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput> | ScoreFlavorDescriptorCreateWithoutScoreInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput | ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyScoreInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type SampleCreateNestedOneWithoutGreenBeanGradingInput = {
+    create?: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutGreenBeanGradingInput
+    connect?: SampleWhereUniqueInput
+  }
+
+  export type EnumGradingSystemFieldUpdateOperationsInput = {
+    set?: $Enums.GradingSystem
+  }
+
+  export type NullableEnumGradeClassificationFieldUpdateOperationsInput = {
+    set?: $Enums.GradeClassification | null
+  }
+
+  export type SampleUpdateOneRequiredWithoutGreenBeanGradingNestedInput = {
+    create?: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+    connectOrCreate?: SampleCreateOrConnectWithoutGreenBeanGradingInput
+    upsert?: SampleUpsertWithoutGreenBeanGradingInput
+    connect?: SampleWhereUniqueInput
+    update?: XOR<XOR<SampleUpdateToOneWithWhereWithoutGreenBeanGradingInput, SampleUpdateWithoutGreenBeanGradingInput>, SampleUncheckedUpdateWithoutGreenBeanGradingInput>
+  }
+
+  export type UserCreateNestedOneWithoutFlavorDescriptorsInput = {
+    create?: XOR<UserCreateWithoutFlavorDescriptorsInput, UserUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlavorDescriptorsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrganizationCreateNestedOneWithoutFlavorDescriptorsInput = {
+    create?: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutFlavorDescriptorsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+  }
+
+  export type EnumFlavorCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.FlavorCategory
+  }
+
+  export type UserUpdateOneWithoutFlavorDescriptorsNestedInput = {
+    create?: XOR<UserCreateWithoutFlavorDescriptorsInput, UserUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlavorDescriptorsInput
+    upsert?: UserUpsertWithoutFlavorDescriptorsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlavorDescriptorsInput, UserUpdateWithoutFlavorDescriptorsInput>, UserUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutFlavorDescriptorsInput
+    upsert?: OrganizationUpsertWithoutFlavorDescriptorsInput
+    disconnect?: OrganizationWhereInput | boolean
+    delete?: OrganizationWhereInput | boolean
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutFlavorDescriptorsInput, OrganizationUpdateWithoutFlavorDescriptorsInput>, OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput = {
+    create?: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput> | ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput[] | ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput[]
+    connectOrCreate?: ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput | ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput[]
+    upsert?: ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput[]
+    createMany?: ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope
+    set?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    disconnect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    delete?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    connect?: ScoreFlavorDescriptorWhereUniqueInput | ScoreFlavorDescriptorWhereUniqueInput[]
+    update?: ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput[]
+    updateMany?: ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput | ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput[]
+    deleteMany?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+  }
+
+  export type FlavorDescriptorCreateNestedOneWithoutScoreDescriptorsInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutScoreDescriptorsInput
+    connect?: FlavorDescriptorWhereUniqueInput
+  }
+
+  export type ScoreCreateNestedOneWithoutFlavorDescriptorsInput = {
+    create?: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: ScoreCreateOrConnectWithoutFlavorDescriptorsInput
+    connect?: ScoreWhereUniqueInput
+  }
+
+  export type FlavorDescriptorUpdateOneRequiredWithoutScoreDescriptorsNestedInput = {
+    create?: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+    connectOrCreate?: FlavorDescriptorCreateOrConnectWithoutScoreDescriptorsInput
+    upsert?: FlavorDescriptorUpsertWithoutScoreDescriptorsInput
+    connect?: FlavorDescriptorWhereUniqueInput
+    update?: XOR<XOR<FlavorDescriptorUpdateToOneWithWhereWithoutScoreDescriptorsInput, FlavorDescriptorUpdateWithoutScoreDescriptorsInput>, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
+  }
+
+  export type ScoreUpdateOneRequiredWithoutFlavorDescriptorsNestedInput = {
+    create?: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+    connectOrCreate?: ScoreCreateOrConnectWithoutFlavorDescriptorsInput
+    upsert?: ScoreUpsertWithoutFlavorDescriptorsInput
+    connect?: ScoreWhereUniqueInput
+    update?: XOR<XOR<ScoreUpdateToOneWithWhereWithoutFlavorDescriptorsInput, ScoreUpdateWithoutFlavorDescriptorsInput>, ScoreUncheckedUpdateWithoutFlavorDescriptorsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -18642,7 +22374,7 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
-  export type NestedJsonFilter<$PrismaModel = never> =
+  export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
         Required<NestedJsonFilterBase<$PrismaModel>>
@@ -18652,13 +22384,12 @@ export namespace Prisma {
   export type NestedJsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
@@ -18898,60 +22629,77 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type UserCreateWithoutOrganizationInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    avatar?: string | null
-    bio?: string | null
-    role?: $Enums.UserRole
-    emailVerified?: boolean
-    emailVerifiedAt?: Date | string | null
-    lastLoginAt?: Date | string | null
-    resetToken?: string | null
-    resetTokenExpiry?: Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
-    scores?: ScoreCreateNestedManyWithoutUserInput
-    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
-    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+  export type NestedEnumGradingSystemFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemFilter<$PrismaModel> | $Enums.GradingSystem
   }
 
-  export type UserUncheckedCreateWithoutOrganizationInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    avatar?: string | null
-    bio?: string | null
-    role?: $Enums.UserRole
-    emailVerified?: boolean
-    emailVerifiedAt?: Date | string | null
-    lastLoginAt?: Date | string | null
-    resetToken?: string | null
-    resetTokenExpiry?: Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
-    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
-    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+  export type NestedEnumGradeClassificationNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableFilter<$PrismaModel> | $Enums.GradeClassification | null
   }
 
-  export type UserCreateOrConnectWithoutOrganizationInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
+  export type NestedEnumGradingSystemWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradingSystem | EnumGradingSystemFieldRefInput<$PrismaModel>
+    in?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GradingSystem[] | ListEnumGradingSystemFieldRefInput<$PrismaModel>
+    not?: NestedEnumGradingSystemWithAggregatesFilter<$PrismaModel> | $Enums.GradingSystem
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGradingSystemFilter<$PrismaModel>
+    _max?: NestedEnumGradingSystemFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type UserCreateManyOrganizationInputEnvelope = {
-    data: UserCreateManyOrganizationInput | UserCreateManyOrganizationInput[]
-    skipDuplicates?: boolean
+  export type NestedEnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GradeClassification | EnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GradeClassification[] | ListEnumGradeClassificationFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGradeClassificationNullableWithAggregatesFilter<$PrismaModel> | $Enums.GradeClassification | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+    _max?: NestedEnumGradeClassificationNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumFlavorCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryFilter<$PrismaModel> | $Enums.FlavorCategory
+  }
+
+  export type NestedEnumFlavorCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FlavorCategory | EnumFlavorCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FlavorCategory[] | ListEnumFlavorCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumFlavorCategoryWithAggregatesFilter<$PrismaModel> | $Enums.FlavorCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFlavorCategoryFilter<$PrismaModel>
+    _max?: NestedEnumFlavorCategoryFilter<$PrismaModel>
   }
 
   export type CuppingSessionCreateWithoutOrganizationInput = {
@@ -18973,9 +22721,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutCuppingSessionsInput
     template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
+    scores?: ScoreCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantCreateNestedManyWithoutSessionInput
     samples?: SessionSampleCreateNestedManyWithoutSessionInput
-    scores?: ScoreCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionUncheckedCreateWithoutOrganizationInput = {
@@ -18997,9 +22745,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantUncheckedCreateNestedManyWithoutSessionInput
     samples?: SessionSampleUncheckedCreateNestedManyWithoutSessionInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionCreateOrConnectWithoutOrganizationInput = {
@@ -19009,72 +22757,6 @@ export namespace Prisma {
 
   export type CuppingSessionCreateManyOrganizationInputEnvelope = {
     data: CuppingSessionCreateManyOrganizationInput | CuppingSessionCreateManyOrganizationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type SampleCreateWithoutOrganizationInput = {
-    id?: string
-    name: string
-    description?: string | null
-    code?: string | null
-    origin: string
-    region?: string | null
-    farm?: string | null
-    producer?: string | null
-    variety?: string | null
-    altitude?: number | null
-    processingMethod?: $Enums.ProcessingMethod | null
-    harvestDate?: Date | string | null
-    roaster?: string | null
-    roastDate?: Date | string | null
-    roastLevel?: $Enums.RoastLevel | null
-    moisture?: number | null
-    density?: number | null
-    screenSize?: string | null
-    notes?: string | null
-    imageUrl?: string | null
-    tags?: SampleCreatetagsInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
-    scores?: ScoreCreateNestedManyWithoutSampleInput
-  }
-
-  export type SampleUncheckedCreateWithoutOrganizationInput = {
-    id?: string
-    name: string
-    description?: string | null
-    code?: string | null
-    origin: string
-    region?: string | null
-    farm?: string | null
-    producer?: string | null
-    variety?: string | null
-    altitude?: number | null
-    processingMethod?: $Enums.ProcessingMethod | null
-    harvestDate?: Date | string | null
-    roaster?: string | null
-    roastDate?: Date | string | null
-    roastLevel?: $Enums.RoastLevel | null
-    moisture?: number | null
-    density?: number | null
-    screenSize?: string | null
-    notes?: string | null
-    imageUrl?: string | null
-    tags?: SampleCreatetagsInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
-  }
-
-  export type SampleCreateOrConnectWithoutOrganizationInput = {
-    where: SampleWhereUniqueInput
-    create: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type SampleCreateManyOrganizationInputEnvelope = {
-    data: SampleCreateManyOrganizationInput | SampleCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -19089,8 +22771,8 @@ export namespace Prisma {
     categories: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    creator: UserCreateNestedOneWithoutCreatedTemplatesInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutTemplateInput
+    creator: UserCreateNestedOneWithoutCreatedTemplatesInput
   }
 
   export type CuppingTemplateUncheckedCreateWithoutOrganizationInput = {
@@ -19115,6 +22797,40 @@ export namespace Prisma {
 
   export type CuppingTemplateCreateManyOrganizationInputEnvelope = {
     data: CuppingTemplateCreateManyOrganizationInput | CuppingTemplateCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlavorDescriptorCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator?: UserCreateNestedOneWithoutFlavorDescriptorsInput
+    scoreDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorCreateOrConnectWithoutOrganizationInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    create: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorCreateManyOrganizationInputEnvelope = {
+    data: FlavorDescriptorCreateManyOrganizationInput | FlavorDescriptorCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -19152,43 +22868,130 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
+  export type SampleCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
+    scores?: ScoreCreateNestedManyWithoutSampleInput
+    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleCreateOrConnectWithoutOrganizationInput = {
+    where: SampleWhereUniqueInput
+    create: XOR<SampleCreateWithoutOrganizationInput, SampleUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type SampleCreateManyOrganizationInputEnvelope = {
+    data: SampleCreateManyOrganizationInput | SampleCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutOrganizationInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
+    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
+    scores?: ScoreCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
+    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOrganizationInput = {
     where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
     create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
   }
 
-  export type UserUpdateWithWhereUniqueWithoutOrganizationInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
-  }
-
-  export type UserUpdateManyWithWhereWithoutOrganizationInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutOrganizationInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    firstName?: StringFilter<"User"> | string
-    lastName?: StringFilter<"User"> | string
-    avatar?: StringNullableFilter<"User"> | string | null
-    bio?: StringNullableFilter<"User"> | string | null
-    organizationId?: StringFilter<"User"> | string
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    emailVerified?: BoolFilter<"User"> | boolean
-    emailVerifiedAt?: DateTimeNullableFilter<"User"> | Date | string | null
-    lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
-    resetToken?: StringNullableFilter<"User"> | string | null
-    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
-    preferences?: JsonFilter<"User">
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
+  export type UserCreateManyOrganizationInputEnvelope = {
+    data: UserCreateManyOrganizationInput | UserCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
   }
 
   export type CuppingSessionUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -19230,6 +23033,103 @@ export namespace Prisma {
     settings?: JsonFilter<"CuppingSession">
     createdAt?: DateTimeFilter<"CuppingSession"> | Date | string
     updatedAt?: DateTimeFilter<"CuppingSession"> | Date | string
+  }
+
+  export type CuppingTemplateUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: CuppingTemplateWhereUniqueInput
+    update: XOR<CuppingTemplateUpdateWithoutOrganizationInput, CuppingTemplateUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<CuppingTemplateCreateWithoutOrganizationInput, CuppingTemplateUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type CuppingTemplateUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: CuppingTemplateWhereUniqueInput
+    data: XOR<CuppingTemplateUpdateWithoutOrganizationInput, CuppingTemplateUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type CuppingTemplateUpdateManyWithWhereWithoutOrganizationInput = {
+    where: CuppingTemplateScalarWhereInput
+    data: XOR<CuppingTemplateUpdateManyMutationInput, CuppingTemplateUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type CuppingTemplateScalarWhereInput = {
+    AND?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+    OR?: CuppingTemplateScalarWhereInput[]
+    NOT?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
+    id?: StringFilter<"CuppingTemplate"> | string
+    organizationId?: StringFilter<"CuppingTemplate"> | string
+    createdBy?: StringFilter<"CuppingTemplate"> | string
+    name?: StringFilter<"CuppingTemplate"> | string
+    description?: StringNullableFilter<"CuppingTemplate"> | string | null
+    isDefault?: BoolFilter<"CuppingTemplate"> | boolean
+    isPublic?: BoolFilter<"CuppingTemplate"> | boolean
+    scoringSystem?: EnumScoringSystemFilter<"CuppingTemplate"> | $Enums.ScoringSystem
+    maxScore?: IntFilter<"CuppingTemplate"> | number
+    categories?: JsonFilter<"CuppingTemplate">
+    createdAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
+  }
+
+  export type FlavorDescriptorUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    update: XOR<FlavorDescriptorUpdateWithoutOrganizationInput, FlavorDescriptorUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<FlavorDescriptorCreateWithoutOrganizationInput, FlavorDescriptorUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    data: XOR<FlavorDescriptorUpdateWithoutOrganizationInput, FlavorDescriptorUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorUpdateManyWithWhereWithoutOrganizationInput = {
+    where: FlavorDescriptorScalarWhereInput
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type FlavorDescriptorScalarWhereInput = {
+    AND?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+    OR?: FlavorDescriptorScalarWhereInput[]
+    NOT?: FlavorDescriptorScalarWhereInput | FlavorDescriptorScalarWhereInput[]
+    id?: StringFilter<"FlavorDescriptor"> | string
+    name?: StringFilter<"FlavorDescriptor"> | string
+    category?: EnumFlavorCategoryFilter<"FlavorDescriptor"> | $Enums.FlavorCategory
+    description?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    isDefault?: BoolFilter<"FlavorDescriptor"> | boolean
+    organizationId?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdBy?: StringNullableFilter<"FlavorDescriptor"> | string | null
+    createdAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+    updatedAt?: DateTimeFilter<"FlavorDescriptor"> | Date | string
+  }
+
+  export type InvitationUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutOrganizationInput, InvitationUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<InvitationCreateWithoutOrganizationInput, InvitationUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutOrganizationInput, InvitationUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutOrganizationInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type InvitationScalarWhereInput = {
+    AND?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+    OR?: InvitationScalarWhereInput[]
+    NOT?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+    id?: StringFilter<"Invitation"> | string
+    email?: StringFilter<"Invitation"> | string
+    organizationId?: StringFilter<"Invitation"> | string
+    role?: EnumUserRoleFilter<"Invitation"> | $Enums.UserRole
+    token?: StringFilter<"Invitation"> | string
+    status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    expiresAt?: DateTimeFilter<"Invitation"> | Date | string
+    invitedBy?: StringFilter<"Invitation"> | string
+    createdAt?: DateTimeFilter<"Invitation"> | Date | string
+    updatedAt?: DateTimeFilter<"Invitation"> | Date | string
   }
 
   export type SampleUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -19278,121 +23178,43 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Sample"> | Date | string
   }
 
-  export type CuppingTemplateUpsertWithWhereUniqueWithoutOrganizationInput = {
-    where: CuppingTemplateWhereUniqueInput
-    update: XOR<CuppingTemplateUpdateWithoutOrganizationInput, CuppingTemplateUncheckedUpdateWithoutOrganizationInput>
-    create: XOR<CuppingTemplateCreateWithoutOrganizationInput, CuppingTemplateUncheckedCreateWithoutOrganizationInput>
+  export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
   }
 
-  export type CuppingTemplateUpdateWithWhereUniqueWithoutOrganizationInput = {
-    where: CuppingTemplateWhereUniqueInput
-    data: XOR<CuppingTemplateUpdateWithoutOrganizationInput, CuppingTemplateUncheckedUpdateWithoutOrganizationInput>
+  export type UserUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
   }
 
-  export type CuppingTemplateUpdateManyWithWhereWithoutOrganizationInput = {
-    where: CuppingTemplateScalarWhereInput
-    data: XOR<CuppingTemplateUpdateManyMutationInput, CuppingTemplateUncheckedUpdateManyWithoutOrganizationInput>
+  export type UserUpdateManyWithWhereWithoutOrganizationInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutOrganizationInput>
   }
 
-  export type CuppingTemplateScalarWhereInput = {
-    AND?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
-    OR?: CuppingTemplateScalarWhereInput[]
-    NOT?: CuppingTemplateScalarWhereInput | CuppingTemplateScalarWhereInput[]
-    id?: StringFilter<"CuppingTemplate"> | string
-    organizationId?: StringFilter<"CuppingTemplate"> | string
-    createdBy?: StringFilter<"CuppingTemplate"> | string
-    name?: StringFilter<"CuppingTemplate"> | string
-    description?: StringNullableFilter<"CuppingTemplate"> | string | null
-    isDefault?: BoolFilter<"CuppingTemplate"> | boolean
-    isPublic?: BoolFilter<"CuppingTemplate"> | boolean
-    scoringSystem?: EnumScoringSystemFilter<"CuppingTemplate"> | $Enums.ScoringSystem
-    maxScore?: IntFilter<"CuppingTemplate"> | number
-    categories?: JsonFilter<"CuppingTemplate">
-    createdAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
-    updatedAt?: DateTimeFilter<"CuppingTemplate"> | Date | string
-  }
-
-  export type InvitationUpsertWithWhereUniqueWithoutOrganizationInput = {
-    where: InvitationWhereUniqueInput
-    update: XOR<InvitationUpdateWithoutOrganizationInput, InvitationUncheckedUpdateWithoutOrganizationInput>
-    create: XOR<InvitationCreateWithoutOrganizationInput, InvitationUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type InvitationUpdateWithWhereUniqueWithoutOrganizationInput = {
-    where: InvitationWhereUniqueInput
-    data: XOR<InvitationUpdateWithoutOrganizationInput, InvitationUncheckedUpdateWithoutOrganizationInput>
-  }
-
-  export type InvitationUpdateManyWithWhereWithoutOrganizationInput = {
-    where: InvitationScalarWhereInput
-    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutOrganizationInput>
-  }
-
-  export type InvitationScalarWhereInput = {
-    AND?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
-    OR?: InvitationScalarWhereInput[]
-    NOT?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
-    id?: StringFilter<"Invitation"> | string
-    email?: StringFilter<"Invitation"> | string
-    organizationId?: StringFilter<"Invitation"> | string
-    role?: EnumUserRoleFilter<"Invitation"> | $Enums.UserRole
-    token?: StringFilter<"Invitation"> | string
-    status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
-    expiresAt?: DateTimeFilter<"Invitation"> | Date | string
-    invitedBy?: StringFilter<"Invitation"> | string
-    createdAt?: DateTimeFilter<"Invitation"> | Date | string
-    updatedAt?: DateTimeFilter<"Invitation"> | Date | string
-  }
-
-  export type OrganizationCreateWithoutUsersInput = {
-    id?: string
-    name: string
-    slug: string
-    domain?: string | null
-    subdomain: string
-    description?: string | null
-    logo?: string | null
-    website?: string | null
-    subscriptionStatus?: $Enums.SubscriptionStatus
-    subscriptionPlan?: $Enums.SubscriptionPlan
-    trialEndsAt?: Date | string | null
-    subscriptionEndsAt?: Date | string | null
-    stripeCustomerId?: string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
-    samples?: SampleCreateNestedManyWithoutOrganizationInput
-    templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
-    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutUsersInput = {
-    id?: string
-    name: string
-    slug: string
-    domain?: string | null
-    subdomain: string
-    description?: string | null
-    logo?: string | null
-    website?: string | null
-    subscriptionStatus?: $Enums.SubscriptionStatus
-    subscriptionPlan?: $Enums.SubscriptionPlan
-    trialEndsAt?: Date | string | null
-    subscriptionEndsAt?: Date | string | null
-    stripeCustomerId?: string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
-    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
-    templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
-    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutUsersInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    firstName?: StringFilter<"User"> | string
+    lastName?: StringFilter<"User"> | string
+    avatar?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
+    organizationId?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    emailVerified?: BoolFilter<"User"> | boolean
+    emailVerifiedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    lastLoginAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
+    preferences?: JsonFilter<"User">
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
   }
 
   export type CuppingSessionCreateWithoutCreatorInput = {
@@ -19414,9 +23236,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
+    scores?: ScoreCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantCreateNestedManyWithoutSessionInput
     samples?: SessionSampleCreateNestedManyWithoutSessionInput
-    scores?: ScoreCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionUncheckedCreateWithoutCreatorInput = {
@@ -19438,9 +23260,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantUncheckedCreateNestedManyWithoutSessionInput
     samples?: SessionSampleUncheckedCreateNestedManyWithoutSessionInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionCreateOrConnectWithoutCreatorInput = {
@@ -19450,6 +23272,80 @@ export namespace Prisma {
 
   export type CuppingSessionCreateManyCreatorInputEnvelope = {
     data: CuppingSessionCreateManyCreatorInput | CuppingSessionCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CuppingTemplateCreateWithoutCreatorInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isDefault?: boolean
+    isPublic?: boolean
+    scoringSystem?: $Enums.ScoringSystem
+    maxScore?: number
+    categories: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutTemplateInput
+    organization: OrganizationCreateNestedOneWithoutTemplatesInput
+  }
+
+  export type CuppingTemplateUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    isDefault?: boolean
+    isPublic?: boolean
+    scoringSystem?: $Enums.ScoringSystem
+    maxScore?: number
+    categories: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type CuppingTemplateCreateOrConnectWithoutCreatorInput = {
+    where: CuppingTemplateWhereUniqueInput
+    create: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type CuppingTemplateCreateManyCreatorInputEnvelope = {
+    data: CuppingTemplateCreateManyCreatorInput | CuppingTemplateCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlavorDescriptorCreateWithoutCreatorInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization?: OrganizationCreateNestedOneWithoutFlavorDescriptorsInput
+    scoreDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateWithoutCreatorInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutFlavorDescriptorInput
+  }
+
+  export type FlavorDescriptorCreateOrConnectWithoutCreatorInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    create: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorCreateManyCreatorInputEnvelope = {
+    data: FlavorDescriptorCreateManyCreatorInput | FlavorDescriptorCreateManyCreatorInput[]
     skipDuplicates?: boolean
   }
 
@@ -19478,9 +23374,10 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
+    sample: SampleCreateNestedOneWithoutScoresInput
     session: CuppingSessionCreateNestedOneWithoutScoresInput
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
-    sample: SampleCreateNestedOneWithoutScoresInput
   }
 
   export type ScoreUncheckedCreateWithoutUserInput = {
@@ -19511,6 +23408,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutUserInput = {
@@ -19555,101 +23453,57 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type CuppingTemplateCreateWithoutCreatorInput = {
+  export type OrganizationCreateWithoutUsersInput = {
     id?: string
     name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
     description?: string | null
-    isDefault?: boolean
-    isPublic?: boolean
-    scoringSystem?: $Enums.ScoringSystem
-    maxScore?: number
-    categories: JsonNullValueInput | InputJsonValue
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutTemplatesInput
-    cuppingSessions?: CuppingSessionCreateNestedManyWithoutTemplateInput
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
+    templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
   }
 
-  export type CuppingTemplateUncheckedCreateWithoutCreatorInput = {
+  export type OrganizationUncheckedCreateWithoutUsersInput = {
     id?: string
-    organizationId: string
     name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
     description?: string | null
-    isDefault?: boolean
-    isPublic?: boolean
-    scoringSystem?: $Enums.ScoringSystem
-    maxScore?: number
-    categories: JsonNullValueInput | InputJsonValue
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutTemplateInput
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
-  export type CuppingTemplateCreateOrConnectWithoutCreatorInput = {
-    where: CuppingTemplateWhereUniqueInput
-    create: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput>
-  }
-
-  export type CuppingTemplateCreateManyCreatorInputEnvelope = {
-    data: CuppingTemplateCreateManyCreatorInput | CuppingTemplateCreateManyCreatorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type OrganizationUpsertWithoutUsersInput = {
-    update: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
+  export type OrganizationCreateOrConnectWithoutUsersInput = {
+    where: OrganizationWhereUniqueInput
     create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
-    where?: OrganizationWhereInput
-  }
-
-  export type OrganizationUpdateToOneWithWhereWithoutUsersInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type OrganizationUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    domain?: NullableStringFieldUpdateOperationsInput | string | null
-    subdomain?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUpdateManyWithoutOrganizationNestedInput
-    templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
-    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type OrganizationUncheckedUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    domain?: NullableStringFieldUpdateOperationsInput | string | null
-    subdomain?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
-    templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
-    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type CuppingSessionUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -19666,6 +23520,38 @@ export namespace Prisma {
   export type CuppingSessionUpdateManyWithWhereWithoutCreatorInput = {
     where: CuppingSessionScalarWhereInput
     data: XOR<CuppingSessionUpdateManyMutationInput, CuppingSessionUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: CuppingTemplateWhereUniqueInput
+    update: XOR<CuppingTemplateUpdateWithoutCreatorInput, CuppingTemplateUncheckedUpdateWithoutCreatorInput>
+    create: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: CuppingTemplateWhereUniqueInput
+    data: XOR<CuppingTemplateUpdateWithoutCreatorInput, CuppingTemplateUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type CuppingTemplateUpdateManyWithWhereWithoutCreatorInput = {
+    where: CuppingTemplateScalarWhereInput
+    data: XOR<CuppingTemplateUpdateManyMutationInput, CuppingTemplateUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    update: XOR<FlavorDescriptorUpdateWithoutCreatorInput, FlavorDescriptorUncheckedUpdateWithoutCreatorInput>
+    create: XOR<FlavorDescriptorCreateWithoutCreatorInput, FlavorDescriptorUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    data: XOR<FlavorDescriptorUpdateWithoutCreatorInput, FlavorDescriptorUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type FlavorDescriptorUpdateManyWithWhereWithoutCreatorInput = {
+    where: FlavorDescriptorScalarWhereInput
+    data: XOR<FlavorDescriptorUpdateManyMutationInput, FlavorDescriptorUncheckedUpdateManyWithoutCreatorInput>
   }
 
   export type ScoreUpsertWithWhereUniqueWithoutUserInput = {
@@ -19749,20 +23635,63 @@ export namespace Prisma {
     calibratedAt?: DateTimeNullableFilter<"SessionParticipant"> | Date | string | null
   }
 
-  export type CuppingTemplateUpsertWithWhereUniqueWithoutCreatorInput = {
-    where: CuppingTemplateWhereUniqueInput
-    update: XOR<CuppingTemplateUpdateWithoutCreatorInput, CuppingTemplateUncheckedUpdateWithoutCreatorInput>
-    create: XOR<CuppingTemplateCreateWithoutCreatorInput, CuppingTemplateUncheckedCreateWithoutCreatorInput>
+  export type OrganizationUpsertWithoutUsersInput = {
+    update: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
+    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    where?: OrganizationWhereInput
   }
 
-  export type CuppingTemplateUpdateWithWhereUniqueWithoutCreatorInput = {
-    where: CuppingTemplateWhereUniqueInput
-    data: XOR<CuppingTemplateUpdateWithoutCreatorInput, CuppingTemplateUncheckedUpdateWithoutCreatorInput>
+  export type OrganizationUpdateToOneWithWhereWithoutUsersInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
   }
 
-  export type CuppingTemplateUpdateManyWithWhereWithoutCreatorInput = {
-    where: CuppingTemplateScalarWhereInput
-    data: XOR<CuppingTemplateUpdateManyMutationInput, CuppingTemplateUncheckedUpdateManyWithoutCreatorInput>
+  export type OrganizationUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
+    templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutInvitationsInput = {
@@ -19782,10 +23711,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
-    samples?: SampleCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -19805,10 +23735,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
-    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -19844,10 +23775,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -19867,10 +23799,70 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type GreenBeanGradingCreateWithoutSampleInput = {
+    id?: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beanColorAssessment?: string | null
+  }
+
+  export type GreenBeanGradingUncheckedCreateWithoutSampleInput = {
+    id?: string
+    gradingSystem?: $Enums.GradingSystem
+    primaryDefects?: number
+    secondaryDefects?: number
+    fullDefectEquivalents?: number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: number | null
+    uniformityPercentage?: number | null
+    moistureContent?: number | null
+    waterActivity?: number | null
+    bulkDensity?: number | null
+    uniformityScore?: number | null
+    grade?: string | null
+    classification?: $Enums.GradeClassification | null
+    qualityScore?: number | null
+    gradedBy?: string | null
+    gradedAt?: Date | string | null
+    certifiedBy?: string | null
+    certificationDate?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beanColorAssessment?: string | null
+  }
+
+  export type GreenBeanGradingCreateOrConnectWithoutSampleInput = {
+    where: GreenBeanGradingWhereUniqueInput
+    create: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
   }
 
   export type OrganizationCreateWithoutSamplesInput = {
@@ -19890,10 +23882,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSamplesInput = {
@@ -19913,53 +23906,16 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
     templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSamplesInput = {
     where: OrganizationWhereUniqueInput
     create: XOR<OrganizationCreateWithoutSamplesInput, OrganizationUncheckedCreateWithoutSamplesInput>
-  }
-
-  export type SessionSampleCreateWithoutSampleInput = {
-    id?: string
-    position: number
-    isBlind?: boolean
-    blindCode?: string | null
-    grindSize?: string | null
-    waterTemp?: number | null
-    brewRatio?: string | null
-    steepTime?: number | null
-    addedAt?: Date | string
-    session: CuppingSessionCreateNestedOneWithoutSamplesInput
-    scores?: ScoreCreateNestedManyWithoutSessionSampleInput
-  }
-
-  export type SessionSampleUncheckedCreateWithoutSampleInput = {
-    id?: string
-    sessionId: string
-    position: number
-    isBlind?: boolean
-    blindCode?: string | null
-    grindSize?: string | null
-    waterTemp?: number | null
-    brewRatio?: string | null
-    steepTime?: number | null
-    addedAt?: Date | string
-    scores?: ScoreUncheckedCreateNestedManyWithoutSessionSampleInput
-  }
-
-  export type SessionSampleCreateOrConnectWithoutSampleInput = {
-    where: SessionSampleWhereUniqueInput
-    create: XOR<SessionSampleCreateWithoutSampleInput, SessionSampleUncheckedCreateWithoutSampleInput>
-  }
-
-  export type SessionSampleCreateManySampleInputEnvelope = {
-    data: SessionSampleCreateManySampleInput | SessionSampleCreateManySampleInput[]
-    skipDuplicates?: boolean
   }
 
   export type ScoreCreateWithoutSampleInput = {
@@ -19987,6 +23943,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
     session: CuppingSessionCreateNestedOneWithoutScoresInput
     sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
@@ -20020,6 +23977,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutSampleInput = {
@@ -20030,6 +23988,109 @@ export namespace Prisma {
   export type ScoreCreateManySampleInputEnvelope = {
     data: ScoreCreateManySampleInput | ScoreCreateManySampleInput[]
     skipDuplicates?: boolean
+  }
+
+  export type SessionSampleCreateWithoutSampleInput = {
+    id?: string
+    position: number
+    isBlind?: boolean
+    blindCode?: string | null
+    grindSize?: string | null
+    waterTemp?: number | null
+    brewRatio?: string | null
+    steepTime?: number | null
+    addedAt?: Date | string
+    scores?: ScoreCreateNestedManyWithoutSessionSampleInput
+    session: CuppingSessionCreateNestedOneWithoutSamplesInput
+  }
+
+  export type SessionSampleUncheckedCreateWithoutSampleInput = {
+    id?: string
+    sessionId: string
+    position: number
+    isBlind?: boolean
+    blindCode?: string | null
+    grindSize?: string | null
+    waterTemp?: number | null
+    brewRatio?: string | null
+    steepTime?: number | null
+    addedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSessionSampleInput
+  }
+
+  export type SessionSampleCreateOrConnectWithoutSampleInput = {
+    where: SessionSampleWhereUniqueInput
+    create: XOR<SessionSampleCreateWithoutSampleInput, SessionSampleUncheckedCreateWithoutSampleInput>
+  }
+
+  export type SessionSampleCreateManySampleInputEnvelope = {
+    data: SessionSampleCreateManySampleInput | SessionSampleCreateManySampleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GreenBeanGradingUpsertWithoutSampleInput = {
+    update: XOR<GreenBeanGradingUpdateWithoutSampleInput, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+    create: XOR<GreenBeanGradingCreateWithoutSampleInput, GreenBeanGradingUncheckedCreateWithoutSampleInput>
+    where?: GreenBeanGradingWhereInput
+  }
+
+  export type GreenBeanGradingUpdateToOneWithWhereWithoutSampleInput = {
+    where?: GreenBeanGradingWhereInput
+    data: XOR<GreenBeanGradingUpdateWithoutSampleInput, GreenBeanGradingUncheckedUpdateWithoutSampleInput>
+  }
+
+  export type GreenBeanGradingUpdateWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beanColorAssessment?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GreenBeanGradingUncheckedUpdateWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingSystem?: EnumGradingSystemFieldUpdateOperationsInput | $Enums.GradingSystem
+    primaryDefects?: IntFieldUpdateOperationsInput | number
+    secondaryDefects?: IntFieldUpdateOperationsInput | number
+    fullDefectEquivalents?: FloatFieldUpdateOperationsInput | number
+    defectBreakdown?: JsonNullValueInput | InputJsonValue
+    screenSizeDistribution?: NullableJsonNullValueInput | InputJsonValue
+    averageScreenSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    moistureContent?: NullableFloatFieldUpdateOperationsInput | number | null
+    waterActivity?: NullableFloatFieldUpdateOperationsInput | number | null
+    bulkDensity?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: NullableEnumGradeClassificationFieldUpdateOperationsInput | $Enums.GradeClassification | null
+    qualityScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    certificationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beanColorAssessment?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrganizationUpsertWithoutSamplesInput = {
@@ -20060,10 +24121,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSamplesInput = {
@@ -20083,10 +24145,27 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
     templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type ScoreUpsertWithWhereUniqueWithoutSampleInput = {
+    where: ScoreWhereUniqueInput
+    update: XOR<ScoreUpdateWithoutSampleInput, ScoreUncheckedUpdateWithoutSampleInput>
+    create: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput>
+  }
+
+  export type ScoreUpdateWithWhereUniqueWithoutSampleInput = {
+    where: ScoreWhereUniqueInput
+    data: XOR<ScoreUpdateWithoutSampleInput, ScoreUncheckedUpdateWithoutSampleInput>
+  }
+
+  export type ScoreUpdateManyWithWhereWithoutSampleInput = {
+    where: ScoreScalarWhereInput
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSampleInput>
   }
 
   export type SessionSampleUpsertWithWhereUniqueWithoutSampleInput = {
@@ -20122,124 +24201,6 @@ export namespace Prisma {
     addedAt?: DateTimeFilter<"SessionSample"> | Date | string
   }
 
-  export type ScoreUpsertWithWhereUniqueWithoutSampleInput = {
-    where: ScoreWhereUniqueInput
-    update: XOR<ScoreUpdateWithoutSampleInput, ScoreUncheckedUpdateWithoutSampleInput>
-    create: XOR<ScoreCreateWithoutSampleInput, ScoreUncheckedCreateWithoutSampleInput>
-  }
-
-  export type ScoreUpdateWithWhereUniqueWithoutSampleInput = {
-    where: ScoreWhereUniqueInput
-    data: XOR<ScoreUpdateWithoutSampleInput, ScoreUncheckedUpdateWithoutSampleInput>
-  }
-
-  export type ScoreUpdateManyWithWhereWithoutSampleInput = {
-    where: ScoreScalarWhereInput
-    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSampleInput>
-  }
-
-  export type OrganizationCreateWithoutTemplatesInput = {
-    id?: string
-    name: string
-    slug: string
-    domain?: string | null
-    subdomain: string
-    description?: string | null
-    logo?: string | null
-    website?: string | null
-    subscriptionStatus?: $Enums.SubscriptionStatus
-    subscriptionPlan?: $Enums.SubscriptionPlan
-    trialEndsAt?: Date | string | null
-    subscriptionEndsAt?: Date | string | null
-    stripeCustomerId?: string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
-    samples?: SampleCreateNestedManyWithoutOrganizationInput
-    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutTemplatesInput = {
-    id?: string
-    name: string
-    slug: string
-    domain?: string | null
-    subdomain: string
-    description?: string | null
-    logo?: string | null
-    website?: string | null
-    subscriptionStatus?: $Enums.SubscriptionStatus
-    subscriptionPlan?: $Enums.SubscriptionPlan
-    trialEndsAt?: Date | string | null
-    subscriptionEndsAt?: Date | string | null
-    stripeCustomerId?: string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
-    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
-    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutTemplatesInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
-  }
-
-  export type UserCreateWithoutCreatedTemplatesInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    avatar?: string | null
-    bio?: string | null
-    role?: $Enums.UserRole
-    emailVerified?: boolean
-    emailVerifiedAt?: Date | string | null
-    lastLoginAt?: Date | string | null
-    resetToken?: string | null
-    resetTokenExpiry?: Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
-    cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
-    scores?: ScoreCreateNestedManyWithoutUserInput
-    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCreatedTemplatesInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    avatar?: string | null
-    bio?: string | null
-    organizationId: string
-    role?: $Enums.UserRole
-    emailVerified?: boolean
-    emailVerifiedAt?: Date | string | null
-    lastLoginAt?: Date | string | null
-    resetToken?: string | null
-    resetTokenExpiry?: Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
-    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCreatedTemplatesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCreatedTemplatesInput, UserUncheckedCreateWithoutCreatedTemplatesInput>
-  }
-
   export type CuppingSessionCreateWithoutTemplateInput = {
     id?: string
     name: string
@@ -20257,11 +24218,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     creator: UserCreateNestedOneWithoutCuppingSessionsInput
+    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
+    scores?: ScoreCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantCreateNestedManyWithoutSessionInput
     samples?: SessionSampleCreateNestedManyWithoutSessionInput
-    scores?: ScoreCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionUncheckedCreateWithoutTemplateInput = {
@@ -20283,9 +24244,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
     participants?: SessionParticipantUncheckedCreateNestedManyWithoutSessionInput
     samples?: SessionSampleUncheckedCreateNestedManyWithoutSessionInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionCreateOrConnectWithoutTemplateInput = {
@@ -20298,61 +24259,126 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type OrganizationUpsertWithoutTemplatesInput = {
-    update: XOR<OrganizationUpdateWithoutTemplatesInput, OrganizationUncheckedUpdateWithoutTemplatesInput>
+  export type UserCreateWithoutCreatedTemplatesInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
+    scores?: ScoreCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedTemplatesInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    organizationId: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedTemplatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedTemplatesInput, UserUncheckedCreateWithoutCreatedTemplatesInput>
+  }
+
+  export type OrganizationCreateWithoutTemplatesInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutTemplatesInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutTemplatesInput = {
+    where: OrganizationWhereUniqueInput
     create: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
-    where?: OrganizationWhereInput
   }
 
-  export type OrganizationUpdateToOneWithWhereWithoutTemplatesInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutTemplatesInput, OrganizationUncheckedUpdateWithoutTemplatesInput>
+  export type CuppingSessionUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: CuppingSessionWhereUniqueInput
+    update: XOR<CuppingSessionUpdateWithoutTemplateInput, CuppingSessionUncheckedUpdateWithoutTemplateInput>
+    create: XOR<CuppingSessionCreateWithoutTemplateInput, CuppingSessionUncheckedCreateWithoutTemplateInput>
   }
 
-  export type OrganizationUpdateWithoutTemplatesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    domain?: NullableStringFieldUpdateOperationsInput | string | null
-    subdomain?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUpdateManyWithoutOrganizationNestedInput
-    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+  export type CuppingSessionUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: CuppingSessionWhereUniqueInput
+    data: XOR<CuppingSessionUpdateWithoutTemplateInput, CuppingSessionUncheckedUpdateWithoutTemplateInput>
   }
 
-  export type OrganizationUncheckedUpdateWithoutTemplatesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    domain?: NullableStringFieldUpdateOperationsInput | string | null
-    subdomain?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
-    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  export type CuppingSessionUpdateManyWithWhereWithoutTemplateInput = {
+    where: CuppingSessionScalarWhereInput
+    data: XOR<CuppingSessionUpdateManyMutationInput, CuppingSessionUncheckedUpdateManyWithoutTemplateInput>
   }
 
   export type UserUpsertWithoutCreatedTemplatesInput = {
@@ -20383,10 +24409,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTemplatesInput = {
@@ -20408,75 +24435,68 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type CuppingSessionUpsertWithWhereUniqueWithoutTemplateInput = {
-    where: CuppingSessionWhereUniqueInput
-    update: XOR<CuppingSessionUpdateWithoutTemplateInput, CuppingSessionUncheckedUpdateWithoutTemplateInput>
-    create: XOR<CuppingSessionCreateWithoutTemplateInput, CuppingSessionUncheckedCreateWithoutTemplateInput>
+  export type OrganizationUpsertWithoutTemplatesInput = {
+    update: XOR<OrganizationUpdateWithoutTemplatesInput, OrganizationUncheckedUpdateWithoutTemplatesInput>
+    create: XOR<OrganizationCreateWithoutTemplatesInput, OrganizationUncheckedCreateWithoutTemplatesInput>
+    where?: OrganizationWhereInput
   }
 
-  export type CuppingSessionUpdateWithWhereUniqueWithoutTemplateInput = {
-    where: CuppingSessionWhereUniqueInput
-    data: XOR<CuppingSessionUpdateWithoutTemplateInput, CuppingSessionUncheckedUpdateWithoutTemplateInput>
+  export type OrganizationUpdateToOneWithWhereWithoutTemplatesInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutTemplatesInput, OrganizationUncheckedUpdateWithoutTemplatesInput>
   }
 
-  export type CuppingSessionUpdateManyWithWhereWithoutTemplateInput = {
-    where: CuppingSessionScalarWhereInput
-    data: XOR<CuppingSessionUpdateManyMutationInput, CuppingSessionUncheckedUpdateManyWithoutTemplateInput>
-  }
-
-  export type OrganizationCreateWithoutCuppingSessionsInput = {
-    id?: string
-    name: string
-    slug: string
-    domain?: string | null
-    subdomain: string
-    description?: string | null
-    logo?: string | null
-    website?: string | null
-    subscriptionStatus?: $Enums.SubscriptionStatus
-    subscriptionPlan?: $Enums.SubscriptionPlan
-    trialEndsAt?: Date | string | null
-    subscriptionEndsAt?: Date | string | null
-    stripeCustomerId?: string | null
+  export type OrganizationUpdateWithoutTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    samples?: SampleCreateNestedManyWithoutOrganizationInput
-    templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
-    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
   }
 
-  export type OrganizationUncheckedCreateWithoutCuppingSessionsInput = {
-    id?: string
-    name: string
-    slug: string
-    domain?: string | null
-    subdomain: string
-    description?: string | null
-    logo?: string | null
-    website?: string | null
-    subscriptionStatus?: $Enums.SubscriptionStatus
-    subscriptionPlan?: $Enums.SubscriptionPlan
-    trialEndsAt?: Date | string | null
-    subscriptionEndsAt?: Date | string | null
-    stripeCustomerId?: string | null
+  export type OrganizationUncheckedUpdateWithoutTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
-    templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
-    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutCuppingSessionsInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutCuppingSessionsInput = {
@@ -20496,10 +24516,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
+    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
     scores?: ScoreCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
-    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutCuppingSessionsInput = {
@@ -20520,14 +24541,68 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
     scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
-    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCuppingSessionsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutCuppingSessionsInput, UserUncheckedCreateWithoutCuppingSessionsInput>
+  }
+
+  export type OrganizationCreateWithoutCuppingSessionsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutCuppingSessionsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutCuppingSessionsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
   }
 
   export type CuppingTemplateCreateWithoutCuppingSessionsInput = {
@@ -20541,8 +24616,8 @@ export namespace Prisma {
     categories: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutTemplatesInput
     creator: UserCreateNestedOneWithoutCreatedTemplatesInput
+    organization: OrganizationCreateNestedOneWithoutTemplatesInput
   }
 
   export type CuppingTemplateUncheckedCreateWithoutCuppingSessionsInput = {
@@ -20563,6 +24638,78 @@ export namespace Prisma {
   export type CuppingTemplateCreateOrConnectWithoutCuppingSessionsInput = {
     where: CuppingTemplateWhereUniqueInput
     create: XOR<CuppingTemplateCreateWithoutCuppingSessionsInput, CuppingTemplateUncheckedCreateWithoutCuppingSessionsInput>
+  }
+
+  export type ScoreCreateWithoutSessionInput = {
+    id?: string
+    totalScore: number
+    maxScore?: number
+    scores: JsonNullValueInput | InputJsonValue
+    aroma?: number | null
+    flavor?: number | null
+    aftertaste?: number | null
+    acidity?: number | null
+    body?: number | null
+    balance?: number | null
+    sweetness?: number | null
+    cleanliness?: number | null
+    uniformity?: number | null
+    overall?: number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    privateNotes?: string | null
+    voiceNotes?: string | null
+    voiceFileUrl?: string | null
+    isComplete?: boolean
+    isSubmitted?: boolean
+    submittedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
+    sample: SampleCreateNestedOneWithoutScoresInput
+    sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
+    user: UserCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateWithoutSessionInput = {
+    id?: string
+    sessionSampleId: string
+    sampleId: string
+    userId: string
+    totalScore: number
+    maxScore?: number
+    scores: JsonNullValueInput | InputJsonValue
+    aroma?: number | null
+    flavor?: number | null
+    aftertaste?: number | null
+    acidity?: number | null
+    body?: number | null
+    balance?: number | null
+    sweetness?: number | null
+    cleanliness?: number | null
+    uniformity?: number | null
+    overall?: number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    privateNotes?: string | null
+    voiceNotes?: string | null
+    voiceFileUrl?: string | null
+    isComplete?: boolean
+    isSubmitted?: boolean
+    submittedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
+  }
+
+  export type ScoreCreateOrConnectWithoutSessionInput = {
+    where: ScoreWhereUniqueInput
+    create: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput>
+  }
+
+  export type ScoreCreateManySessionInputEnvelope = {
+    data: ScoreCreateManySessionInput | ScoreCreateManySessionInput[]
+    skipDuplicates?: boolean
   }
 
   export type SessionParticipantCreateWithoutSessionInput = {
@@ -20607,8 +24754,8 @@ export namespace Prisma {
     brewRatio?: string | null
     steepTime?: number | null
     addedAt?: Date | string
-    sample: SampleCreateNestedOneWithoutSessionSamplesInput
     scores?: ScoreCreateNestedManyWithoutSessionSampleInput
+    sample: SampleCreateNestedOneWithoutSessionSamplesInput
   }
 
   export type SessionSampleUncheckedCreateWithoutSessionInput = {
@@ -20633,133 +24780,6 @@ export namespace Prisma {
   export type SessionSampleCreateManySessionInputEnvelope = {
     data: SessionSampleCreateManySessionInput | SessionSampleCreateManySessionInput[]
     skipDuplicates?: boolean
-  }
-
-  export type ScoreCreateWithoutSessionInput = {
-    id?: string
-    totalScore: number
-    maxScore?: number
-    scores: JsonNullValueInput | InputJsonValue
-    aroma?: number | null
-    flavor?: number | null
-    aftertaste?: number | null
-    acidity?: number | null
-    body?: number | null
-    balance?: number | null
-    sweetness?: number | null
-    cleanliness?: number | null
-    uniformity?: number | null
-    overall?: number | null
-    defects?: JsonNullValueInput | InputJsonValue
-    notes?: string | null
-    privateNotes?: string | null
-    voiceNotes?: string | null
-    voiceFileUrl?: string | null
-    isComplete?: boolean
-    isSubmitted?: boolean
-    submittedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
-    sample: SampleCreateNestedOneWithoutScoresInput
-    user: UserCreateNestedOneWithoutScoresInput
-  }
-
-  export type ScoreUncheckedCreateWithoutSessionInput = {
-    id?: string
-    sessionSampleId: string
-    sampleId: string
-    userId: string
-    totalScore: number
-    maxScore?: number
-    scores: JsonNullValueInput | InputJsonValue
-    aroma?: number | null
-    flavor?: number | null
-    aftertaste?: number | null
-    acidity?: number | null
-    body?: number | null
-    balance?: number | null
-    sweetness?: number | null
-    cleanliness?: number | null
-    uniformity?: number | null
-    overall?: number | null
-    defects?: JsonNullValueInput | InputJsonValue
-    notes?: string | null
-    privateNotes?: string | null
-    voiceNotes?: string | null
-    voiceFileUrl?: string | null
-    isComplete?: boolean
-    isSubmitted?: boolean
-    submittedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ScoreCreateOrConnectWithoutSessionInput = {
-    where: ScoreWhereUniqueInput
-    create: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput>
-  }
-
-  export type ScoreCreateManySessionInputEnvelope = {
-    data: ScoreCreateManySessionInput | ScoreCreateManySessionInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type OrganizationUpsertWithoutCuppingSessionsInput = {
-    update: XOR<OrganizationUpdateWithoutCuppingSessionsInput, OrganizationUncheckedUpdateWithoutCuppingSessionsInput>
-    create: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
-    where?: OrganizationWhereInput
-  }
-
-  export type OrganizationUpdateToOneWithWhereWithoutCuppingSessionsInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutCuppingSessionsInput, OrganizationUncheckedUpdateWithoutCuppingSessionsInput>
-  }
-
-  export type OrganizationUpdateWithoutCuppingSessionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    domain?: NullableStringFieldUpdateOperationsInput | string | null
-    subdomain?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUpdateManyWithoutOrganizationNestedInput
-    templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
-    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type OrganizationUncheckedUpdateWithoutCuppingSessionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    domain?: NullableStringFieldUpdateOperationsInput | string | null
-    subdomain?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
-    templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
-    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCuppingSessionsInput = {
@@ -20790,10 +24810,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
+    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
-    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCuppingSessionsInput = {
@@ -20814,9 +24835,69 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
-    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type OrganizationUpsertWithoutCuppingSessionsInput = {
+    update: XOR<OrganizationUpdateWithoutCuppingSessionsInput, OrganizationUncheckedUpdateWithoutCuppingSessionsInput>
+    create: XOR<OrganizationCreateWithoutCuppingSessionsInput, OrganizationUncheckedCreateWithoutCuppingSessionsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutCuppingSessionsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutCuppingSessionsInput, OrganizationUncheckedUpdateWithoutCuppingSessionsInput>
+  }
+
+  export type OrganizationUpdateWithoutCuppingSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutCuppingSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type CuppingTemplateUpsertWithoutCuppingSessionsInput = {
@@ -20841,8 +24922,8 @@ export namespace Prisma {
     categories?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
   }
 
   export type CuppingTemplateUncheckedUpdateWithoutCuppingSessionsInput = {
@@ -20858,6 +24939,22 @@ export namespace Prisma {
     categories?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreUpsertWithWhereUniqueWithoutSessionInput = {
+    where: ScoreWhereUniqueInput
+    update: XOR<ScoreUpdateWithoutSessionInput, ScoreUncheckedUpdateWithoutSessionInput>
+    create: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput>
+  }
+
+  export type ScoreUpdateWithWhereUniqueWithoutSessionInput = {
+    where: ScoreWhereUniqueInput
+    data: XOR<ScoreUpdateWithoutSessionInput, ScoreUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type ScoreUpdateManyWithWhereWithoutSessionInput = {
+    where: ScoreScalarWhereInput
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSessionInput>
   }
 
   export type SessionParticipantUpsertWithWhereUniqueWithoutSessionInput = {
@@ -20892,22 +24989,6 @@ export namespace Prisma {
     data: XOR<SessionSampleUpdateManyMutationInput, SessionSampleUncheckedUpdateManyWithoutSessionInput>
   }
 
-  export type ScoreUpsertWithWhereUniqueWithoutSessionInput = {
-    where: ScoreWhereUniqueInput
-    update: XOR<ScoreUpdateWithoutSessionInput, ScoreUncheckedUpdateWithoutSessionInput>
-    create: XOR<ScoreCreateWithoutSessionInput, ScoreUncheckedCreateWithoutSessionInput>
-  }
-
-  export type ScoreUpdateWithWhereUniqueWithoutSessionInput = {
-    where: ScoreWhereUniqueInput
-    data: XOR<ScoreUpdateWithoutSessionInput, ScoreUncheckedUpdateWithoutSessionInput>
-  }
-
-  export type ScoreUpdateManyWithWhereWithoutSessionInput = {
-    where: ScoreScalarWhereInput
-    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSessionInput>
-  }
-
   export type CuppingSessionCreateWithoutParticipantsInput = {
     id?: string
     name: string
@@ -20925,11 +25006,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     creator: UserCreateNestedOneWithoutCuppingSessionsInput
+    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
-    samples?: SessionSampleCreateNestedManyWithoutSessionInput
     scores?: ScoreCreateNestedManyWithoutSessionInput
+    samples?: SessionSampleCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionUncheckedCreateWithoutParticipantsInput = {
@@ -20952,8 +25033,8 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    samples?: SessionSampleUncheckedCreateNestedManyWithoutSessionInput
     scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
+    samples?: SessionSampleUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CuppingSessionCreateOrConnectWithoutParticipantsInput = {
@@ -20978,10 +25059,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
-    scores?: ScoreCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
+    scores?: ScoreCreateNestedManyWithoutUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutSessionParticipantsInput = {
@@ -21003,8 +25085,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionParticipantsInput = {
@@ -21040,11 +25123,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
-    samples?: SessionSampleUpdateManyWithoutSessionNestedInput
     scores?: ScoreUpdateManyWithoutSessionNestedInput
+    samples?: SessionSampleUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateWithoutParticipantsInput = {
@@ -21067,8 +25150,8 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    samples?: SessionSampleUncheckedUpdateManyWithoutSessionNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
+    samples?: SessionSampleUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type UserUpsertWithoutSessionParticipantsInput = {
@@ -21099,10 +25182,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
-    scores?: ScoreUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUpdateManyWithoutUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionParticipantsInput = {
@@ -21124,122 +25208,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
-  }
-
-  export type CuppingSessionCreateWithoutSamplesInput = {
-    id?: string
-    name: string
-    description?: string | null
-    location?: string | null
-    blindTasting?: boolean
-    allowComments?: boolean
-    requireCalibration?: boolean
-    status?: $Enums.SessionStatus
-    scheduledAt?: Date | string | null
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    notes?: string | null
-    tags?: CuppingSessionCreatetagsInput | string[]
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
-    creator: UserCreateNestedOneWithoutCuppingSessionsInput
-    template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
-    participants?: SessionParticipantCreateNestedManyWithoutSessionInput
-    scores?: ScoreCreateNestedManyWithoutSessionInput
-  }
-
-  export type CuppingSessionUncheckedCreateWithoutSamplesInput = {
-    id?: string
-    organizationId: string
-    createdBy: string
-    name: string
-    description?: string | null
-    location?: string | null
-    templateId?: string | null
-    blindTasting?: boolean
-    allowComments?: boolean
-    requireCalibration?: boolean
-    status?: $Enums.SessionStatus
-    scheduledAt?: Date | string | null
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    notes?: string | null
-    tags?: CuppingSessionCreatetagsInput | string[]
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    participants?: SessionParticipantUncheckedCreateNestedManyWithoutSessionInput
-    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
-  }
-
-  export type CuppingSessionCreateOrConnectWithoutSamplesInput = {
-    where: CuppingSessionWhereUniqueInput
-    create: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
-  }
-
-  export type SampleCreateWithoutSessionSamplesInput = {
-    id?: string
-    name: string
-    description?: string | null
-    code?: string | null
-    origin: string
-    region?: string | null
-    farm?: string | null
-    producer?: string | null
-    variety?: string | null
-    altitude?: number | null
-    processingMethod?: $Enums.ProcessingMethod | null
-    harvestDate?: Date | string | null
-    roaster?: string | null
-    roastDate?: Date | string | null
-    roastLevel?: $Enums.RoastLevel | null
-    moisture?: number | null
-    density?: number | null
-    screenSize?: string | null
-    notes?: string | null
-    imageUrl?: string | null
-    tags?: SampleCreatetagsInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutSamplesInput
-    scores?: ScoreCreateNestedManyWithoutSampleInput
-  }
-
-  export type SampleUncheckedCreateWithoutSessionSamplesInput = {
-    id?: string
-    organizationId: string
-    name: string
-    description?: string | null
-    code?: string | null
-    origin: string
-    region?: string | null
-    farm?: string | null
-    producer?: string | null
-    variety?: string | null
-    altitude?: number | null
-    processingMethod?: $Enums.ProcessingMethod | null
-    harvestDate?: Date | string | null
-    roaster?: string | null
-    roastDate?: Date | string | null
-    roastLevel?: $Enums.RoastLevel | null
-    moisture?: number | null
-    density?: number | null
-    screenSize?: string | null
-    notes?: string | null
-    imageUrl?: string | null
-    tags?: SampleCreatetagsInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
-  }
-
-  export type SampleCreateOrConnectWithoutSessionSamplesInput = {
-    where: SampleWhereUniqueInput
-    create: XOR<SampleCreateWithoutSessionSamplesInput, SampleUncheckedCreateWithoutSessionSamplesInput>
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ScoreCreateWithoutSessionSampleInput = {
@@ -21267,8 +25238,9 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    session: CuppingSessionCreateNestedOneWithoutScoresInput
+    flavorDescriptors?: ScoreFlavorDescriptorCreateNestedManyWithoutScoreInput
     sample: SampleCreateNestedOneWithoutScoresInput
+    session: CuppingSessionCreateNestedOneWithoutScoresInput
     user: UserCreateNestedOneWithoutScoresInput
   }
 
@@ -21300,6 +25272,7 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedCreateNestedManyWithoutScoreInput
   }
 
   export type ScoreCreateOrConnectWithoutSessionSampleInput = {
@@ -21312,63 +25285,136 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type CuppingSessionUpsertWithoutSamplesInput = {
-    update: XOR<CuppingSessionUpdateWithoutSamplesInput, CuppingSessionUncheckedUpdateWithoutSamplesInput>
+  export type SampleCreateWithoutSessionSamplesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
+    organization: OrganizationCreateNestedOneWithoutSamplesInput
+    scores?: ScoreCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleUncheckedCreateWithoutSessionSamplesInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleCreateOrConnectWithoutSessionSamplesInput = {
+    where: SampleWhereUniqueInput
+    create: XOR<SampleCreateWithoutSessionSamplesInput, SampleUncheckedCreateWithoutSessionSamplesInput>
+  }
+
+  export type CuppingSessionCreateWithoutSamplesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    location?: string | null
+    blindTasting?: boolean
+    allowComments?: boolean
+    requireCalibration?: boolean
+    status?: $Enums.SessionStatus
+    scheduledAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    notes?: string | null
+    tags?: CuppingSessionCreatetagsInput | string[]
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator: UserCreateNestedOneWithoutCuppingSessionsInput
+    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
+    template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
+    scores?: ScoreCreateNestedManyWithoutSessionInput
+    participants?: SessionParticipantCreateNestedManyWithoutSessionInput
+  }
+
+  export type CuppingSessionUncheckedCreateWithoutSamplesInput = {
+    id?: string
+    organizationId: string
+    createdBy: string
+    name: string
+    description?: string | null
+    location?: string | null
+    templateId?: string | null
+    blindTasting?: boolean
+    allowComments?: boolean
+    requireCalibration?: boolean
+    status?: $Enums.SessionStatus
+    scheduledAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    notes?: string | null
+    tags?: CuppingSessionCreatetagsInput | string[]
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSessionInput
+    participants?: SessionParticipantUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type CuppingSessionCreateOrConnectWithoutSamplesInput = {
+    where: CuppingSessionWhereUniqueInput
     create: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
-    where?: CuppingSessionWhereInput
   }
 
-  export type CuppingSessionUpdateToOneWithWhereWithoutSamplesInput = {
-    where?: CuppingSessionWhereInput
-    data: XOR<CuppingSessionUpdateWithoutSamplesInput, CuppingSessionUncheckedUpdateWithoutSamplesInput>
+  export type ScoreUpsertWithWhereUniqueWithoutSessionSampleInput = {
+    where: ScoreWhereUniqueInput
+    update: XOR<ScoreUpdateWithoutSessionSampleInput, ScoreUncheckedUpdateWithoutSessionSampleInput>
+    create: XOR<ScoreCreateWithoutSessionSampleInput, ScoreUncheckedCreateWithoutSessionSampleInput>
   }
 
-  export type CuppingSessionUpdateWithoutSamplesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    blindTasting?: BoolFieldUpdateOperationsInput | boolean
-    allowComments?: BoolFieldUpdateOperationsInput | boolean
-    requireCalibration?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: CuppingSessionUpdatetagsInput | string[]
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
-    creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
-    template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
-    participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUpdateManyWithoutSessionNestedInput
+  export type ScoreUpdateWithWhereUniqueWithoutSessionSampleInput = {
+    where: ScoreWhereUniqueInput
+    data: XOR<ScoreUpdateWithoutSessionSampleInput, ScoreUncheckedUpdateWithoutSessionSampleInput>
   }
 
-  export type CuppingSessionUncheckedUpdateWithoutSamplesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    templateId?: NullableStringFieldUpdateOperationsInput | string | null
-    blindTasting?: BoolFieldUpdateOperationsInput | boolean
-    allowComments?: BoolFieldUpdateOperationsInput | boolean
-    requireCalibration?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
-    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: CuppingSessionUpdatetagsInput | string[]
-    settings?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    participants?: SessionParticipantUncheckedUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
+  export type ScoreUpdateManyWithWhereWithoutSessionSampleInput = {
+    where: ScoreScalarWhereInput
+    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSessionSampleInput>
   }
 
   export type SampleUpsertWithoutSessionSamplesInput = {
@@ -21406,6 +25452,7 @@ export namespace Prisma {
     tags?: SampleUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
     scores?: ScoreUpdateManyWithoutSampleNestedInput
   }
@@ -21435,23 +25482,154 @@ export namespace Prisma {
     tags?: SampleUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
     scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
   }
 
-  export type ScoreUpsertWithWhereUniqueWithoutSessionSampleInput = {
-    where: ScoreWhereUniqueInput
-    update: XOR<ScoreUpdateWithoutSessionSampleInput, ScoreUncheckedUpdateWithoutSessionSampleInput>
-    create: XOR<ScoreCreateWithoutSessionSampleInput, ScoreUncheckedCreateWithoutSessionSampleInput>
+  export type CuppingSessionUpsertWithoutSamplesInput = {
+    update: XOR<CuppingSessionUpdateWithoutSamplesInput, CuppingSessionUncheckedUpdateWithoutSamplesInput>
+    create: XOR<CuppingSessionCreateWithoutSamplesInput, CuppingSessionUncheckedCreateWithoutSamplesInput>
+    where?: CuppingSessionWhereInput
   }
 
-  export type ScoreUpdateWithWhereUniqueWithoutSessionSampleInput = {
-    where: ScoreWhereUniqueInput
-    data: XOR<ScoreUpdateWithoutSessionSampleInput, ScoreUncheckedUpdateWithoutSessionSampleInput>
+  export type CuppingSessionUpdateToOneWithWhereWithoutSamplesInput = {
+    where?: CuppingSessionWhereInput
+    data: XOR<CuppingSessionUpdateWithoutSamplesInput, CuppingSessionUncheckedUpdateWithoutSamplesInput>
   }
 
-  export type ScoreUpdateManyWithWhereWithoutSessionSampleInput = {
-    where: ScoreScalarWhereInput
-    data: XOR<ScoreUpdateManyMutationInput, ScoreUncheckedUpdateManyWithoutSessionSampleInput>
+  export type CuppingSessionUpdateWithoutSamplesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    blindTasting?: BoolFieldUpdateOperationsInput | boolean
+    allowComments?: BoolFieldUpdateOperationsInput | boolean
+    requireCalibration?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: CuppingSessionUpdatetagsInput | string[]
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
+    scores?: ScoreUpdateManyWithoutSessionNestedInput
+    participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
+  }
+
+  export type CuppingSessionUncheckedUpdateWithoutSamplesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    blindTasting?: BoolFieldUpdateOperationsInput | boolean
+    allowComments?: BoolFieldUpdateOperationsInput | boolean
+    requireCalibration?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: CuppingSessionUpdatetagsInput | string[]
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
+    participants?: SessionParticipantUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type ScoreFlavorDescriptorCreateWithoutScoreInput = {
+    id?: string
+    intensity?: number
+    createdAt?: Date | string
+    flavorDescriptor: FlavorDescriptorCreateNestedOneWithoutScoreDescriptorsInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput = {
+    id?: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateOrConnectWithoutScoreInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    create: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateManyScoreInputEnvelope = {
+    data: ScoreFlavorDescriptorCreateManyScoreInput | ScoreFlavorDescriptorCreateManyScoreInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SampleCreateWithoutScoresInput = {
+    id?: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingCreateNestedOneWithoutSampleInput
+    organization: OrganizationCreateNestedOneWithoutSamplesInput
+    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleUncheckedCreateWithoutScoresInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    greenBeanGrading?: GreenBeanGradingUncheckedCreateNestedOneWithoutSampleInput
+    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleCreateOrConnectWithoutScoresInput = {
+    where: SampleWhereUniqueInput
+    create: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
   }
 
   export type CuppingSessionCreateWithoutScoresInput = {
@@ -21471,8 +25649,8 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     creator: UserCreateNestedOneWithoutCuppingSessionsInput
+    organization: OrganizationCreateNestedOneWithoutCuppingSessionsInput
     template?: CuppingTemplateCreateNestedOneWithoutCuppingSessionsInput
     participants?: SessionParticipantCreateNestedManyWithoutSessionInput
     samples?: SessionSampleCreateNestedManyWithoutSessionInput
@@ -21517,8 +25695,8 @@ export namespace Prisma {
     brewRatio?: string | null
     steepTime?: number | null
     addedAt?: Date | string
-    session: CuppingSessionCreateNestedOneWithoutSamplesInput
     sample: SampleCreateNestedOneWithoutSessionSamplesInput
+    session: CuppingSessionCreateNestedOneWithoutSamplesInput
   }
 
   export type SessionSampleUncheckedCreateWithoutScoresInput = {
@@ -21540,67 +25718,6 @@ export namespace Prisma {
     create: XOR<SessionSampleCreateWithoutScoresInput, SessionSampleUncheckedCreateWithoutScoresInput>
   }
 
-  export type SampleCreateWithoutScoresInput = {
-    id?: string
-    name: string
-    description?: string | null
-    code?: string | null
-    origin: string
-    region?: string | null
-    farm?: string | null
-    producer?: string | null
-    variety?: string | null
-    altitude?: number | null
-    processingMethod?: $Enums.ProcessingMethod | null
-    harvestDate?: Date | string | null
-    roaster?: string | null
-    roastDate?: Date | string | null
-    roastLevel?: $Enums.RoastLevel | null
-    moisture?: number | null
-    density?: number | null
-    screenSize?: string | null
-    notes?: string | null
-    imageUrl?: string | null
-    tags?: SampleCreatetagsInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutSamplesInput
-    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
-  }
-
-  export type SampleUncheckedCreateWithoutScoresInput = {
-    id?: string
-    organizationId: string
-    name: string
-    description?: string | null
-    code?: string | null
-    origin: string
-    region?: string | null
-    farm?: string | null
-    producer?: string | null
-    variety?: string | null
-    altitude?: number | null
-    processingMethod?: $Enums.ProcessingMethod | null
-    harvestDate?: Date | string | null
-    roaster?: string | null
-    roastDate?: Date | string | null
-    roastLevel?: $Enums.RoastLevel | null
-    moisture?: number | null
-    density?: number | null
-    screenSize?: string | null
-    notes?: string | null
-    imageUrl?: string | null
-    tags?: SampleCreatetagsInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
-  }
-
-  export type SampleCreateOrConnectWithoutScoresInput = {
-    where: SampleWhereUniqueInput
-    create: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
-  }
-
   export type UserCreateWithoutScoresInput = {
     id?: string
     email: string
@@ -21618,10 +25735,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
     cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
-    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorCreateNestedManyWithoutCreatorInput
+    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutScoresInput = {
@@ -21643,13 +25761,110 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
-    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
     createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    flavorDescriptors?: FlavorDescriptorUncheckedCreateNestedManyWithoutCreatorInput
+    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutScoresInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutScoresInput, UserUncheckedCreateWithoutScoresInput>
+  }
+
+  export type ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutScoreInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    update: XOR<ScoreFlavorDescriptorUpdateWithoutScoreInput, ScoreFlavorDescriptorUncheckedUpdateWithoutScoreInput>
+    create: XOR<ScoreFlavorDescriptorCreateWithoutScoreInput, ScoreFlavorDescriptorUncheckedCreateWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutScoreInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    data: XOR<ScoreFlavorDescriptorUpdateWithoutScoreInput, ScoreFlavorDescriptorUncheckedUpdateWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithWhereWithoutScoreInput = {
+    where: ScoreFlavorDescriptorScalarWhereInput
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreInput>
+  }
+
+  export type ScoreFlavorDescriptorScalarWhereInput = {
+    AND?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+    OR?: ScoreFlavorDescriptorScalarWhereInput[]
+    NOT?: ScoreFlavorDescriptorScalarWhereInput | ScoreFlavorDescriptorScalarWhereInput[]
+    id?: StringFilter<"ScoreFlavorDescriptor"> | string
+    scoreId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    flavorDescriptorId?: StringFilter<"ScoreFlavorDescriptor"> | string
+    intensity?: IntFilter<"ScoreFlavorDescriptor"> | number
+    createdAt?: DateTimeFilter<"ScoreFlavorDescriptor"> | Date | string
+  }
+
+  export type SampleUpsertWithoutScoresInput = {
+    update: XOR<SampleUpdateWithoutScoresInput, SampleUncheckedUpdateWithoutScoresInput>
+    create: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
+    where?: SampleWhereInput
+  }
+
+  export type SampleUpdateToOneWithWhereWithoutScoresInput = {
+    where?: SampleWhereInput
+    data: XOR<SampleUpdateWithoutScoresInput, SampleUncheckedUpdateWithoutScoresInput>
+  }
+
+  export type SampleUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
+    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
+  }
+
+  export type SampleUncheckedUpdateWithoutScoresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
   }
 
   export type CuppingSessionUpsertWithoutScoresInput = {
@@ -21680,8 +25895,8 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
     participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUpdateManyWithoutSessionNestedInput
@@ -21732,8 +25947,8 @@ export namespace Prisma {
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
     sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
+    session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
   }
 
   export type SessionSampleUncheckedUpdateWithoutScoresInput = {
@@ -21748,73 +25963,6 @@ export namespace Prisma {
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SampleUpsertWithoutScoresInput = {
-    update: XOR<SampleUpdateWithoutScoresInput, SampleUncheckedUpdateWithoutScoresInput>
-    create: XOR<SampleCreateWithoutScoresInput, SampleUncheckedCreateWithoutScoresInput>
-    where?: SampleWhereInput
-  }
-
-  export type SampleUpdateToOneWithWhereWithoutScoresInput = {
-    where?: SampleWhereInput
-    data: XOR<SampleUpdateWithoutScoresInput, SampleUncheckedUpdateWithoutScoresInput>
-  }
-
-  export type SampleUpdateWithoutScoresInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: StringFieldUpdateOperationsInput | string
-    region?: NullableStringFieldUpdateOperationsInput | string | null
-    farm?: NullableStringFieldUpdateOperationsInput | string | null
-    producer?: NullableStringFieldUpdateOperationsInput | string | null
-    variety?: NullableStringFieldUpdateOperationsInput | string | null
-    altitude?: NullableIntFieldUpdateOperationsInput | number | null
-    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
-    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roaster?: NullableStringFieldUpdateOperationsInput | string | null
-    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
-    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
-    density?: NullableFloatFieldUpdateOperationsInput | number | null
-    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: SampleUpdatetagsInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
-    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
-  }
-
-  export type SampleUncheckedUpdateWithoutScoresInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: StringFieldUpdateOperationsInput | string
-    region?: NullableStringFieldUpdateOperationsInput | string | null
-    farm?: NullableStringFieldUpdateOperationsInput | string | null
-    producer?: NullableStringFieldUpdateOperationsInput | string | null
-    variety?: NullableStringFieldUpdateOperationsInput | string | null
-    altitude?: NullableIntFieldUpdateOperationsInput | number | null
-    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
-    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roaster?: NullableStringFieldUpdateOperationsInput | string | null
-    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
-    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
-    density?: NullableFloatFieldUpdateOperationsInput | number | null
-    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: SampleUpdatetagsInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
   }
 
   export type UserUpsertWithoutScoresInput = {
@@ -21845,10 +25993,11 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
-    sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
+    sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutScoresInput = {
@@ -21870,11 +26019,144 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
-    sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
     createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
+    sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type UserCreateManyOrganizationInput = {
+  export type SampleCreateWithoutGreenBeanGradingInput = {
+    id?: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutSamplesInput
+    scores?: ScoreCreateNestedManyWithoutSampleInput
+    sessionSamples?: SessionSampleCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleUncheckedCreateWithoutGreenBeanGradingInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    code?: string | null
+    origin: string
+    region?: string | null
+    farm?: string | null
+    producer?: string | null
+    variety?: string | null
+    altitude?: number | null
+    processingMethod?: $Enums.ProcessingMethod | null
+    harvestDate?: Date | string | null
+    roaster?: string | null
+    roastDate?: Date | string | null
+    roastLevel?: $Enums.RoastLevel | null
+    moisture?: number | null
+    density?: number | null
+    screenSize?: string | null
+    notes?: string | null
+    imageUrl?: string | null
+    tags?: SampleCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    scores?: ScoreUncheckedCreateNestedManyWithoutSampleInput
+    sessionSamples?: SessionSampleUncheckedCreateNestedManyWithoutSampleInput
+  }
+
+  export type SampleCreateOrConnectWithoutGreenBeanGradingInput = {
+    where: SampleWhereUniqueInput
+    create: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+  }
+
+  export type SampleUpsertWithoutGreenBeanGradingInput = {
+    update: XOR<SampleUpdateWithoutGreenBeanGradingInput, SampleUncheckedUpdateWithoutGreenBeanGradingInput>
+    create: XOR<SampleCreateWithoutGreenBeanGradingInput, SampleUncheckedCreateWithoutGreenBeanGradingInput>
+    where?: SampleWhereInput
+  }
+
+  export type SampleUpdateToOneWithWhereWithoutGreenBeanGradingInput = {
+    where?: SampleWhereInput
+    data: XOR<SampleUpdateWithoutGreenBeanGradingInput, SampleUncheckedUpdateWithoutGreenBeanGradingInput>
+  }
+
+  export type SampleUpdateWithoutGreenBeanGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutSamplesNestedInput
+    scores?: ScoreUpdateManyWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
+  }
+
+  export type SampleUncheckedUpdateWithoutGreenBeanGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
+  }
+
+  export type UserCreateWithoutFlavorDescriptorsInput = {
     id?: string
     email: string
     password: string
@@ -21891,6 +26173,455 @@ export namespace Prisma {
     preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutCreatorInput
+    createdTemplates?: CuppingTemplateCreateNestedManyWithoutCreatorInput
+    scores?: ScoreCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantCreateNestedManyWithoutUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
+  }
+
+  export type UserUncheckedCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
+    organizationId: string
+    role?: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutCreatorInput
+    createdTemplates?: CuppingTemplateUncheckedCreateNestedManyWithoutCreatorInput
+    scores?: ScoreUncheckedCreateNestedManyWithoutUserInput
+    sessionParticipants?: SessionParticipantUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFlavorDescriptorsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFlavorDescriptorsInput, UserUncheckedCreateWithoutFlavorDescriptorsInput>
+  }
+
+  export type OrganizationCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionCreateNestedManyWithoutOrganizationInput
+    templates?: CuppingTemplateCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationCreateNestedManyWithoutOrganizationInput
+    samples?: SampleCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    subdomain: string
+    description?: string | null
+    logo?: string | null
+    website?: string | null
+    subscriptionStatus?: $Enums.SubscriptionStatus
+    subscriptionPlan?: $Enums.SubscriptionPlan
+    trialEndsAt?: Date | string | null
+    subscriptionEndsAt?: Date | string | null
+    stripeCustomerId?: string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cuppingSessions?: CuppingSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    templates?: CuppingTemplateUncheckedCreateNestedManyWithoutOrganizationInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+    samples?: SampleUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutFlavorDescriptorsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput = {
+    id?: string
+    intensity?: number
+    createdAt?: Date | string
+    score: ScoreCreateNestedOneWithoutFlavorDescriptorsInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput = {
+    id?: string
+    scoreId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateOrConnectWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    create: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreFlavorDescriptorCreateManyFlavorDescriptorInputEnvelope = {
+    data: ScoreFlavorDescriptorCreateManyFlavorDescriptorInput | ScoreFlavorDescriptorCreateManyFlavorDescriptorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutFlavorDescriptorsInput = {
+    update: XOR<UserUpdateWithoutFlavorDescriptorsInput, UserUncheckedUpdateWithoutFlavorDescriptorsInput>
+    create: XOR<UserCreateWithoutFlavorDescriptorsInput, UserUncheckedCreateWithoutFlavorDescriptorsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFlavorDescriptorsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFlavorDescriptorsInput, UserUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type UserUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
+    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUpdateManyWithoutUserNestedInput
+    sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
+    sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OrganizationUpsertWithoutFlavorDescriptorsInput = {
+    update: XOR<OrganizationUpdateWithoutFlavorDescriptorsInput, OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput>
+    create: XOR<OrganizationCreateWithoutFlavorDescriptorsInput, OrganizationUncheckedCreateWithoutFlavorDescriptorsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutFlavorDescriptorsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutFlavorDescriptorsInput, OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type OrganizationUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUpdateManyWithoutOrganizationNestedInput
+    templates?: CuppingTemplateUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    subdomain?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionStatus?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    subscriptionPlan?: EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+    trialEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subscriptionEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    templates?: CuppingTemplateUncheckedUpdateManyWithoutOrganizationNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+    samples?: SampleUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUpsertWithWhereUniqueWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    update: XOR<ScoreFlavorDescriptorUpdateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedUpdateWithoutFlavorDescriptorInput>
+    create: XOR<ScoreFlavorDescriptorCreateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedCreateWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithWhereUniqueWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorWhereUniqueInput
+    data: XOR<ScoreFlavorDescriptorUpdateWithoutFlavorDescriptorInput, ScoreFlavorDescriptorUncheckedUpdateWithoutFlavorDescriptorInput>
+  }
+
+  export type ScoreFlavorDescriptorUpdateManyWithWhereWithoutFlavorDescriptorInput = {
+    where: ScoreFlavorDescriptorScalarWhereInput
+    data: XOR<ScoreFlavorDescriptorUpdateManyMutationInput, ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorInput>
+  }
+
+  export type FlavorDescriptorCreateWithoutScoreDescriptorsInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator?: UserCreateNestedOneWithoutFlavorDescriptorsInput
+    organization?: OrganizationCreateNestedOneWithoutFlavorDescriptorsInput
+  }
+
+  export type FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorCreateOrConnectWithoutScoreDescriptorsInput = {
+    where: FlavorDescriptorWhereUniqueInput
+    create: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+  }
+
+  export type ScoreCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    totalScore: number
+    maxScore?: number
+    scores: JsonNullValueInput | InputJsonValue
+    aroma?: number | null
+    flavor?: number | null
+    aftertaste?: number | null
+    acidity?: number | null
+    body?: number | null
+    balance?: number | null
+    sweetness?: number | null
+    cleanliness?: number | null
+    uniformity?: number | null
+    overall?: number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    privateNotes?: string | null
+    voiceNotes?: string | null
+    voiceFileUrl?: string | null
+    isComplete?: boolean
+    isSubmitted?: boolean
+    submittedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sample: SampleCreateNestedOneWithoutScoresInput
+    session: CuppingSessionCreateNestedOneWithoutScoresInput
+    sessionSample: SessionSampleCreateNestedOneWithoutScoresInput
+    user: UserCreateNestedOneWithoutScoresInput
+  }
+
+  export type ScoreUncheckedCreateWithoutFlavorDescriptorsInput = {
+    id?: string
+    sessionId: string
+    sessionSampleId: string
+    sampleId: string
+    userId: string
+    totalScore: number
+    maxScore?: number
+    scores: JsonNullValueInput | InputJsonValue
+    aroma?: number | null
+    flavor?: number | null
+    aftertaste?: number | null
+    acidity?: number | null
+    body?: number | null
+    balance?: number | null
+    sweetness?: number | null
+    cleanliness?: number | null
+    uniformity?: number | null
+    overall?: number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: string | null
+    privateNotes?: string | null
+    voiceNotes?: string | null
+    voiceFileUrl?: string | null
+    isComplete?: boolean
+    isSubmitted?: boolean
+    submittedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScoreCreateOrConnectWithoutFlavorDescriptorsInput = {
+    where: ScoreWhereUniqueInput
+    create: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+  }
+
+  export type FlavorDescriptorUpsertWithoutScoreDescriptorsInput = {
+    update: XOR<FlavorDescriptorUpdateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
+    create: XOR<FlavorDescriptorCreateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedCreateWithoutScoreDescriptorsInput>
+    where?: FlavorDescriptorWhereInput
+  }
+
+  export type FlavorDescriptorUpdateToOneWithWhereWithoutScoreDescriptorsInput = {
+    where?: FlavorDescriptorWhereInput
+    data: XOR<FlavorDescriptorUpdateWithoutScoreDescriptorsInput, FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput>
+  }
+
+  export type FlavorDescriptorUpdateWithoutScoreDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneWithoutFlavorDescriptorsNestedInput
+    organization?: OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateWithoutScoreDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreUpsertWithoutFlavorDescriptorsInput = {
+    update: XOR<ScoreUpdateWithoutFlavorDescriptorsInput, ScoreUncheckedUpdateWithoutFlavorDescriptorsInput>
+    create: XOR<ScoreCreateWithoutFlavorDescriptorsInput, ScoreUncheckedCreateWithoutFlavorDescriptorsInput>
+    where?: ScoreWhereInput
+  }
+
+  export type ScoreUpdateToOneWithWhereWithoutFlavorDescriptorsInput = {
+    where?: ScoreWhereInput
+    data: XOR<ScoreUpdateWithoutFlavorDescriptorsInput, ScoreUncheckedUpdateWithoutFlavorDescriptorsInput>
+  }
+
+  export type ScoreUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
+    session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
+    sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
+    user?: UserUpdateOneRequiredWithoutScoresNestedInput
+  }
+
+  export type ScoreUncheckedUpdateWithoutFlavorDescriptorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    sessionSampleId?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CuppingSessionCreateManyOrganizationInput = {
@@ -21910,6 +26641,43 @@ export namespace Prisma {
     notes?: string | null
     tags?: CuppingSessionCreatetagsInput | string[]
     settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CuppingTemplateCreateManyOrganizationInput = {
+    id?: string
+    createdBy: string
+    name: string
+    description?: string | null
+    isDefault?: boolean
+    isPublic?: boolean
+    scoringSystem?: $Enums.ScoringSystem
+    maxScore?: number
+    categories: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorCreateManyOrganizationInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationCreateManyOrganizationInput = {
+    id?: string
+    email: string
+    role?: $Enums.UserRole
+    token: string
+    status?: $Enums.InvitationStatus
+    expiresAt: Date | string
+    invitedBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21940,95 +26708,23 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type CuppingTemplateCreateManyOrganizationInput = {
-    id?: string
-    createdBy: string
-    name: string
-    description?: string | null
-    isDefault?: boolean
-    isPublic?: boolean
-    scoringSystem?: $Enums.ScoringSystem
-    maxScore?: number
-    categories: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type InvitationCreateManyOrganizationInput = {
+  export type UserCreateManyOrganizationInput = {
     id?: string
     email: string
+    password: string
+    firstName: string
+    lastName: string
+    avatar?: string | null
+    bio?: string | null
     role?: $Enums.UserRole
-    token: string
-    status?: $Enums.InvitationStatus
-    expiresAt: Date | string
-    invitedBy: string
+    emailVerified?: boolean
+    emailVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type UserUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    emailVerified?: BoolFieldUpdateOperationsInput | boolean
-    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
-    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
-    scores?: ScoreUpdateManyWithoutUserNestedInput
-    sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
-    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    emailVerified?: BoolFieldUpdateOperationsInput | boolean
-    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
-    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
-    sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
-    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
-  }
-
-  export type UserUncheckedUpdateManyWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    emailVerified?: BoolFieldUpdateOperationsInput | boolean
-    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
-    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    preferences?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CuppingSessionUpdateWithoutOrganizationInput = {
@@ -22050,9 +26746,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
     template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
+    scores?: ScoreUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateWithoutOrganizationInput = {
@@ -22074,9 +26770,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUncheckedUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUncheckedUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateManyWithoutOrganizationInput = {
@@ -22100,88 +26796,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SampleUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: StringFieldUpdateOperationsInput | string
-    region?: NullableStringFieldUpdateOperationsInput | string | null
-    farm?: NullableStringFieldUpdateOperationsInput | string | null
-    producer?: NullableStringFieldUpdateOperationsInput | string | null
-    variety?: NullableStringFieldUpdateOperationsInput | string | null
-    altitude?: NullableIntFieldUpdateOperationsInput | number | null
-    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
-    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roaster?: NullableStringFieldUpdateOperationsInput | string | null
-    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
-    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
-    density?: NullableFloatFieldUpdateOperationsInput | number | null
-    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: SampleUpdatetagsInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
-    scores?: ScoreUpdateManyWithoutSampleNestedInput
-  }
-
-  export type SampleUncheckedUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: StringFieldUpdateOperationsInput | string
-    region?: NullableStringFieldUpdateOperationsInput | string | null
-    farm?: NullableStringFieldUpdateOperationsInput | string | null
-    producer?: NullableStringFieldUpdateOperationsInput | string | null
-    variety?: NullableStringFieldUpdateOperationsInput | string | null
-    altitude?: NullableIntFieldUpdateOperationsInput | number | null
-    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
-    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roaster?: NullableStringFieldUpdateOperationsInput | string | null
-    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
-    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
-    density?: NullableFloatFieldUpdateOperationsInput | number | null
-    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: SampleUpdatetagsInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
-  }
-
-  export type SampleUncheckedUpdateManyWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: StringFieldUpdateOperationsInput | string
-    region?: NullableStringFieldUpdateOperationsInput | string | null
-    farm?: NullableStringFieldUpdateOperationsInput | string | null
-    producer?: NullableStringFieldUpdateOperationsInput | string | null
-    variety?: NullableStringFieldUpdateOperationsInput | string | null
-    altitude?: NullableIntFieldUpdateOperationsInput | number | null
-    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
-    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roaster?: NullableStringFieldUpdateOperationsInput | string | null
-    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
-    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
-    density?: NullableFloatFieldUpdateOperationsInput | number | null
-    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    tags?: SampleUpdatetagsInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type CuppingTemplateUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -22193,8 +26807,8 @@ export namespace Prisma {
     categories?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creator?: UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput
     cuppingSessions?: CuppingSessionUpdateManyWithoutTemplateNestedInput
+    creator?: UserUpdateOneRequiredWithoutCreatedTemplatesNestedInput
   }
 
   export type CuppingTemplateUncheckedUpdateWithoutOrganizationInput = {
@@ -22222,6 +26836,41 @@ export namespace Prisma {
     scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
     maxScore?: IntFieldUpdateOperationsInput | number
     categories?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlavorDescriptorUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneWithoutFlavorDescriptorsNestedInput
+    scoreDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22262,6 +26911,157 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SampleUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUpdateOneWithoutSampleNestedInput
+    scores?: ScoreUpdateManyWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUpdateManyWithoutSampleNestedInput
+  }
+
+  export type SampleUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    greenBeanGrading?: GreenBeanGradingUncheckedUpdateOneWithoutSampleNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutSampleNestedInput
+    sessionSamples?: SessionSampleUncheckedUpdateManyWithoutSampleNestedInput
+  }
+
+  export type SampleUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    farm?: NullableStringFieldUpdateOperationsInput | string | null
+    producer?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    altitude?: NullableIntFieldUpdateOperationsInput | number | null
+    processingMethod?: NullableEnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod | null
+    harvestDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roaster?: NullableStringFieldUpdateOperationsInput | string | null
+    roastDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roastLevel?: NullableEnumRoastLevelFieldUpdateOperationsInput | $Enums.RoastLevel | null
+    moisture?: NullableFloatFieldUpdateOperationsInput | number | null
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    screenSize?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: SampleUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUpdateManyWithoutCreatorNestedInput
+    createdTemplates?: CuppingTemplateUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUpdateManyWithoutUserNestedInput
+    sessionParticipants?: SessionParticipantUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    createdTemplates?: CuppingTemplateUncheckedUpdateManyWithoutCreatorNestedInput
+    flavorDescriptors?: FlavorDescriptorUncheckedUpdateManyWithoutCreatorNestedInput
+    scores?: ScoreUncheckedUpdateManyWithoutUserNestedInput
+    sessionParticipants?: SessionParticipantUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferences?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CuppingSessionCreateManyCreatorInput = {
     id?: string
     organizationId: string
@@ -22279,6 +27079,31 @@ export namespace Prisma {
     notes?: string | null
     tags?: CuppingSessionCreatetagsInput | string[]
     settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CuppingTemplateCreateManyCreatorInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    isDefault?: boolean
+    isPublic?: boolean
+    scoringSystem?: $Enums.ScoringSystem
+    maxScore?: number
+    categories: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FlavorDescriptorCreateManyCreatorInput = {
+    id?: string
+    name: string
+    category: $Enums.FlavorCategory
+    description?: string | null
+    isDefault?: boolean
+    organizationId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22324,20 +27149,6 @@ export namespace Prisma {
     calibratedAt?: Date | string | null
   }
 
-  export type CuppingTemplateCreateManyCreatorInput = {
-    id?: string
-    organizationId: string
-    name: string
-    description?: string | null
-    isDefault?: boolean
-    isPublic?: boolean
-    scoringSystem?: $Enums.ScoringSystem
-    maxScore?: number
-    categories: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type CuppingSessionUpdateWithoutCreatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -22357,9 +27168,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     template?: CuppingTemplateUpdateOneWithoutCuppingSessionsNestedInput
+    scores?: ScoreUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateWithoutCreatorInput = {
@@ -22381,9 +27192,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUncheckedUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUncheckedUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateManyWithoutCreatorInput = {
@@ -22403,6 +27214,85 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: CuppingSessionUpdatetagsInput | string[]
     settings?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CuppingTemplateUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
+    maxScore?: IntFieldUpdateOperationsInput | number
+    categories?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUpdateManyWithoutTemplateNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
+  }
+
+  export type CuppingTemplateUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
+    maxScore?: IntFieldUpdateOperationsInput | number
+    categories?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type CuppingTemplateUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
+    maxScore?: IntFieldUpdateOperationsInput | number
+    categories?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlavorDescriptorUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneWithoutFlavorDescriptorsNestedInput
+    scoreDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scoreDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorNestedInput
+  }
+
+  export type FlavorDescriptorUncheckedUpdateManyWithoutCreatorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumFlavorCategoryFieldUpdateOperationsInput | $Enums.FlavorCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22432,9 +27322,10 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
+    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
     session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
-    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
   }
 
   export type ScoreUncheckedUpdateWithoutUserInput = {
@@ -22465,6 +27356,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutUserInput = {
@@ -22530,63 +27422,6 @@ export namespace Prisma {
     calibratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type CuppingTemplateUpdateWithoutCreatorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    isDefault?: BoolFieldUpdateOperationsInput | boolean
-    isPublic?: BoolFieldUpdateOperationsInput | boolean
-    scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
-    maxScore?: IntFieldUpdateOperationsInput | number
-    categories?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutTemplatesNestedInput
-    cuppingSessions?: CuppingSessionUpdateManyWithoutTemplateNestedInput
-  }
-
-  export type CuppingTemplateUncheckedUpdateWithoutCreatorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    isDefault?: BoolFieldUpdateOperationsInput | boolean
-    isPublic?: BoolFieldUpdateOperationsInput | boolean
-    scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
-    maxScore?: IntFieldUpdateOperationsInput | number
-    categories?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cuppingSessions?: CuppingSessionUncheckedUpdateManyWithoutTemplateNestedInput
-  }
-
-  export type CuppingTemplateUncheckedUpdateManyWithoutCreatorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    isDefault?: BoolFieldUpdateOperationsInput | boolean
-    isPublic?: BoolFieldUpdateOperationsInput | boolean
-    scoringSystem?: EnumScoringSystemFieldUpdateOperationsInput | $Enums.ScoringSystem
-    maxScore?: IntFieldUpdateOperationsInput | number
-    categories?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SessionSampleCreateManySampleInput = {
-    id?: string
-    sessionId: string
-    position: number
-    isBlind?: boolean
-    blindCode?: string | null
-    grindSize?: string | null
-    waterTemp?: number | null
-    brewRatio?: string | null
-    steepTime?: number | null
-    addedAt?: Date | string
-  }
-
   export type ScoreCreateManySampleInput = {
     id?: string
     sessionId: string
@@ -22617,45 +27452,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SessionSampleUpdateWithoutSampleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    position?: IntFieldUpdateOperationsInput | number
-    isBlind?: BoolFieldUpdateOperationsInput | boolean
-    blindCode?: NullableStringFieldUpdateOperationsInput | string | null
-    grindSize?: NullableStringFieldUpdateOperationsInput | string | null
-    waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
-    brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
-    steepTime?: NullableIntFieldUpdateOperationsInput | number | null
-    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
-    scores?: ScoreUpdateManyWithoutSessionSampleNestedInput
-  }
-
-  export type SessionSampleUncheckedUpdateWithoutSampleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionId?: StringFieldUpdateOperationsInput | string
-    position?: IntFieldUpdateOperationsInput | number
-    isBlind?: BoolFieldUpdateOperationsInput | boolean
-    blindCode?: NullableStringFieldUpdateOperationsInput | string | null
-    grindSize?: NullableStringFieldUpdateOperationsInput | string | null
-    waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
-    brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
-    steepTime?: NullableIntFieldUpdateOperationsInput | number | null
-    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    scores?: ScoreUncheckedUpdateManyWithoutSessionSampleNestedInput
-  }
-
-  export type SessionSampleUncheckedUpdateManyWithoutSampleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionId?: StringFieldUpdateOperationsInput | string
-    position?: IntFieldUpdateOperationsInput | number
-    isBlind?: BoolFieldUpdateOperationsInput | boolean
-    blindCode?: NullableStringFieldUpdateOperationsInput | string | null
-    grindSize?: NullableStringFieldUpdateOperationsInput | string | null
-    waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
-    brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
-    steepTime?: NullableIntFieldUpdateOperationsInput | number | null
-    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type SessionSampleCreateManySampleInput = {
+    id?: string
+    sessionId: string
+    position: number
+    isBlind?: boolean
+    blindCode?: string | null
+    grindSize?: string | null
+    waterTemp?: number | null
+    brewRatio?: string | null
+    steepTime?: number | null
+    addedAt?: Date | string
   }
 
   export type ScoreUpdateWithoutSampleInput = {
@@ -22683,6 +27490,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
     session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
@@ -22716,6 +27524,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutSampleInput = {
@@ -22746,6 +27555,47 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionSampleUpdateWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    isBlind?: BoolFieldUpdateOperationsInput | boolean
+    blindCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grindSize?: NullableStringFieldUpdateOperationsInput | string | null
+    waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
+    brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
+    steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUpdateManyWithoutSessionSampleNestedInput
+    session?: CuppingSessionUpdateOneRequiredWithoutSamplesNestedInput
+  }
+
+  export type SessionSampleUncheckedUpdateWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    isBlind?: BoolFieldUpdateOperationsInput | boolean
+    blindCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grindSize?: NullableStringFieldUpdateOperationsInput | string | null
+    waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
+    brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
+    steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSessionSampleNestedInput
+  }
+
+  export type SessionSampleUncheckedUpdateManyWithoutSampleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    isBlind?: BoolFieldUpdateOperationsInput | boolean
+    blindCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grindSize?: NullableStringFieldUpdateOperationsInput | string | null
+    waterTemp?: NullableFloatFieldUpdateOperationsInput | number | null
+    brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
+    steepTime?: NullableIntFieldUpdateOperationsInput | number | null
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CuppingSessionCreateManyTemplateInput = {
@@ -22786,11 +27636,11 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
     creator?: UserUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutCuppingSessionsNestedInput
+    scores?: ScoreUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateWithoutTemplateInput = {
@@ -22812,9 +27662,9 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
     participants?: SessionParticipantUncheckedUpdateManyWithoutSessionNestedInput
     samples?: SessionSampleUncheckedUpdateManyWithoutSessionNestedInput
-    scores?: ScoreUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type CuppingSessionUncheckedUpdateManyWithoutTemplateInput = {
@@ -22836,30 +27686,6 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SessionParticipantCreateManySessionInput = {
-    id?: string
-    userId: string
-    role?: $Enums.ParticipantRole
-    joinedAt?: Date | string
-    leftAt?: Date | string | null
-    isActive?: boolean
-    isCalibrated?: boolean
-    calibratedAt?: Date | string | null
-  }
-
-  export type SessionSampleCreateManySessionInput = {
-    id?: string
-    sampleId: string
-    position: number
-    isBlind?: boolean
-    blindCode?: string | null
-    grindSize?: string | null
-    waterTemp?: number | null
-    brewRatio?: string | null
-    steepTime?: number | null
-    addedAt?: Date | string
   }
 
   export type ScoreCreateManySessionInput = {
@@ -22890,6 +27716,122 @@ export namespace Prisma {
     submittedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SessionParticipantCreateManySessionInput = {
+    id?: string
+    userId: string
+    role?: $Enums.ParticipantRole
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+    isActive?: boolean
+    isCalibrated?: boolean
+    calibratedAt?: Date | string | null
+  }
+
+  export type SessionSampleCreateManySessionInput = {
+    id?: string
+    sampleId: string
+    position: number
+    isBlind?: boolean
+    blindCode?: string | null
+    grindSize?: string | null
+    waterTemp?: number | null
+    brewRatio?: string | null
+    steepTime?: number | null
+    addedAt?: Date | string
+  }
+
+  export type ScoreUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
+    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
+    sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
+    user?: UserUpdateOneRequiredWithoutScoresNestedInput
+  }
+
+  export type ScoreUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionSampleId?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
+  }
+
+  export type ScoreUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionSampleId?: StringFieldUpdateOperationsInput | string
+    sampleId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    totalScore?: FloatFieldUpdateOperationsInput | number
+    maxScore?: FloatFieldUpdateOperationsInput | number
+    scores?: JsonNullValueInput | InputJsonValue
+    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
+    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
+    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
+    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
+    body?: NullableFloatFieldUpdateOperationsInput | number | null
+    balance?: NullableFloatFieldUpdateOperationsInput | number | null
+    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
+    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
+    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
+    overall?: NullableFloatFieldUpdateOperationsInput | number | null
+    defects?: JsonNullValueInput | InputJsonValue
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isComplete?: BoolFieldUpdateOperationsInput | boolean
+    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionParticipantUpdateWithoutSessionInput = {
@@ -22935,8 +27877,8 @@ export namespace Prisma {
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
     scores?: ScoreUpdateManyWithoutSessionSampleNestedInput
+    sample?: SampleUpdateOneRequiredWithoutSessionSamplesNestedInput
   }
 
   export type SessionSampleUncheckedUpdateWithoutSessionInput = {
@@ -22964,96 +27906,6 @@ export namespace Prisma {
     brewRatio?: NullableStringFieldUpdateOperationsInput | string | null
     steepTime?: NullableIntFieldUpdateOperationsInput | number | null
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ScoreUpdateWithoutSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    totalScore?: FloatFieldUpdateOperationsInput | number
-    maxScore?: FloatFieldUpdateOperationsInput | number
-    scores?: JsonNullValueInput | InputJsonValue
-    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
-    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
-    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
-    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
-    body?: NullableFloatFieldUpdateOperationsInput | number | null
-    balance?: NullableFloatFieldUpdateOperationsInput | number | null
-    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
-    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
-    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
-    overall?: NullableFloatFieldUpdateOperationsInput | number | null
-    defects?: JsonNullValueInput | InputJsonValue
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    isComplete?: BoolFieldUpdateOperationsInput | boolean
-    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessionSample?: SessionSampleUpdateOneRequiredWithoutScoresNestedInput
-    sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
-    user?: UserUpdateOneRequiredWithoutScoresNestedInput
-  }
-
-  export type ScoreUncheckedUpdateWithoutSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionSampleId?: StringFieldUpdateOperationsInput | string
-    sampleId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    totalScore?: FloatFieldUpdateOperationsInput | number
-    maxScore?: FloatFieldUpdateOperationsInput | number
-    scores?: JsonNullValueInput | InputJsonValue
-    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
-    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
-    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
-    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
-    body?: NullableFloatFieldUpdateOperationsInput | number | null
-    balance?: NullableFloatFieldUpdateOperationsInput | number | null
-    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
-    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
-    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
-    overall?: NullableFloatFieldUpdateOperationsInput | number | null
-    defects?: JsonNullValueInput | InputJsonValue
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    isComplete?: BoolFieldUpdateOperationsInput | boolean
-    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ScoreUncheckedUpdateManyWithoutSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sessionSampleId?: StringFieldUpdateOperationsInput | string
-    sampleId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    totalScore?: FloatFieldUpdateOperationsInput | number
-    maxScore?: FloatFieldUpdateOperationsInput | number
-    scores?: JsonNullValueInput | InputJsonValue
-    aroma?: NullableFloatFieldUpdateOperationsInput | number | null
-    flavor?: NullableFloatFieldUpdateOperationsInput | number | null
-    aftertaste?: NullableFloatFieldUpdateOperationsInput | number | null
-    acidity?: NullableFloatFieldUpdateOperationsInput | number | null
-    body?: NullableFloatFieldUpdateOperationsInput | number | null
-    balance?: NullableFloatFieldUpdateOperationsInput | number | null
-    sweetness?: NullableFloatFieldUpdateOperationsInput | number | null
-    cleanliness?: NullableFloatFieldUpdateOperationsInput | number | null
-    uniformity?: NullableFloatFieldUpdateOperationsInput | number | null
-    overall?: NullableFloatFieldUpdateOperationsInput | number | null
-    defects?: JsonNullValueInput | InputJsonValue
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    privateNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    voiceNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    voiceFileUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    isComplete?: BoolFieldUpdateOperationsInput | boolean
-    isSubmitted?: BoolFieldUpdateOperationsInput | boolean
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ScoreCreateManySessionSampleInput = {
@@ -23111,8 +27963,9 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
+    flavorDescriptors?: ScoreFlavorDescriptorUpdateManyWithoutScoreNestedInput
     sample?: SampleUpdateOneRequiredWithoutScoresNestedInput
+    session?: CuppingSessionUpdateOneRequiredWithoutScoresNestedInput
     user?: UserUpdateOneRequiredWithoutScoresNestedInput
   }
 
@@ -23144,6 +27997,7 @@ export namespace Prisma {
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptors?: ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreNestedInput
   }
 
   export type ScoreUncheckedUpdateManyWithoutSessionSampleInput = {
@@ -23176,7 +28030,147 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ScoreFlavorDescriptorCreateManyScoreInput = {
+    id?: string
+    flavorDescriptorId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
 
+  export type ScoreFlavorDescriptorUpdateWithoutScoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flavorDescriptor?: FlavorDescriptorUpdateOneRequiredWithoutScoreDescriptorsNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateWithoutScoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutScoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flavorDescriptorId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorCreateManyFlavorDescriptorInput = {
+    id?: string
+    scoreId: string
+    intensity?: number
+    createdAt?: Date | string
+  }
+
+  export type ScoreFlavorDescriptorUpdateWithoutFlavorDescriptorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: ScoreUpdateOneRequiredWithoutFlavorDescriptorsNestedInput
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateWithoutFlavorDescriptorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScoreFlavorDescriptorUncheckedUpdateManyWithoutFlavorDescriptorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scoreId?: StringFieldUpdateOperationsInput | string
+    intensity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+
+
+  /**
+   * Aliases for legacy arg types
+   */
+    /**
+     * @deprecated Use OrganizationCountOutputTypeDefaultArgs instead
+     */
+    export type OrganizationCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = OrganizationCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserCountOutputTypeDefaultArgs instead
+     */
+    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SampleCountOutputTypeDefaultArgs instead
+     */
+    export type SampleCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SampleCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CuppingTemplateCountOutputTypeDefaultArgs instead
+     */
+    export type CuppingTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CuppingTemplateCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CuppingSessionCountOutputTypeDefaultArgs instead
+     */
+    export type CuppingSessionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CuppingSessionCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SessionSampleCountOutputTypeDefaultArgs instead
+     */
+    export type SessionSampleCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SessionSampleCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ScoreCountOutputTypeDefaultArgs instead
+     */
+    export type ScoreCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ScoreCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FlavorDescriptorCountOutputTypeDefaultArgs instead
+     */
+    export type FlavorDescriptorCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FlavorDescriptorCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use OrganizationDefaultArgs instead
+     */
+    export type OrganizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = OrganizationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserDefaultArgs instead
+     */
+    export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InvitationDefaultArgs instead
+     */
+    export type InvitationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InvitationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SampleDefaultArgs instead
+     */
+    export type SampleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SampleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CuppingTemplateDefaultArgs instead
+     */
+    export type CuppingTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CuppingTemplateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CuppingSessionDefaultArgs instead
+     */
+    export type CuppingSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CuppingSessionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SessionParticipantDefaultArgs instead
+     */
+    export type SessionParticipantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SessionParticipantDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SessionSampleDefaultArgs instead
+     */
+    export type SessionSampleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SessionSampleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ScoreDefaultArgs instead
+     */
+    export type ScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ScoreDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use GreenBeanGradingDefaultArgs instead
+     */
+    export type GreenBeanGradingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = GreenBeanGradingDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FlavorDescriptorDefaultArgs instead
+     */
+    export type FlavorDescriptorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FlavorDescriptorDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ScoreFlavorDescriptorDefaultArgs instead
+     */
+    export type ScoreFlavorDescriptorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ScoreFlavorDescriptorDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

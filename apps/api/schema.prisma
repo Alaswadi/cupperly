@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
 }
 
 datasource db {
@@ -154,8 +153,9 @@ model Sample {
   updatedAt DateTime @updatedAt
 
   // Relations
-  sessionSamples SessionSample[]
-  scores         Score[]
+  sessionSamples   SessionSample[]
+  scores           Score[]
+  greenBeanGrading GreenBeanGrading?
 
   @@map("samples")
 }
@@ -273,10 +273,6 @@ model SessionSample {
   brewRatio      String?
   steepTime      Int? // in seconds
 
-  // AI Analysis
-  aiSummary      String? @map("aisummary") // AI-generated summary of the cupping results
-  aiGeneratedAt  DateTime? @map("aigeneratedat") // When the AI summary was generated
-
   // Timestamps
   addedAt DateTime @default(now())
 
@@ -351,9 +347,7 @@ model Score {
 
 enum UserRole {
   ADMIN     // Full access to organization
-  MANAGER   // Can manage sessions and users
   CUPPER    // Can participate in sessions
-  VIEWER    // Read-only access
 
   @@map("user_role")
 }
@@ -488,4 +482,73 @@ enum FlavorCategory {
   NEGATIVE
 
   @@map("flavor_category")
+}
+
+enum GradingSystem {
+  SCA          // Specialty Coffee Association
+
+  @@map("grading_system")
+}
+
+enum GradeClassification {
+  SPECIALTY_GRADE    // 0-5 full defects (SCA)
+  PREMIUM_GRADE      // 6-8 full defects (SCA)
+  EXCHANGE_GRADE     // 9-23 full defects (SCA)
+  BELOW_STANDARD     // 24+ full defects (SCA)
+  OFF_GRADE          // Significant quality issues
+
+  @@map("grade_classification")
+}
+
+// ============================================================================
+// GREEN BEAN GRADING
+// ============================================================================
+
+model GreenBeanGrading {
+  id       String @id @default(cuid())
+  sampleId String @unique
+  sample   Sample @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+
+  // Grading System
+  gradingSystem GradingSystem @default(SCA)
+
+  // SCA Defect Counting
+  primaryDefects        Int   @default(0) // Category 1 defects
+  secondaryDefects      Int   @default(0) // Category 2 defects
+  fullDefectEquivalents Float @default(0) // Auto-calculated: primary + (secondary / 5)
+
+  // Defect Details (JSON for flexibility)
+  // Structure: [{type: string, count: number, category: 1|2, description?: string}]
+  defectBreakdown Json @default("[]")
+
+  // Screen Size Analysis (13-20)
+  // Structure: {size13: number, size14: number, ..., size20: number}
+  screenSizeDistribution Json?
+  averageScreenSize      Float?
+  uniformityPercentage   Float? // Percentage of beans in dominant size
+
+  // Additional Assessments
+  moistureContent      Float? // Percentage (10-12% ideal for storage)
+  waterActivity        Float? // aw value (0.55-0.65 ideal)
+  bulkDensity          Float? // g/L (used in quality calculation)
+  beanColorAssessment  String? // Bean color assessment (e.g., "Bluish-Green", "Green", "Yellowish")
+  uniformityScore      Int? // 1-10 scale (overall uniformity)
+
+  // Classification Results
+  grade          String? // e.g., "Grade 1", "Grade 2", "Premium", "AA", "AB"
+  classification GradeClassification?
+  qualityScore   Float? // Overall quality score (0-100)
+
+  // Metadata
+  gradedBy          String? // User ID who performed grading
+  gradedAt          DateTime?
+  certifiedBy       String? // For official certifications
+  certificationDate DateTime?
+  notes             String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("green_bean_gradings")
 }

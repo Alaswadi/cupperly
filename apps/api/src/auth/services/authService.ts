@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../generated/client';
+import { PrismaClient } from '@prisma/client';
 import { hashPassword, comparePassword, validatePasswordStrength } from '../../utils/password';
 import { generateTokens, verifyRefreshToken } from '../../utils/jwt';
 import { v4 as uuidv4 } from 'uuid';
@@ -28,6 +28,16 @@ export interface InviteUserData {
   lastName?: string;
   organizationId: string;
   invitedBy: string;
+}
+
+export interface CreateMemberData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: 'ADMIN' | 'MANAGER' | 'CUPPER' | 'VIEWER';
+  password: string;
+  organizationId: string;
+  createdBy: string;
 }
 
 export class AuthService {
@@ -269,5 +279,66 @@ export class AuthService {
     });
 
     return invitation;
+  }
+
+  async createMember(data: CreateMemberData) {
+    // Check if user already exists in the organization
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email: data.email,
+        organizationId: data.organizationId,
+      },
+    });
+
+    if (existingUser) {
+      throw new Error('User with this email is already a member of this organization');
+    }
+
+    // Check if email is already registered globally
+    const globalUser = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
+    if (globalUser) {
+      throw new Error('This email is already registered. User cannot be added to multiple organizations.');
+    }
+
+    // Validate password strength
+    const passwordValidation = validatePasswordStrength(data.password);
+    if (!passwordValidation.isValid) {
+      throw new Error(`Password validation failed: ${passwordValidation.errors.join(', ')}`);
+    }
+
+    // Hash password
+    const hashedPassword = await hashPassword(data.password);
+
+    // Create user
+    const user = await prisma.user.create({
+      data: {
+        email: data.email,
+        password: hashedPassword,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        role: data.role,
+        organizationId: data.organizationId,
+        emailVerified: true, // Auto-verify since admin is creating
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        organizationId: true,
+        emailVerified: true,
+        avatar: true,
+        bio: true,
+        preferences: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return user;
   }
 }

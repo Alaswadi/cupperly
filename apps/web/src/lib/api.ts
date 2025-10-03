@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { 
-  ApiResponse, 
-  LoginForm, 
+import {
+  ApiResponse,
+  LoginForm,
   RegisterOrganizationForm,
   User,
   Organization,
@@ -10,7 +10,9 @@ import {
   CuppingTemplate,
   Score,
   CreateSampleForm,
-  CreateSessionForm
+  CreateSessionForm,
+  GreenBeanGrading,
+  CreateGreenBeanGradingForm
 } from '@/types';
 
 class ApiClient {
@@ -190,6 +192,22 @@ class ApiClient {
     return this.request('POST', '/api/auth/invite', data);
   }
 
+  async createMember(data: { email: string; firstName: string; lastName: string; role: string; password: string }) {
+    return this.request<{ user: User }>('POST', '/api/auth/create-member', data);
+  }
+
+  async getTeamMembers() {
+    return this.request<{ users: User[] }>('GET', '/api/auth/team-members');
+  }
+
+  async updateTeamMember(id: string, data: { firstName?: string; lastName?: string; email?: string; role?: string; bio?: string }) {
+    return this.request<{ user: User }>('PUT', `/api/auth/team-members/${id}`, data);
+  }
+
+  async deleteTeamMember(id: string) {
+    return this.request('DELETE', `/api/auth/team-members/${id}`);
+  }
+
   // Sample endpoints
   async getSamples() {
     return this.request<{ samples: Sample[]; pagination: any }>('GET', '/api/samples');
@@ -301,6 +319,10 @@ export const authApi = {
   getProfile: api.getProfile.bind(api),
   updateProfile: api.updateProfile.bind(api),
   inviteUser: api.inviteUser.bind(api),
+  createMember: api.createMember.bind(api),
+  getTeamMembers: api.getTeamMembers.bind(api),
+  updateTeamMember: api.updateTeamMember.bind(api),
+  deleteTeamMember: api.deleteTeamMember.bind(api),
 };
 
 export const samplesApi = {
@@ -348,6 +370,31 @@ export const settingsApi = {
 export const aiApi = {
   generateSummary: (sessionId: string, sampleId: string) =>
     api.request<{ aiSummary: string; generatedAt: string }>('POST', `/api/ai/sessions/${sessionId}/samples/${sampleId}/summary`),
+};
+
+export const greenBeanGradingApi = {
+  getGrading: (sampleId: string) =>
+    api.request<GreenBeanGrading>('GET', `/api/samples/${sampleId}/grading`),
+  createGrading: (sampleId: string, data: CreateGreenBeanGradingForm) =>
+    api.request<GreenBeanGrading>('POST', `/api/samples/${sampleId}/grading`, data),
+  updateGrading: (sampleId: string, data: CreateGreenBeanGradingForm) =>
+    api.request<GreenBeanGrading>('PUT', `/api/samples/${sampleId}/grading`, data),
+  deleteGrading: (sampleId: string) =>
+    api.request<void>('DELETE', `/api/samples/${sampleId}/grading`),
+  calculatePreview: (sampleId: string, data: {
+    primaryDefects: number;
+    secondaryDefects: number;
+    moistureContent?: number;
+    waterActivity?: number;
+    colorScore?: number;
+    uniformityScore?: number;
+  }) =>
+    api.request<{
+      fullDefectEquivalents: number;
+      classification: string;
+      grade: string;
+      qualityScore: number;
+    }>('POST', `/api/samples/${sampleId}/grading/calculate`, data),
 };
 
 export default api;

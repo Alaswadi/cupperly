@@ -3,57 +3,74 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { samplesApi } from '@/lib/api';
-import { Sample } from '@/types';
+import { samplesApi, greenBeanGradingApi } from '@/lib/api';
+import { Sample, GreenBeanGrading } from '@/types';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { GreenBeanGradingForm } from '@/components/samples/grading/GreenBeanGradingForm';
+import { GreenBeanGradingReport } from '@/components/samples/grading/GreenBeanGradingReport';
 import Link from 'next/link';
-import { 
+import {
   ArrowLeft,
-  Coffee, 
-  MapPin, 
+  Coffee,
+  MapPin,
   Calendar,
   Edit,
   Package,
   Thermometer,
   User,
   Building,
-  Mountain
+  Mountain,
+  Beaker,
+  Info,
+  FileText
 } from 'lucide-react';
+
+type TabType = 'overview' | 'grading' | 'report';
 
 export default function SampleDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
   const [sample, setSample] = useState<Sample | null>(null);
+  const [grading, setGrading] = useState<GreenBeanGrading | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   const sampleId = params.id as string;
 
   useEffect(() => {
     if (sampleId) {
       loadSample();
+      loadGrading();
     }
   }, [sampleId]);
 
   const loadSample = async () => {
     try {
       setIsLoading(true);
-      console.log('Loading sample:', sampleId);
       const response = await samplesApi.getSample(sampleId);
-      console.log('Sample response:', response);
-      
+
       if (response.success) {
         setSample(response.data);
-        console.log('Sample loaded successfully:', response.data);
       } else {
-        console.error('Failed to load sample - API returned error:', response);
         setSample(null);
       }
     } catch (error) {
-      console.error('Failed to load sample - Exception:', error);
+      console.error('Failed to load sample:', error);
       setSample(null);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadGrading = async () => {
+    try {
+      const response = await greenBeanGradingApi.getGrading(sampleId);
+      if (response.success && response.data) {
+        setGrading(response.data);
+      }
+    } catch (error) {
+      console.error('Failed to load grading:', error);
     }
   };
 
@@ -71,7 +88,7 @@ export default function SampleDetailPage() {
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Sample not found</h2>
         <p className="text-gray-600 mb-4">The sample you are looking for does not exist.</p>
         <Link href="/dashboard/samples">
-          <button className="px-4 py-2 bg-coffee-brown text-white rounded-lg hover:bg-coffee-dark">
+          <button className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700">
             Back to Samples
           </button>
         </Link>
@@ -81,6 +98,7 @@ export default function SampleDetailPage() {
 
   return (
     <div className="max-w-6xl mx-auto">
+      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-6">
           <Link href="/dashboard/samples">
@@ -89,125 +107,161 @@ export default function SampleDetailPage() {
             </button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900">{sample?.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{sample.name}</h1>
             <p className="text-gray-600 mt-1">Sample Details and Information</p>
           </div>
-          <Link href={`/dashboard/samples/${sample?.id}/edit`}>
+          <Link href={`/dashboard/samples/${sample.id}/edit`}>
             <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
               <Edit className="h-4 w-4" />
               Edit
             </button>
           </Link>
         </div>
+
+        {/* Tabs */}
+        <div className="border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`
+                flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                ${activeTab === 'overview'
+                  ? 'border-amber-600 text-amber-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }
+              `}
+            >
+              <Info className="h-4 w-4" />
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('grading')}
+              className={`
+                flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                ${activeTab === 'grading'
+                  ? 'border-amber-600 text-amber-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }
+              `}
+            >
+              <Beaker className="h-4 w-4" />
+              Green Bean Grading
+            </button>
+            <button
+              onClick={() => setActiveTab('report')}
+              disabled={!grading}
+              className={`
+                flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                ${activeTab === 'report'
+                  ? 'border-amber-600 text-amber-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }
+                ${!grading ? 'opacity-50 cursor-not-allowed' : ''}
+              `}
+            >
+              <FileText className="h-4 w-4" />
+              Grading Report
+            </button>
+          </nav>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-          {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Coffee className="h-5 w-5 text-blue-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Sample Name</label>
-                    <p className="text-lg font-semibold text-gray-900">{sample?.name}</p>
+      {/* Tab Content */}
+      {activeTab === 'overview' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Basic Information */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Coffee className="h-5 w-5 text-blue-600" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Origin</label>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.origin || 'Not specified'}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Variety</label>
-                    <p className="text-gray-900">{sample?.variety || 'Not specified'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Sample Code</label>
-                    <div className="flex items-center gap-2">
-                      <Package className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.code || 'Not specified'}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Processing Method</label>
-                    <p className="text-gray-900">{sample?.processingMethod || 'Not specified'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Roast Level</label>
-                    <div className="flex items-center gap-2">
-                      <Thermometer className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.roastLevel || 'Not specified'}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Created Date</label>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">
-                        {sample?.createdAt ? new Date(sample.createdAt).toLocaleDateString() : 'Unknown'}
-                      </p>
-                    </div>
-                  </div>
+                  <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
                 </div>
               </div>
-            </div>
-          </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Sample Name</label>
+                      <p className="text-lg font-semibold text-gray-900">{sample.name}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Origin</label>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-gray-400" />
+                        <p className="text-gray-900">{sample.origin || 'Not specified'}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Region</label>
+                      <p className="text-gray-900">{sample.region || 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Variety</label>
+                      <p className="text-gray-900">{sample.variety || 'Not specified'}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Processing Method</label>
+                      <p className="text-gray-900">{sample.processingMethod || 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Roast Level</label>
+                      <div className="flex items-center gap-2">
+                        <Thermometer className="h-4 w-4 text-gray-400" />
+                        <p className="text-gray-900">{sample.roastLevel || 'Not specified'}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Altitude</label>
+                      <div className="flex items-center gap-2">
+                        <Mountain className="h-4 w-4 text-gray-400" />
+                        <p className="text-gray-900">{sample.altitude ? `${sample.altitude}m` : 'Not specified'}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Sample Code</label>
+                      <div className="flex items-center gap-2">
+                        <Package className="h-4 w-4 text-gray-400" />
+                        <p className="text-gray-900">{sample.code || 'Not specified'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Production Details */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Mountain className="h-5 w-5 text-green-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">Production Details</h2>
+                {sample.description && (
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-500 mb-2">Description</label>
+                    <p className="text-gray-900">{sample.description}</p>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
+
+            {/* Producer Information */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <User className="h-5 w-5 text-green-600" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-gray-900">Producer Information</h2>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-500 mb-1">Producer</label>
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.producer || 'Not specified'}</p>
-                    </div>
+                    <p className="text-gray-900">{sample.producer || 'Not specified'}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-500 mb-1">Farm</label>
                     <div className="flex items-center gap-2">
                       <Building className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.farm || 'Not specified'}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Altitude</label>
-                    <div className="flex items-center gap-2">
-                      <Mountain className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">
-                        {sample?.altitude ? `${sample.altitude} masl` : 'Not specified'}
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Region</label>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.region || 'Not specified'}</p>
+                      <p className="text-gray-900">{sample.farm || 'Not specified'}</p>
                     </div>
                   </div>
                 </div>
@@ -215,86 +269,101 @@ export default function SampleDetailPage() {
             </div>
           </div>
 
-          {/* Harvest & Roasting */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Calendar className="h-5 w-5 text-green-600" />
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Physical Attributes */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4">Physical Attributes</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Moisture</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {sample.moisture ? `${sample.moisture}%` : 'N/A'}
+                  </span>
                 </div>
-                <h2 className="text-lg font-semibold text-gray-900">Harvest & Roasting</h2>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Density</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {sample.density ? `${sample.density} g/L` : 'N/A'}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Screen Size</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {sample.screenSize || 'N/A'}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Harvest Date</label>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">
-                        {sample?.harvestDate ? new Date(sample.harvestDate).toLocaleDateString() : 'Not specified'}
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Roaster</label>
-                    <div className="flex items-center gap-2">
-                      <Coffee className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">{sample?.roaster || 'Not specified'}</p>
-                    </div>
+
+            {/* Dates */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4">Important Dates</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Harvest Date</label>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm text-gray-900">
+                      {sample.harvestDate ? new Date(sample.harvestDate).toLocaleDateString() : 'Not specified'}
+                    </span>
                   </div>
                 </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-1">Roast Date</label>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-900">
-                        {sample?.roastDate ? new Date(sample.roastDate).toLocaleDateString() : 'Not specified'}
-                      </p>
-                    </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Roast Date</label>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm text-gray-900">
+                      {sample.roastDate ? new Date(sample.roastDate).toLocaleDateString() : 'Not specified'}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      )}
 
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Actions</h3>
-            </div>
-            <div className="p-6 space-y-3">
-              <Link href={`/dashboard/samples/${sample?.id}/edit`} className="block">
-                <button className="w-full flex items-center gap-3 px-4 py-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                  <Edit className="h-4 w-4 text-gray-600" />
-                  <span>Edit Sample</span>
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Sample Information</h3>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <p className="text-sm font-medium text-gray-500">Sample ID</p>
-                <p className="text-gray-900 font-mono">{sample?.id}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500">Last Updated</p>
-                <p className="text-gray-900">
-                  {sample?.updatedAt ? new Date(sample.updatedAt).toLocaleDateString() : 'Unknown'}
-                </p>
-              </div>
-            </div>
-          </div>
+      {activeTab === 'grading' && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <GreenBeanGradingForm
+            sampleId={sampleId}
+            onGradingUpdate={(updatedGrading) => {
+              setGrading(updatedGrading);
+            }}
+          />
         </div>
-      </div>
+      )}
+
+      {activeTab === 'report' && grading && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+          <GreenBeanGradingReport
+            grading={grading}
+            sampleName={sample?.name}
+            sampleOrigin={sample?.origin}
+            sampleRegion={sample?.region}
+            sampleVariety={sample?.variety}
+            processingMethod={sample?.processingMethod}
+          />
+        </div>
+      )}
+
+      {activeTab === 'report' && !grading && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+          <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Grading Data Available</h3>
+          <p className="text-gray-600 mb-4">
+            Please complete the green bean grading first to generate a report.
+          </p>
+          <button
+            onClick={() => setActiveTab('grading')}
+            className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+          >
+            Go to Grading
+          </button>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-// Shared TypeScript types for CuppingLab
+// Shared TypeScript types for Cupperly
 
 export interface User {
   id: string;

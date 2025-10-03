@@ -50,9 +50,9 @@ export const inviteUserValidator: ValidationChain[] = [
     .withMessage('Valid email is required'),
   
   body('role')
-    .isIn(['ADMIN', 'MANAGER', 'CUPPER', 'VIEWER'])
+    .isIn(['ADMIN', 'CUPPER'])
     .withMessage('Valid role is required'),
-  
+
   body('firstName')
     .optional()
     .trim()
@@ -142,4 +142,60 @@ export const changePasswordValidator: ValidationChain[] = [
   body('newPassword')
     .isLength({ min: 8 })
     .withMessage('New password must be at least 8 characters long'),
+];
+
+export const createMemberValidator: ValidationChain[] = [
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Valid email is required'),
+
+  body('firstName')
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('First name is required and must be less than 50 characters'),
+
+  body('lastName')
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('Last name is required and must be less than 50 characters'),
+
+  body('role')
+    .isIn(['ADMIN', 'CUPPER'])
+    .withMessage('Valid role is required'),
+
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long'),
+];
+
+export const updateTeamMemberValidator: ValidationChain[] = [
+  body('firstName')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('First name must be between 1 and 50 characters'),
+
+  body('lastName')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('Last name must be between 1 and 50 characters'),
+
+  body('email')
+    .optional()
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Valid email is required'),
+
+  body('role')
+    .optional()
+    .isIn(['ADMIN', 'CUPPER'])
+    .withMessage('Valid role is required'),
+
+  body('bio')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Bio must be less than 500 characters'),
 ];

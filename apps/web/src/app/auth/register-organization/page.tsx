@@ -117,7 +117,7 @@ export default function RegisterOrganizationPage() {
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-2xl text-coffee-brown">Register Your Organization</CardTitle>
             <CardDescription className="text-coffee-dark/70">
-              Create a new organization to start using CuppingLab for your coffee cupping needs.
+              Create a new organization to start using Cupperly for your coffee cupping needs.
             </CardDescription>
           </CardHeader>
           <CardContent>

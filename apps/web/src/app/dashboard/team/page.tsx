@@ -20,7 +20,8 @@ import {
   Settings as SettingsIcon,
   Coffee,
   Eye,
-  MoreHorizontal
+  Trash2,
+  X
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -31,6 +32,10 @@ export default function TeamPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<User | null>(null);
   const [stats, setStats] = useState({
     totalMembers: 0,
     admins: 0,
@@ -44,17 +49,21 @@ export default function TeamPage() {
   const loadTeamMembers = async () => {
     try {
       setIsLoading(true);
-      // For now, we'll show the current user as the only team member
-      // In a real implementation, you'd have an API endpoint to get all users
-      const currentUser = user;
-      if (currentUser) {
-        setTeamMembers([currentUser]);
-        
-        // Calculate stats based on current user
+      const response = await authApi.getTeamMembers();
+
+      if (response.success && response.data) {
+        const users = response.data.users;
+        setTeamMembers(users);
+
+        // Calculate stats
+        const totalMembers = users.length;
+        const admins = users.filter(u => u.role === 'ADMIN').length;
+        const cuppers = users.filter(u => u.role === 'CUPPER').length;
+
         setStats({
-          totalMembers: 1,
-          admins: currentUser.role === 'ADMIN' ? 1 : 0,
-          cuppers: currentUser.role === 'CUPPER' ? 1 : 0,
+          totalMembers,
+          admins,
+          cuppers,
         });
       }
     } catch (error) {
@@ -68,8 +77,6 @@ export default function TeamPage() {
     switch (role) {
       case 'ADMIN':
         return 'bg-red-100 text-red-800';
-      case 'MANAGER':
-        return 'bg-blue-100 text-blue-800';
       case 'CUPPER':
         return 'bg-green-100 text-green-800';
       default:
@@ -81,8 +88,6 @@ export default function TeamPage() {
     switch (role) {
       case 'ADMIN':
         return <Crown className="h-4 w-4" />;
-      case 'MANAGER':
-        return <SettingsIcon className="h-4 w-4" />;
       case 'CUPPER':
         return <Coffee className="h-4 w-4" />;
       default:
@@ -98,16 +103,66 @@ export default function TeamPage() {
     return matchesSearch && matchesRole;
   });
 
-  const handleInviteUser = async (inviteData: any) => {
+  const handleCreateMember = async (memberData: any) => {
     try {
-      const response = await authApi.inviteUser(inviteData);
+      const response = await authApi.createMember(memberData);
       if (response.success) {
         // Refresh team members list
         loadTeamMembers();
         setShowInviteModal(false);
       }
-    } catch (error) {
-      console.error('Failed to invite user:', error);
+    } catch (error: any) {
+      console.error('Failed to create member:', error);
+      alert(error.message || 'Failed to create team member');
+    }
+  };
+
+  const handleViewMember = (member: User) => {
+    setSelectedMember(member);
+    setShowViewModal(true);
+  };
+
+  const handleEditMember = (member: User) => {
+    setSelectedMember(member);
+    setShowEditModal(true);
+  };
+
+  const handleUpdateMember = async (data: any) => {
+    if (!selectedMember) return;
+
+    try {
+      const response = await authApi.updateTeamMember(selectedMember.id, data);
+      if (response.success) {
+        setShowEditModal(false);
+        setSelectedMember(null);
+        // Reload team members
+        loadTeamMembers();
+      }
+    } catch (error: any) {
+      console.error('Failed to update member:', error);
+      alert(error.message || 'Failed to update team member');
+    }
+  };
+
+  const handleDeleteMember = (member: User) => {
+    setSelectedMember(member);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedMember) return;
+
+    try {
+      const response = await authApi.deleteTeamMember(selectedMember.id);
+      if (response.success) {
+        setShowDeleteModal(false);
+        setSelectedMember(null);
+        // Reload team members
+        loadTeamMembers();
+      }
+    } catch (error: any) {
+      console.error('Failed to delete member:', error);
+      alert(error.message || 'Failed to delete team member');
     }
   };
 
@@ -202,14 +257,16 @@ export default function TeamPage() {
                   <option value="CUPPER">Cupper</option>
                 </select>
               </div>
-              {/* Invite Button */}
-              <Button
-                className="bg-coffee-brown hover:bg-coffee-dark text-white flex items-center gap-2"
-                onClick={() => setShowInviteModal(true)}
-              >
-                <UserPlus className="h-4 w-4" />
-                Invite Member
-              </Button>
+              {/* Add Member Button - Only for ADMIN */}
+              {user?.role === 'ADMIN' && (
+                <Button
+                  className="bg-coffee-brown hover:bg-coffee-dark text-white flex items-center gap-2"
+                  onClick={() => setShowInviteModal(true)}
+                >
+                  <UserPlus className="h-4 w-4" />
+                  Add Member
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -263,17 +320,31 @@ export default function TeamPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="flex items-center space-x-2">
-                        <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <button
+                          onClick={() => handleViewMember(member)}
+                          className="w-8 h-8 flex items-center justify-center text-blue-400 hover:text-blue-600 transition-colors"
+                          title="View Details"
+                        >
                           <Eye className="h-4 w-4" />
                         </button>
                         {user?.role === 'ADMIN' && member.id !== user.id && (
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
-                            <SettingsIcon className="h-4 w-4" />
-                          </button>
+                          <>
+                            <button
+                              onClick={() => handleEditMember(member)}
+                              className="w-8 h-8 flex items-center justify-center text-green-400 hover:text-green-600 transition-colors"
+                              title="Edit Member"
+                            >
+                              <SettingsIcon className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMember(member)}
+                              className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-red-600 transition-colors"
+                              title="Delete Member"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </>
                         )}
-                        <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -284,28 +355,459 @@ export default function TeamPage() {
         </div>
       </div>
 
-      {/* Invite Modal Placeholder */}
+      {/* Add Member Modal */}
       {showInviteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Invite Team Member</h3>
-            <p className="text-gray-600 mb-4">
-              Invite functionality will be implemented here. For now, this is a placeholder.
-            </p>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowInviteModal(false)}>
-                Cancel
-              </Button>
-              <Button
-                onClick={() => setShowInviteModal(false)}
-                className="bg-coffee-brown hover:bg-coffee-dark text-white"
-              >
-                Send Invite
-              </Button>
+        <AddMemberModal
+          onClose={() => setShowInviteModal(false)}
+          onSubmit={handleCreateMember}
+        />
+      )}
+
+      {/* View Member Modal */}
+      {showViewModal && selectedMember && (
+        <ViewMemberModal
+          member={selectedMember}
+          onClose={() => {
+            setShowViewModal(false);
+            setSelectedMember(null);
+          }}
+        />
+      )}
+
+      {/* Edit Member Modal */}
+      {showEditModal && selectedMember && (
+        <EditMemberModal
+          member={selectedMember}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedMember(null);
+          }}
+          onSubmit={handleUpdateMember}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedMember && (
+        <DeleteMemberModal
+          member={selectedMember}
+          onClose={() => {
+            setShowDeleteModal(false);
+            setSelectedMember(null);
+          }}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
+    </div>
+  );
+}
+
+// Add Member Modal Component
+interface AddMemberModalProps {
+  onClose: () => void;
+  onSubmit: (data: any) => void;
+}
+
+function AddMemberModal({ onClose, onSubmit }: AddMemberModalProps) {
+  const [formData, setFormData] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    role: 'CUPPER',
+    password: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await onSubmit(formData);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg border border-gray-200">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Add Team Member</h3>
+        <p className="text-sm text-gray-600 mb-6">
+          Create a new team member account. They can log in immediately with the credentials you set.
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                First Name
+              </label>
+              <Input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                placeholder="John"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Last Name
+              </label>
+              <Input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                placeholder="Doe"
+                className="w-full"
+              />
             </div>
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <Input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="john.doe@example.com"
+              className="w-full"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-coffee-brown"
+            >
+              <option value="CUPPER">Cupper</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <Input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              placeholder="Minimum 8 characters"
+              className="w-full"
+              minLength={8}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              The user will use this password to log in.
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="bg-coffee-brown hover:bg-coffee-dark text-white"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creating...' : 'Create Member'}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// View Member Modal Component
+function ViewMemberModal({ member, onClose }: { member: User; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-coffee-brown">Member Details</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
         </div>
-      )}
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-20 h-20 bg-coffee-brown rounded-full flex items-center justify-center">
+              <span className="text-2xl font-medium text-white">
+                {member.firstName[0]}{member.lastName[0]}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-500">Name</label>
+            <p className="text-lg text-gray-900">{member.firstName} {member.lastName}</p>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-500">Email</label>
+            <p className="text-lg text-gray-900">{member.email}</p>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-500">Role</label>
+            <p className="text-lg text-gray-900">{member.role}</p>
+          </div>
+
+          {member.bio && (
+            <div>
+              <label className="text-sm font-medium text-gray-500">Bio</label>
+              <p className="text-gray-900">{member.bio}</p>
+            </div>
+          )}
+
+          <div>
+            <label className="text-sm font-medium text-gray-500">Email Verified</label>
+            <p className="text-gray-900">{member.emailVerified ? 'Yes' : 'No'}</p>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-500">Joined</label>
+            <p className="text-gray-900">
+              {member.createdAt ? formatDateTime(member.createdAt) : 'Unknown'}
+            </p>
+          </div>
+
+          {member.lastLoginAt && (
+            <div>
+              <label className="text-sm font-medium text-gray-500">Last Login</label>
+              <p className="text-gray-900">{formatDateTime(member.lastLoginAt)}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-end mt-6">
+          <Button onClick={onClose} variant="outline">
+            Close
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Edit Member Modal Component
+function EditMemberModal({
+  member,
+  onClose,
+  onSubmit
+}: {
+  member: User;
+  onClose: () => void;
+  onSubmit: (data: any) => void;
+}) {
+  const [formData, setFormData] = useState({
+    firstName: member.firstName,
+    lastName: member.lastName,
+    email: member.email,
+    role: member.role,
+    bio: member.bio || '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await onSubmit(formData);
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-coffee-brown">Edit Member</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              First Name
+            </label>
+            <Input
+              type="text"
+              value={formData.firstName}
+              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Last Name
+            </label>
+            <Input
+              type="text"
+              value={formData.lastName}
+              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <Input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
+            <select
+              value={formData.role}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-brown"
+              required
+            >
+              <option value="ADMIN">Admin</option>
+              <option value="CUPPER">Cupper</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Bio (Optional)
+            </label>
+            <textarea
+              value={formData.bio}
+              onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-brown"
+              rows={3}
+              maxLength={500}
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="bg-coffee-brown hover:bg-coffee-dark text-white"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Updating...' : 'Update Member'}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Delete Member Modal Component
+function DeleteMemberModal({
+  member,
+  onClose,
+  onConfirm
+}: {
+  member: User;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleConfirm = async () => {
+    setIsDeleting(true);
+    await onConfirm();
+    setIsDeleting(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-red-600">Delete Member</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <div className="mb-6">
+          <p className="text-gray-700 mb-4">
+            Are you sure you want to delete <strong>{member.firstName} {member.lastName}</strong>?
+          </p>
+          <p className="text-sm text-gray-500">
+            This action cannot be undone. All data associated with this user will be permanently removed.
+          </p>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onClose}
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            onClick={handleConfirm}
+            className="bg-red-600 hover:bg-red-700 text-white"
+            disabled={isDeleting}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete Member'}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

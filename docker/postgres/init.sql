@@ -38,5 +38,5 @@ $$ LANGUAGE plpgsql;
 -- Log initialization
 DO $$
 BEGIN
-    RAISE NOTICE 'CuppingLab database initialized successfully';
+    RAISE NOTICE 'Cupperly database initialized successfully';
 END $$;
