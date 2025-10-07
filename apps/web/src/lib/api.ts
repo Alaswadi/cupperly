@@ -188,6 +188,10 @@ class ApiClient {
     return this.request<{ user: User }>('PUT', '/api/auth/profile', data);
   }
 
+  async updateOrganization(data: { name?: string; description?: string }) {
+    return this.request<{ organization: Organization }>('PUT', '/api/auth/organization', data);
+  }
+
   async inviteUser(data: { email: string; role: string; firstName?: string; lastName?: string }) {
     return this.request('POST', '/api/auth/invite', data);
   }
@@ -318,6 +322,7 @@ export const authApi = {
   refreshToken: api.refreshToken.bind(api),
   getProfile: api.getProfile.bind(api),
   updateProfile: api.updateProfile.bind(api),
+  updateOrganization: api.updateOrganization.bind(api),
   inviteUser: api.inviteUser.bind(api),
   createMember: api.createMember.bind(api),
   getTeamMembers: api.getTeamMembers.bind(api),

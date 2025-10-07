@@ -33,6 +33,17 @@ export const errorHandler = (
     message = 'Validation Error';
   }
 
+  // Authentication errors
+  if (err.message?.includes('Invalid credentials')) {
+    statusCode = 401;
+    message = 'Invalid credentials';
+  }
+
+  if (err.message?.includes('Organization subscription is not active')) {
+    statusCode = 403;
+    message = 'Organization subscription is not active';
+  }
+
   // JWT errors
   if (err.name === 'JsonWebTokenError') {
     statusCode = 401;

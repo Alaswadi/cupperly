@@ -570,3 +570,56 @@ export const deleteTeamMember = async (
     next(error);
   }
 };
+
+export const updateOrganization = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Validation failed',
+          details: errors.array(),
+        },
+      });
+    }
+
+    const { name, description } = req.body;
+    const organizationId = req.user!.organizationId;
+
+    // Update organization
+    const updatedOrganization = await prisma.organization.update({
+      where: { id: organizationId },
+      data: {
+        ...(name && { name }),
+        ...(description !== undefined && { description }),
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        subdomain: true,
+        description: true,
+        logo: true,
+        website: true,
+        subscriptionStatus: true,
+        subscriptionPlan: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      data: { organization: updatedOrganization },
+      message: 'Organization updated successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { settingsApi } from '@/lib/api';
+import { useRouter } from 'next/navigation';
+import { settingsApi, authApi } from '@/lib/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,7 +26,8 @@ import {
 } from 'lucide-react';
 
 export default function SettingsPage() {
-  const { user, organization } = useAuth();
+  const { user, organization, updateUser, updateOrganization: updateOrgContext } = useAuth();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
   const [showPassword, setShowPassword] = useState(false);
@@ -49,6 +51,14 @@ export default function SettingsPage() {
   });
   const [availableModels, setAvailableModels] = useState<Array<{id: string, name: string, description: string}>>([]);
   const [loadingModels, setLoadingModels] = useState(false);
+
+  // Redirect non-admin users
+  useEffect(() => {
+    if (user && user.role !== 'ADMIN') {
+      toast.error('You do not have permission to access settings');
+      router.push('/dashboard');
+    }
+  }, [user, router]);
 
   useEffect(() => {
     if (user && organization) {
@@ -161,7 +171,52 @@ export default function SettingsPage() {
   const handleSave = async (section: string) => {
     setIsLoading(true);
     try {
-      if (section === 'ai') {
+      if (section === 'profile') {
+        // Validate required fields
+        if (!formData.firstName || !formData.lastName || !formData.email) {
+          toast.error('Please fill in all required fields');
+          return;
+        }
+
+        const response = await authApi.updateProfile({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+        });
+
+        if (!response.success) {
+          throw new Error(response.error?.message || 'Failed to save profile');
+        }
+
+        // Update user context
+        if (response.data?.user) {
+          updateUser(response.data.user);
+        }
+
+        toast.success('Profile updated successfully!');
+      } else if (section === 'organization') {
+        // Validate required fields
+        if (!formData.organizationName) {
+          toast.error('Organization name is required');
+          return;
+        }
+
+        const response = await authApi.updateOrganization({
+          name: formData.organizationName,
+          description: formData.organizationDescription,
+        });
+
+        if (!response.success) {
+          throw new Error(response.error?.message || 'Failed to save organization settings');
+        }
+
+        // Update organization context
+        if (response.data?.organization) {
+          updateOrgContext(response.data.organization);
+        }
+
+        toast.success('Organization settings updated successfully!');
+      } else if (section === 'ai') {
         // Validate required fields
         if (formData.aiProvider === 'gemini' && !formData.geminiApiKey) {
           toast.error('Please enter your Gemini API key');
@@ -185,9 +240,8 @@ export default function SettingsPage() {
 
         toast.success('AI settings saved successfully!');
       } else {
-        // TODO: Implement actual save functionality for other sections
+        // For other sections not yet implemented
         console.log(`Saving ${section}:`, formData);
-        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
         toast.success(`${section} settings saved successfully!`);
       }

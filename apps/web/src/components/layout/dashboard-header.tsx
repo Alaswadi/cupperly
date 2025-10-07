@@ -16,14 +16,25 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Sessions', href: '/dashboard/sessions' },
-  { name: 'Samples', href: '/dashboard/samples' },
-  { name: 'Reports', href: '/dashboard/reports' },
-  { name: 'Team', href: '/dashboard/team' },
-  { name: 'Settings', href: '/dashboard/settings' },
-];
+const getNavigation = (userRole?: string) => {
+  const baseNav = [
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Sessions', href: '/dashboard/sessions' },
+    { name: 'Samples', href: '/dashboard/samples' },
+    { name: 'Reports', href: '/dashboard/reports' },
+  ];
+
+  // Only show Team and Settings to ADMIN users
+  if (userRole === 'ADMIN') {
+    return [
+      ...baseNav,
+      { name: 'Team', href: '/dashboard/team' },
+      { name: 'Settings', href: '/dashboard/settings' },
+    ];
+  }
+
+  return baseNav;
+};
 
 export function DashboardHeader() {
   const { user, organization, logout } = useAuth();
@@ -47,7 +58,7 @@ export function DashboardHeader() {
               </h1>
             </Link>
             <nav className="flex space-x-6">
-              {navigation.map((item) => {
+              {getNavigation(user?.role).map((item) => {
                 // More precise active state detection
                 const isActive = item.href === '/dashboard'
                   ? pathname === '/dashboard'
@@ -111,12 +122,14 @@ export function DashboardHeader() {
                       </button>
                     </Link>
 
-                    <Link href="/dashboard/settings">
-                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <Settings className="h-4 w-4 mr-2" />
-                        Settings
-                      </button>
-                    </Link>
+                    {user?.role === 'ADMIN' && (
+                      <Link href="/dashboard/settings">
+                        <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <Settings className="h-4 w-4 mr-2" />
+                          Settings
+                        </button>
+                      </Link>
+                    )}
 
                     <div className="border-t border-gray-100">
                       <button

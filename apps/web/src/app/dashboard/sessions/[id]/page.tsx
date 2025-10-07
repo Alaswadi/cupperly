@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Edit, Play, Users, Calendar, MapPin, FileText, Settings, Coffee, Clock, Eye, EyeOff, BarChart3, CheckCircle } from 'lucide-react';
 import { sessionsApi } from '@/lib/api';
+import { useAuth } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -17,6 +18,7 @@ interface Session {
   allowComments: boolean;
   requireCalibration: boolean;
   scheduledAt?: string;
+  createdBy: string;
   createdAt: string;
   updatedAt: string;
   template?: {
@@ -47,6 +49,7 @@ interface Session {
 export default function SessionDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -180,12 +183,15 @@ export default function SessionDetailPage() {
           </div>
         </div>
         <div className="flex space-x-3">
-          <Link href={`/dashboard/sessions/${session.id}/edit`}>
-            <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-              <Edit className="h-4 w-4" />
-              <span>Edit</span>
-            </button>
-          </Link>
+          {/* Only show edit if user is ADMIN or session creator */}
+          {(user?.role === 'ADMIN' || session.createdBy === user?.id) && (
+            <Link href={`/dashboard/sessions/${session.id}/edit`}>
+              <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                <Edit className="h-4 w-4" />
+                <span>Edit</span>
+              </button>
+            </Link>
+          )}
           {session.status === 'DRAFT' && (
             <button
               onClick={handleStartSession}

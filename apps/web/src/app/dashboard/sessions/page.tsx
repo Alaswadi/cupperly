@@ -607,7 +607,8 @@ export default function SessionsPage() {
                               <Eye className="h-4 w-4" />
                             </button>
                           </Link>
-                          {session.status !== 'COMPLETED' && (
+                          {/* Only show edit if session is not completed AND (user is ADMIN or session creator) */}
+                          {session.status !== 'COMPLETED' && (user?.role === 'ADMIN' || session.createdBy === user?.id) && (
                             <Link href={`/dashboard/sessions/${session.id}/edit`}>
                               <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600" title="Edit">
                                 <Edit className="h-4 w-4" />
@@ -617,9 +618,12 @@ export default function SessionsPage() {
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-600" title="Duplicate">
                             <Copy className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
-                            <Archive className="h-4 w-4" />
-                          </button>
+                          {/* Only show archive if user is ADMIN or session creator */}
+                          {(user?.role === 'ADMIN' || session.createdBy === user?.id) && (
+                            <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
+                              <Archive className="h-4 w-4" />
+                            </button>
+                          )}
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
                             <MoreHorizontal className="h-4 w-4" />
                           </button>

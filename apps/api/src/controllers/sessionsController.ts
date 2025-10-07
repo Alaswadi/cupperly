@@ -354,6 +354,16 @@ export const updateSession = async (
       });
     }
 
+    // Authorization check: Only ADMIN or session creator can update
+    if (req.user!.role !== 'ADMIN' && existingSession.createdBy !== req.user!.id) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          message: 'You do not have permission to update this session',
+        },
+      });
+    }
+
     // Don't allow updates to active or completed sessions
     if (existingSession.status === 'ACTIVE' || existingSession.status === 'COMPLETED') {
       return res.status(400).json({
@@ -449,6 +459,16 @@ export const deleteSession = async (
         success: false,
         error: {
           message: 'Session not found',
+        },
+      });
+    }
+
+    // Authorization check: Only ADMIN or session creator can delete
+    if (req.user!.role !== 'ADMIN' && existingSession.createdBy !== req.user!.id) {
+      return res.status(403).json({
+        success: false,
+        error: {
+          message: 'You do not have permission to delete this session',
         },
       });
     }

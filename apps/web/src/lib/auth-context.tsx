@@ -14,6 +14,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   refreshToken: () => Promise<boolean>;
   updateUser: (user: User) => void;
+  updateOrganization: (organization: Organization) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -108,6 +109,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(updatedUser);
   };
 
+  const updateOrganization = (updatedOrganization: Organization) => {
+    setOrganization(updatedOrganization);
+  };
+
   const value: AuthContextType = {
     user,
     organization,
@@ -117,6 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout,
     refreshToken,
     updateUser,
+    updateOrganization,
   };
 
   return (

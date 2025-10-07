@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../middleware/auth';
+import { authenticate, authorize } from '../middleware/auth';
 import { getSettings, updateSettings } from '../controllers/settingsController';
 
 const router = Router();
@@ -7,8 +7,8 @@ const router = Router();
 // Apply authentication to all routes
 router.use(authenticate);
 
-// Settings routes
-router.get('/', getSettings);
-router.put('/', updateSettings);
+// Settings routes - ADMIN only
+router.get('/', authorize('ADMIN'), getSettings);
+router.put('/', authorize('ADMIN'), updateSettings);
 
 export default router;

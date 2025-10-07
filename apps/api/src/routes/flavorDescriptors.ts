@@ -46,8 +46,8 @@ const updateFlavorDescriptorValidator = [
 
 // Routes
 router.get('/', authenticate, getFlavorDescriptors);
-router.post('/', authenticate, authorize('ADMIN', 'MANAGER'), createFlavorDescriptorValidator, createFlavorDescriptor);
-router.put('/:id', authenticate, authorize('ADMIN', 'MANAGER'), updateFlavorDescriptorValidator, updateFlavorDescriptor);
-router.delete('/:id', authenticate, authorize('ADMIN', 'MANAGER'), deleteFlavorDescriptor);
+router.post('/', authenticate, authorize('ADMIN'), createFlavorDescriptorValidator, createFlavorDescriptor);
+router.put('/:id', authenticate, authorize('ADMIN'), updateFlavorDescriptorValidator, updateFlavorDescriptor);
+router.delete('/:id', authenticate, authorize('ADMIN'), deleteFlavorDescriptor);
 
 export default router;

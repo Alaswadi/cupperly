@@ -70,10 +70,12 @@ router.get('/test', (req, res) => {
   });
 });
 
+// All authenticated users can view and create sessions
 router.get('/', getSessions);
 router.get('/:id', getSession);
 router.post('/', sessionValidation, createSession);
 router.put('/:id', sessionValidation, updateSession);
+// Delete requires ownership check (handled in controller) or ADMIN role
 router.delete('/:id', deleteSession);
 
 // Session management

@@ -17,8 +17,8 @@ router.use(authenticate);
 // Template routes
 router.get('/', getTemplates);
 router.get('/:id', getTemplate);
-router.post('/', authorize('ADMIN', 'OWNER'), createTemplate);
-router.put('/:id', authorize('ADMIN', 'OWNER'), updateTemplate);
-router.delete('/:id', authorize('ADMIN', 'OWNER'), deleteTemplate);
+router.post('/', authorize('ADMIN'), createTemplate);
+router.put('/:id', authorize('ADMIN'), updateTemplate);
+router.delete('/:id', authorize('ADMIN'), deleteTemplate);
 
 export default router;

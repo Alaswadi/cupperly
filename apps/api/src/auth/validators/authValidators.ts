@@ -105,31 +105,31 @@ export const resetPasswordValidator: ValidationChain[] = [
 
 export const updateProfileValidator: ValidationChain[] = [
   body('firstName')
-    .optional()
+    .optional({ values: 'falsy' })
     .trim()
     .isLength({ min: 1, max: 50 })
     .withMessage('First name must be between 1 and 50 characters'),
 
   body('lastName')
-    .optional()
+    .optional({ values: 'falsy' })
     .trim()
     .isLength({ min: 1, max: 50 })
     .withMessage('Last name must be between 1 and 50 characters'),
 
   body('email')
-    .optional()
+    .optional({ values: 'falsy' })
     .isEmail()
     .normalizeEmail()
     .withMessage('Valid email is required'),
 
   body('bio')
-    .optional()
+    .optional({ values: 'falsy' })
     .trim()
     .isLength({ max: 500 })
     .withMessage('Bio must be less than 500 characters'),
 
   body('avatar')
-    .optional()
+    .optional({ values: 'falsy' })
     .isURL()
     .withMessage('Avatar must be a valid URL'),
 ];
@@ -171,31 +171,45 @@ export const createMemberValidator: ValidationChain[] = [
 
 export const updateTeamMemberValidator: ValidationChain[] = [
   body('firstName')
-    .optional()
+    .optional({ values: 'falsy' })
     .trim()
     .isLength({ min: 1, max: 50 })
     .withMessage('First name must be between 1 and 50 characters'),
 
   body('lastName')
-    .optional()
+    .optional({ values: 'falsy' })
     .trim()
     .isLength({ min: 1, max: 50 })
     .withMessage('Last name must be between 1 and 50 characters'),
 
   body('email')
-    .optional()
+    .optional({ values: 'falsy' })
     .isEmail()
     .normalizeEmail()
     .withMessage('Valid email is required'),
 
   body('role')
-    .optional()
+    .optional({ values: 'falsy' })
     .isIn(['ADMIN', 'CUPPER'])
     .withMessage('Valid role is required'),
 
   body('bio')
-    .optional()
+    .optional({ values: 'falsy' })
     .trim()
     .isLength({ max: 500 })
     .withMessage('Bio must be less than 500 characters'),
+];
+
+export const updateOrganizationValidator: ValidationChain[] = [
+  body('name')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Organization name must be between 2 and 100 characters'),
+
+  body('description')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Description must be less than 500 characters'),
 ];

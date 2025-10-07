@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/api';
 import { User } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { formatDateTime } from '@/lib/utils';
+import { toast } from 'react-hot-toast';
 import {
   Users,
   UserPlus,
@@ -27,6 +29,7 @@ import { Input } from '@/components/ui/input';
 
 export default function TeamPage() {
   const { user, organization } = useAuth();
+  const router = useRouter();
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,9 +45,19 @@ export default function TeamPage() {
     cuppers: 0,
   });
 
+  // Redirect non-admin users
   useEffect(() => {
-    loadTeamMembers();
-  }, []);
+    if (user && user.role !== 'ADMIN') {
+      toast.error('You do not have permission to access team management');
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    if (user?.role === 'ADMIN') {
+      loadTeamMembers();
+    }
+  }, [user]);
 
   const loadTeamMembers = async () => {
     try {
