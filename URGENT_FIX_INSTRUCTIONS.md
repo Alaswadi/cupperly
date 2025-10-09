@@ -1,28 +1,34 @@
-# 🚨 URGENT FIX: Development Mode Error (tsx/next not found)
+# 🚨 URGENT FIX: Workspace Conflict Error
 
 ## Problem
 
-Your containers are running in **development mode** instead of production mode, causing:
-- `sh: tsx: not found` (API)
-- `sh: next: not found` (Web)
+Build is failing with:
+```
+must not have multiple workspaces with the same name
+package '@cupperly/ui' has conflicts
+```
 
-## Quick Fix (3 minutes)
+## Root Cause
+
+Dockerfiles were copying the `packages` directory twice, creating duplicate workspace definitions.
+
+## Quick Fix (2 minutes)
 
 ### Step 1: Commit These Changes (1 minute)
 
-The docker-compose.yml has been updated to **force production mode**.
+The Dockerfiles have been fixed to avoid duplicate package copies.
 
 ```bash
 git add .
-git commit -m "Force production mode in docker-compose for Coolify"
+git commit -m "Fix Dockerfile workspace conflicts for Coolify deployment"
 git push origin main
 ```
 
-### Step 2: Redeploy in Coolify (2 minutes)
+### Step 2: Force Rebuild in Coolify (1 minute)
 
 1. Go to Coolify Dashboard
 2. Find your Cupperly resource
-3. Click **"Force Rebuild"** (important - not just "Redeploy")
+3. Click **"Force Rebuild"** (IMPORTANT - clears cache)
 4. Wait for build to complete (5-10 minutes)
 
 ### Step 3: Set Required Environment Variables

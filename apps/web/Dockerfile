@@ -10,7 +10,9 @@ WORKDIR /app
 # Copy root package files for workspace setup
 COPY package.json package-lock.json* ./
 COPY apps/web/package.json ./apps/web/
-COPY packages/*/package.json ./packages/*/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/types/package.json ./packages/types/
+COPY packages/database/package.json ./packages/database/
 
 # Install dependencies
 RUN npm install
@@ -22,10 +24,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json ./package.json
 COPY --from=deps /app/apps/web/package.json ./apps/web/package.json
-COPY --from=deps /app/packages ./packages
 
-# Copy web app source code
+# Copy source code (web app and packages)
 COPY apps/web ./apps/web
+COPY packages ./packages
 
 # Set working directory to web app
 WORKDIR /app/apps/web

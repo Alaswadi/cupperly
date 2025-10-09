@@ -6,10 +6,12 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
+# Copy package files for workspace
 COPY package.json package-lock.json* ./
 COPY apps/api/package.json ./apps/api/
-COPY packages/*/package.json ./packages/*/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/types/package.json ./packages/types/
+COPY packages/database/package.json ./packages/database/
 
 # Install dependencies
 RUN npm install
@@ -41,9 +43,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json ./package.json
 COPY --from=deps /app/apps/api/package.json ./apps/api/package.json
-COPY --from=deps /app/packages ./packages
 
-# Copy source code
+# Copy source code (including packages)
 COPY apps/api ./apps/api
 COPY packages ./packages
 
