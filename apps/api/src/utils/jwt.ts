@@ -3,13 +3,13 @@ import { JWTPayload } from '../middleware/auth';
 
 export const generateAccessToken = (payload: Omit<JWTPayload, 'iat' | 'exp'>) => {
   return jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m',
+    expiresIn: (process.env.JWT_ACCESS_EXPIRES_IN || '15m') as string,
   });
 };
 
 export const generateRefreshToken = (payload: Omit<JWTPayload, 'iat' | 'exp'>) => {
   return jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+    expiresIn: (process.env.JWT_REFRESH_EXPIRES_IN || '7d') as string,
   });
 };
 
