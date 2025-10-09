@@ -1,26 +1,26 @@
-# 🚨 URGENT FIX: Workspace Conflict Error
+# 🚨 URGENT FIX: Prisma Client Generation Error
 
 ## Problem
 
-Build is failing with:
+TypeScript build is failing with:
 ```
-must not have multiple workspaces with the same name
-package '@cupperly/ui' has conflicts
+npm error command sh -c tsc
+exit code: 2
 ```
 
 ## Root Cause
 
-Dockerfiles were copying the `packages` directory twice, creating duplicate workspace definitions.
+The API uses Prisma ORM, but the Prisma Client wasn't being generated before TypeScript compilation, causing the build to fail.
 
 ## Quick Fix (2 minutes)
 
 ### Step 1: Commit These Changes (1 minute)
 
-The Dockerfiles have been fixed to avoid duplicate package copies.
+The Dockerfile has been updated to generate Prisma Client before building.
 
 ```bash
 git add .
-git commit -m "Fix Dockerfile workspace conflicts for Coolify deployment"
+git commit -m "Add Prisma client generation to Dockerfile"
 git push origin main
 ```
 
@@ -28,7 +28,7 @@ git push origin main
 
 1. Go to Coolify Dashboard
 2. Find your Cupperly resource
-3. Click **"Force Rebuild"** (IMPORTANT - clears cache)
+3. Click **"Force Rebuild"** (CRITICAL - must clear cache!)
 4. Wait for build to complete (5-10 minutes)
 
 ### Step 3: Set Required Environment Variables

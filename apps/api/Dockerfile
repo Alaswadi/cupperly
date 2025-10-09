@@ -48,8 +48,11 @@ COPY --from=deps /app/apps/api/package.json ./apps/api/package.json
 COPY apps/api ./apps/api
 COPY packages ./packages
 
-# Build the application
+# Generate Prisma Client
 WORKDIR /app/apps/api
+RUN npx prisma generate
+
+# Build the application
 RUN npm run build
 
 # Production stage
@@ -61,11 +64,12 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
 # Copy built application
-COPY --from=builder --chown=nodejs:nodejs /app/apps/api/dist ./
+COPY --from=builder --chown=nodejs:nodejs /app/apps/api/dist ./dist
 COPY --from=builder --chown=nodejs:nodejs /app/apps/api/package.json ./package.json
+COPY --from=builder --chown=nodejs:nodejs /app/apps/api/schema.prisma ./schema.prisma
 
-# Copy production dependencies
-COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+# Copy production dependencies (includes Prisma client)
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
 
 USER nodejs
 
@@ -74,4 +78,4 @@ EXPOSE 3001
 ENV NODE_ENV=production
 ENV PORT=3001
 
-CMD ["node", "index.js"]
+CMD ["node", "dist/index.js"]
