@@ -5,11 +5,11 @@ services:
     container_name: cupperly-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: cupperly
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB:-cupperly}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
     ports:
-      - "15432:5432"
+      - "${POSTGRES_PORT:-15432}:5432"  # Only expose for development
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -33,57 +33,63 @@ services:
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
-      target: development
+      target: ${BUILD_TARGET:-production}  # Use production by default, development for local
     container_name: cupperly-api
     restart: unless-stopped
     environment:
-      NODE_ENV: development
-      DATABASE_URL: postgresql://postgres:password@postgres:5432/cupperly
-      REDIS_URL: redis://redis:6379
-      JWT_SECRET: dev-jwt-secret-change-in-production
-      JWT_REFRESH_SECRET: dev-refresh-secret-change-in-production
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:password@postgres:5432/cupperly}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      JWT_SECRET: ${JWT_SECRET:-dev-jwt-secret-change-in-production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-dev-refresh-secret-change-in-production}
       PORT: 3001
     ports:
-      - "3001:3001"
-    volumes:
-      - ./apps/api:/app/apps/api:cached
-      - ./packages:/app/packages:cached
-      - /app/node_modules
-      - /app/apps/api/node_modules
-      - /app/generated
+      - "${API_PORT:-3001}:3001"
+    # Volumes only for development - commented out for production
+    # Uncomment these lines for local development
+    # volumes:
+    #   - ./apps/api:/app/apps/api:cached
+    #   - ./packages:/app/packages:cached
+    #   - /app/node_modules
+    #   - /app/apps/api/node_modules
+    #   - /app/generated
     depends_on:
       - postgres
       - redis
     networks:
       - cupperly-network
-    command: npm run dev
+    # Command only for development
+    # command: npm run dev
 
   # Frontend Web App
   web:
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
-      target: development
+      target: ${BUILD_TARGET:-runner}  # Use runner (production) by default, development for local
     container_name: cupperly-web
     restart: unless-stopped
     environment:
-      NODE_ENV: development
-      NEXT_PUBLIC_API_URL: http://localhost:3001
-      NEXTAUTH_URL: http://localhost:3003
-      NEXTAUTH_SECRET: dev-nextauth-secret-change-in-production
+      NODE_ENV: ${NODE_ENV:-production}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-dev-nextauth-secret-change-in-production}
     ports:
-      - "3003:3000"
-    volumes:
-      - ./apps/web:/app/apps/web:cached
-      - ./packages:/app/packages:cached
-      - /app/node_modules
-      - /app/apps/web/node_modules
-      - /app/apps/web/.next
+      - "${WEB_PORT:-3000}:3000"
+    # Volumes only for development - commented out for production
+    # Uncomment these lines for local development
+    # volumes:
+    #   - ./apps/web:/app/apps/web:cached
+    #   - ./packages:/app/packages:cached
+    #   - /app/node_modules
+    #   - /app/apps/web/node_modules
+    #   - /app/apps/web/.next
     depends_on:
       - api
     networks:
       - cupperly-network
-    command: npm run dev
+    # Command only for development
+    # command: npm run dev
 
   # Database Admin (Adminer) - Optional for development
   adminer:
