@@ -1,62 +1,50 @@
-# 🚨 URGENT FIX: Package.json Not Found Error
+# 🚨 URGENT FIX: Development Mode Error (tsx/next not found)
 
-## Quick Fix (5 minutes)
+## Problem
 
-Your containers are crashing because they're looking for source code that doesn't exist. Here's the immediate fix:
+Your containers are running in **development mode** instead of production mode, causing:
+- `sh: tsx: not found` (API)
+- `sh: next: not found` (Web)
+
+## Quick Fix (3 minutes)
 
 ### Step 1: Commit These Changes (1 minute)
 
+The docker-compose.yml has been updated to **force production mode**.
+
 ```bash
 git add .
-git commit -m "Fix docker-compose for Coolify production deployment"
+git commit -m "Force production mode in docker-compose for Coolify"
 git push origin main
 ```
 
-### Step 2: Add ONE Environment Variable in Coolify (1 minute)
+### Step 2: Redeploy in Coolify (2 minutes)
 
-Go to Coolify Dashboard → Your Resource → Environment Variables
+1. Go to Coolify Dashboard
+2. Find your Cupperly resource
+3. Click **"Force Rebuild"** (important - not just "Redeploy")
+4. Wait for build to complete (5-10 minutes)
 
-**Add this single variable:**
-```
-BUILD_TARGET=production
-```
+### Step 3: Set Required Environment Variables
 
-### Step 3: Redeploy (3 minutes)
-
-Click **"Redeploy"** or **"Force Rebuild"** in Coolify
-
-Wait for the build to complete.
-
----
-
-## That's It!
-
-The containers should now build and run successfully.
-
----
-
-## Full Environment Variables (For Complete Setup)
-
-After the quick fix works, add these for a complete production setup:
+While the build is running, set these in Coolify → Environment Variables:
 
 ```env
-# Build Configuration
-BUILD_TARGET=production
-NODE_ENV=production
-
-# Database
+# Database (REQUIRED)
 POSTGRES_PASSWORD=<your-strong-password>
 DATABASE_URL=postgresql://postgres:<same-password>@postgres:5432/cupperly
 
-# JWT Secrets (generate 3 random 32-char strings)
+# JWT Secrets (REQUIRED - generate 3 random 32-char strings)
 JWT_SECRET=<random-32-chars>
 JWT_REFRESH_SECRET=<random-32-chars>
 NEXTAUTH_SECRET=<random-32-chars>
 
-# URLs
+# URLs (REQUIRED - replace with your VPS IP)
 NEXTAUTH_URL=http://your-vps-ip:3000
 NEXT_PUBLIC_API_URL=http://your-vps-ip:3001
 ```
+
+**Note:** You don't need `BUILD_TARGET` anymore - it's hardcoded to production now!
 
 ### Generate Secrets:
 
@@ -72,22 +60,75 @@ openssl rand -base64 32
 
 ---
 
-## What Was Wrong?
+---
 
-- ❌ **Before**: Containers expected source code to be mounted from local machine
-- ✅ **After**: Containers build source code into the Docker image
+## What Changed?
+
+### Before (Development Mode ❌):
+```yaml
+api:
+  build:
+    target: development  # ❌ Runs "npm run dev"
+  command: npm run dev   # ❌ Needs tsx (dev dependency)
+```
+
+### After (Production Mode ✅):
+```yaml
+api:
+  build:
+    target: production   # ✅ Runs compiled code
+  # No command needed    # ✅ Uses built-in CMD
+```
 
 ## Verification
 
-After redeployment:
+After redeployment, you should see:
 
-1. **Check API**: `http://your-vps-ip:3001/health`
-2. **Check Web**: `http://your-vps-ip:3000`
-3. **Check Logs**: No more "ENOENT" errors
+1. **Build logs**:
+   - ✅ "Building API..."
+   - ✅ "npm run build" succeeds
+   - ✅ "Building Web..."
+   - ✅ "next build" succeeds
+
+2. **Container logs**:
+   - ✅ No more "tsx: not found"
+   - ✅ No more "next: not found"
+   - ✅ API starts on port 3001
+   - ✅ Web starts on port 3000
+
+3. **Access**:
+   - ✅ API Health: `http://your-vps-ip:3001/health`
+   - ✅ Frontend: `http://your-vps-ip:3000`
+
+## Troubleshooting
+
+### Still seeing "tsx not found"?
+
+This means it's still building in development mode. Check:
+1. Did you commit and push the changes?
+2. Did you click "Force Rebuild" (not just "Redeploy")?
+3. Check build logs - should say `target: production`
+
+### Build fails?
+
+Check that all environment variables are set, especially:
+- `JWT_SECRET`
+- `JWT_REFRESH_SECRET`
+- `NEXTAUTH_SECRET`
 
 ---
 
-## Need More Help?
+## For Local Development
 
-See detailed guide: [COOLIFY_FIX_PACKAGE_JSON_ERROR.md](./COOLIFY_FIX_PACKAGE_JSON_ERROR.md)
+Use the new development compose file:
+
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
+This gives you hot-reload and all development features.
+
+---
+
+**Need More Help?** Check [COOLIFY_FIX_PACKAGE_JSON_ERROR.md](./COOLIFY_FIX_PACKAGE_JSON_ERROR.md)
 
