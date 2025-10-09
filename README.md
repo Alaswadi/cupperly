@@ -72,11 +72,11 @@ npm run dev
 ```
 
 ### Services
-- **Frontend**: http://localhost:3000
+- **Frontend**: http://localhost:3003
 - **Backend API**: http://localhost:3001
-- **Database**: PostgreSQL on port 5432
+- **Database**: PostgreSQL on port 15432
 - **Redis**: Port 6379
-- **Adminer**: http://localhost:8080 (Database admin)
+- **Adminer**: http://localhost:8081 (Database admin - dev only)
 
 ## 📁 Project Structure
 
@@ -183,11 +183,32 @@ npm run test:integration
 npm run test:coverage
 ```
 
+## 🚀 Deployment
+
+### Coolify Deployment
+
+Deploy to Coolify VPS in minutes:
+
+1. **Use the production compose file**: `docker-compose.prod.yml` or `.coolify/docker-compose.yml`
+2. **Set environment variables** (see [COOLIFY_DEPLOYMENT.md](./COOLIFY_DEPLOYMENT.md))
+3. **Deploy!**
+
+**Note**: Port 8080 conflict with Coolify is fixed. Adminer now uses port 8081 in development and is excluded from production.
+
+See detailed guide: [COOLIFY_DEPLOYMENT.md](./COOLIFY_DEPLOYMENT.md)
+
+### Other Platforms
+
+- **Docker**: Use `docker-compose.prod.yml`
+- **Kubernetes**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
+- **Cloud Providers**: AWS, GCP, Azure guides in [DEPLOYMENT.md](./DEPLOYMENT.md)
+
 ## 📚 Documentation
 
+- [Coolify Deployment Guide](./COOLIFY_DEPLOYMENT.md) - **NEW!** Deploy to Coolify VPS
+- [General Deployment Guide](./DEPLOYMENT.md)
 - [API Documentation](./docs/api.md)
 - [Database Schema](./docs/database.md)
-- [Deployment Guide](./docs/deployment.md)
 - [Contributing Guide](./docs/contributing.md)
 
 ## 🤝 Contributing
