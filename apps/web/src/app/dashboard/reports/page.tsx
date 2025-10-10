@@ -64,7 +64,7 @@ export default function ReportsPage() {
       let totalScore = 0;
       let scoreCount = 0;
 
-      if (sessionsResponse.success) {
+      if (sessionsResponse.success && sessionsResponse.data) {
         sessionsData = sessionsResponse.data.sessions;
         setSessions(sessionsData);
         totalSessions = sessionsData.length;
