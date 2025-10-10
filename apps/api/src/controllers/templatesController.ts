@@ -149,7 +149,7 @@ export const getTemplate = async (
 };
 
 export const createTemplate = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -170,7 +170,7 @@ export const createTemplate = async (
         ...validatedData,
         organizationId,
         createdBy: userId,
-      },
+      } as any,
       include: {
         creator: {
           select: {

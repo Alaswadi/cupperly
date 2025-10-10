@@ -118,11 +118,11 @@ async function generateOpenRouterSummary(apiKey: string, model: string, prompt: 
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+      const errorData: any = await response.json().catch(() => ({}));
       throw new Error(`OpenRouter API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
     }
 
-    const data = await response.json();
+    const data: any = await response.json();
     return data.choices[0]?.message?.content || 'Failed to generate summary';
   } catch (error) {
     console.error('Error generating OpenRouter summary:', error);

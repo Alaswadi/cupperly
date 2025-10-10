@@ -319,7 +319,7 @@ export class AuthService {
         password: hashedPassword,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: data.role,
+        role: data.role as any,
         organizationId: data.organizationId,
         emailVerified: true, // Auto-verify since admin is creating
       },
