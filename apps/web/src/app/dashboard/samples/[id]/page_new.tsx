@@ -393,7 +393,7 @@ export default function SampleDetailPage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-500">Created By</p>
-                <p className="text-gray-900">{user?.name || 'Unknown'}</p>
+                <p className="text-gray-900">{(user as any)?.firstName} {(user as any)?.lastName || 'Unknown'}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-500">Last Updated</p>
