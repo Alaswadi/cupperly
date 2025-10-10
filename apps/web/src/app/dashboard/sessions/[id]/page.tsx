@@ -89,7 +89,7 @@ export default function SessionDetailPage() {
     try {
       setLoading(true);
       const response = await sessionsApi.getSession(sessionId);
-      if (response.success) {
+      if (response.success && response.data) {
         setSession(response.data);
       } else {
         setError('Failed to load session');
