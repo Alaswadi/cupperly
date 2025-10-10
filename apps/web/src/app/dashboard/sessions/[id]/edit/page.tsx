@@ -80,7 +80,7 @@ export default function EditSessionPage() {
         samplesApi.getSamples()
       ]);
 
-      if (sessionResponse.success) {
+      if (sessionResponse.success && sessionResponse.data) {
         const sessionData = sessionResponse.data;
         setSession(sessionData);
         
@@ -156,7 +156,7 @@ export default function EditSessionPage() {
         scheduledAt: formData.scheduledAt ? new Date(formData.scheduledAt).toISOString() : undefined,
       };
 
-      const response = await sessionsApi.updateSession(sessionId, submitData);
+      const response = await sessionsApi.updateSession(sessionId, submitData as any);
 
       if (response.success) {
         toast.success('Session updated successfully!');

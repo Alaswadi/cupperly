@@ -112,7 +112,7 @@ export default function NewSessionPage() {
         scheduledAt: formData.scheduledAt ? new Date(formData.scheduledAt).toISOString() : undefined,
       };
 
-      const response = await sessionsApi.createSession(submitData);
+      const response = await sessionsApi.createSession(submitData as any);
       if (response.success) {
         toast.success('Session created successfully!');
         router.push('/dashboard/sessions');

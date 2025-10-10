@@ -71,7 +71,7 @@ export default function NewSamplePage() {
 
     try {
       setIsLoading(true);
-      const response = await samplesApi.createSample(formData);
+      const response = await samplesApi.createSample(formData as any);
       
       if (response.success) {
         toast.success('Sample created successfully!');

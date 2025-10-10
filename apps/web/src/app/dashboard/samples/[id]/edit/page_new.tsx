@@ -67,7 +67,7 @@ export default function EditSamplePage() {
       setIsLoading(true);
       const response = await samplesApi.getSample(sampleId);
       
-      if (response.success) {
+      if (response.success && response.data) {
         const sampleData = response.data;
         setSample(sampleData);
         setFormData({
@@ -113,7 +113,7 @@ export default function EditSamplePage() {
 
     try {
       setIsSaving(true);
-      const response = await samplesApi.updateSample(sampleId, formData);
+      const response = await samplesApi.updateSample(sampleId, formData as any);
       
       if (response.success) {
         toast.success('Sample updated successfully!');
