@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { fixInvalidTemplates } from '../utils/fixTemplates';
+import { AuthRequest } from '../types/auth';
 
 const prisma = new PrismaClient();
 
@@ -21,7 +22,7 @@ const createTemplateSchema = z.object({
 const updateTemplateSchema = createTemplateSchema.partial();
 
 export const getTemplates = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -103,7 +104,7 @@ export const getTemplates = async (
 };
 
 export const getTemplate = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -199,7 +200,7 @@ export const createTemplate = async (
 };
 
 export const updateTemplate = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -263,7 +264,7 @@ export const updateTemplate = async (
 };
 
 export const deleteTemplate = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {

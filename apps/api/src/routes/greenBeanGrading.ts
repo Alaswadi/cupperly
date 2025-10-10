@@ -245,7 +245,7 @@ router.post(
         secondaryDefects: req.body.secondaryDefects,
         moistureContent: req.body.moistureContent,
         waterActivity: req.body.waterActivity,
-        colorScore: req.body.colorScore,
+        bulkDensity: req.body.bulkDensity,
         uniformityScore: req.body.uniformityScore,
       });
 

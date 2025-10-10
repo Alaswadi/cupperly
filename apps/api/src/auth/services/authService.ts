@@ -23,7 +23,7 @@ export interface LoginData {
 
 export interface InviteUserData {
   email: string;
-  role: 'ADMIN' | 'MANAGER' | 'CUPPER' | 'VIEWER';
+  role: 'ADMIN' | 'CUPPER';
   firstName?: string;
   lastName?: string;
   organizationId: string;
