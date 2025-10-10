@@ -268,7 +268,7 @@ export default function EditSamplePage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coffee-brown focus:border-coffee-brown"
                 >
                   {PROCESSING_METHODS.map(method => (
-                    <option key={method.value} value={method.value}>{method.label}</option>
+                    <option key={method} value={method}>{method}</option>
                   ))}
                 </select>
               </div>
