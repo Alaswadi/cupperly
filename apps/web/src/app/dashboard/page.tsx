@@ -402,7 +402,7 @@ export default function DashboardPage() {
                       {session.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {session.samples?.[0]?.origin || 'Multiple origins'}
+                      {(session.samples?.[0] as any)?.origin || 'Multiple origins'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {stats.avgScore > 0 ? stats.avgScore.toFixed(1) : '--'}
