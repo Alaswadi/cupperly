@@ -125,7 +125,7 @@ export default function ReportsPage() {
       if (scoresResponse.success) {
         const sessionData = {
           ...firstSession,
-          samples: firstSession.samples.map(s => ({
+          samples: firstSession.samples.map((s: any) => ({
             id: s.id,
             sample: {
               id: s.id,
