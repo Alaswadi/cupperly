@@ -29,7 +29,7 @@ export default function SampleDetailPage() {
       setIsLoading(true);
       const response = await samplesApi.getSample(sampleId);
       
-      if (response.success) {
+      if (response.success && response.data) {
         setSample(response.data);
       } else {
         router.push('/dashboard/samples');
