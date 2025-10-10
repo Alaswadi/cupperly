@@ -127,7 +127,7 @@ export default function DashboardPage() {
 
   const filteredSessions = sessions.filter(session =>
     session.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    session.samples?.some(sample =>
+    session.samples?.some((sample: any) =>
       sample.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       sample.origin?.toLowerCase().includes(searchTerm.toLowerCase())
     )
