@@ -87,7 +87,7 @@ export default function DashboardPage() {
         }));
       }
 
-      if (samplesResponse.success) {
+      if (samplesResponse.success && samplesResponse.data) {
         const sampleData = samplesResponse.data.samples;
         setSamples(sampleData.slice(0, 5)); // Show latest 5 samples
         setStats(prev => ({
