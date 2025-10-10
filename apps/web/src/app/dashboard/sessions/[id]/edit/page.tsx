@@ -105,13 +105,13 @@ export default function EditSessionPage() {
         setError('Failed to load session');
       }
 
-      if (templatesResponse.success) {
-        const templateList = templatesResponse.data.templates || templatesResponse.data || [];
+      if (templatesResponse.success && templatesResponse.data) {
+        const templateList = (templatesResponse.data as any).templates || templatesResponse.data || [];
         setTemplates(templateList);
       }
 
-      if (samplesResponse.success) {
-        const sampleList = samplesResponse.data.samples || samplesResponse.data || [];
+      if (samplesResponse.success && samplesResponse.data) {
+        const sampleList = (samplesResponse.data as any).samples || samplesResponse.data || [];
         setSamples(sampleList);
       }
     } catch (error) {
