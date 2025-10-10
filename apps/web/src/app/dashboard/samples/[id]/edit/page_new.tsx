@@ -119,7 +119,7 @@ export default function EditSamplePage() {
         toast.success('Sample updated successfully!');
         router.push(`/dashboard/samples/${sampleId}`);
       } else {
-        toast.error(response.error || 'Failed to update sample');
+        toast.error((response.error as any)?.message || response.error || 'Failed to update sample');
       }
     } catch (error) {
       console.error('Error updating sample:', error);
