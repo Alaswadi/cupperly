@@ -138,7 +138,7 @@ export default function ReportsPage() {
           }))
         };
 
-        await exportSessionToPDFWithCharts(sessionData, scoresResponse.data);
+        await exportSessionToPDFWithCharts(sessionData as any, scoresResponse.data);
         toast.success('PDF report generated successfully!', { id: 'pdf-export-all' });
       }
     } catch (error: any) {
