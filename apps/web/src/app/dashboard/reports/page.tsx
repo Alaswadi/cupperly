@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { sessionsApi, scoresApi } from '@/lib/api';
 import { CuppingSession, Score } from '@/types';
+import { exportSessionToPDFWithCharts } from '@/lib/pdf-export-with-charts';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -137,7 +138,7 @@ export default function ReportsPage() {
           }))
         };
 
-        await exportSessionToPDF(sessionData, scoresResponse.data);
+        await exportSessionToPDFWithCharts(sessionData, scoresResponse.data);
         toast.success('PDF report generated successfully!', { id: 'pdf-export-all' });
       }
     } catch (error: any) {
