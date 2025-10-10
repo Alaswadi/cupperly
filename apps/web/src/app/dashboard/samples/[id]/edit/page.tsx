@@ -121,7 +121,7 @@ export default function EditSamplePage() {
 
     try {
       setIsSaving(true);
-      const response = await samplesApi.updateSample(sampleId, formData);
+      const response = await samplesApi.updateSample(sampleId, formData as any);
       
       if (response.success) {
         toast.success('Sample updated successfully!');
