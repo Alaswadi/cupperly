@@ -71,7 +71,7 @@ export default function EditSamplePage() {
       setIsLoading(true);
       const response = await samplesApi.getSample(sampleId);
       
-      if (response.success) {
+      if (response.success && response.data) {
         const sampleData = response.data;
         setSample(sampleData);
         setFormData({
