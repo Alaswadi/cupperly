@@ -59,7 +59,7 @@ export default function DashboardPage() {
         samplesApi.getSamples(),
       ]);
 
-      if (sessionsResponse.success) {
+      if (sessionsResponse.success && sessionsResponse.data) {
         const sessionData = sessionsResponse.data.sessions;
         setSessions(sessionData.slice(0, 5)); // Show latest 5 sessions
         
