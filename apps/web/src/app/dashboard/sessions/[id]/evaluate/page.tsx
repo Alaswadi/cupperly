@@ -111,11 +111,11 @@ export default function SessionEvaluatePage() {
       setSubmitting(true);
       const currentSample = session.samples[currentSampleIndex];
 
-      const response = await scoresApi.submitScore(sessionId, (currentSample as any).sampleId, scoreData);
+      const response = await scoresApi.submitScore(sessionId, currentSample.sampleId, scoreData);
 
       if (response.success) {
         // Update scores state
-        const updatedScores = scores.filter(s => s.sampleId !== (currentSample as any).sampleId);
+        const updatedScores = scores.filter(s => s.sampleId !== currentSample.sampleId);
         updatedScores.push(response.data);
         setScores(updatedScores);
 
@@ -143,7 +143,7 @@ export default function SessionEvaluatePage() {
   const getCurrentSampleScore = () => {
     if (!session) return undefined;
     const currentSample = session.samples[currentSampleIndex];
-    return scores.find(score => score.sampleId === (currentSample as any).sampleId);
+    return scores.find(score => score.sampleId === currentSample.sampleId);
   };
 
   const getCompletedCount = () => {
@@ -270,7 +270,7 @@ export default function SessionEvaluatePage() {
           <div className="p-8">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {session.samples.map((sample, index) => {
-                const sampleScore = scores.find(s => s.sampleId === (sample as any).sampleId);
+                const sampleScore = scores.find(s => s.sampleId === sample.sampleId);
                 const isCompleted = sampleScore?.isSubmitted;
                 const isCurrent = index === currentSampleIndex;
                 const sampleDisplayName = session.blindTasting && sample.blindCode ? sample.blindCode : sample.name;

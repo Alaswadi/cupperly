@@ -106,12 +106,12 @@ export default function EditSessionPage() {
       }
 
       if (templatesResponse.success && templatesResponse.data) {
-        const templateList = (templatesResponse.data as any)?.templates || templatesResponse.data || [];
+        const templateList = (templatesResponse.data as any)?.templates || (templatesResponse.data as any) || [];
         setTemplates(templateList);
       }
 
       if (samplesResponse.success && samplesResponse.data) {
-        const sampleList = (samplesResponse.data as any)?.samples || samplesResponse.data || [];
+        const sampleList = (samplesResponse.data as any)?.samples || (samplesResponse.data as any) || [];
         setSamples(sampleList);
       }
     } catch (error) {

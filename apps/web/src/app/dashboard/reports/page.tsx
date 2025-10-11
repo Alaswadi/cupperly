@@ -873,7 +873,7 @@ export default function ReportsPage() {
                               </div>
                               <div>
                                 <div className="text-sm font-medium text-gray-900">
-                                  {(session as any).creator?.firstName} {(session as any).creator?.lastName}
+                                  {session.creator?.firstName} {session.creator?.lastName}
                                 </div>
                                 <div className="text-xs text-gray-500">Creator</div>
                               </div>

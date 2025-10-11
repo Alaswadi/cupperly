@@ -143,6 +143,11 @@ export interface CuppingSession {
   id: string;
   organizationId: string;
   createdBy: string;
+  creator?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
   name: string;
   description?: string;
   location?: string;
@@ -160,7 +165,7 @@ export interface CuppingSession {
   settings?: Record<string, any>;
   participants: SessionParticipant[];
   samples: SessionSample[];
-  scores: Score[];
+  scores?: Score[];
   createdAt: string;
   updatedAt: string;
 }

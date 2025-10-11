@@ -7,6 +7,7 @@ import { sessionsApi } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Session {
   id: string;
