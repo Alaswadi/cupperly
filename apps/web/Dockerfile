@@ -31,12 +31,28 @@ COPY --from=deps /app/apps/web/package.json ./apps/web/package.json
 COPY apps/web ./apps/web
 COPY packages ./packages
 
+# Ensure next.config.js is present (it should be in apps/web already, but let's be explicit)
+RUN test -f apps/web/next.config.js || (echo "ERROR: next.config.js not found!" && exit 1)
+
+# Verify next.config.js exists
+RUN echo "=== Checking next.config.js ===" && \
+    cat apps/web/next.config.js && \
+    echo "=== End next.config.js ==="
+
 # Build from root to maintain monorepo structure
 RUN npm run build --workspace=apps/web
 
 # Debug: Verify standalone output was created
-RUN ls -la apps/web/.next/standalone/apps/web/ || echo "ERROR: standalone output not found!"
-RUN test -f apps/web/.next/standalone/apps/web/server.js && echo "✓ server.js found" || echo "✗ server.js NOT found"
+RUN echo "=== Checking build output ===" && \
+    ls -la apps/web/.next/ && \
+    echo "=== Checking standalone folder ===" && \
+    ls -la apps/web/.next/standalone/ && \
+    echo "=== Checking apps folder in standalone ===" && \
+    ls -la apps/web/.next/standalone/apps/ && \
+    echo "=== Checking web folder in standalone ===" && \
+    ls -la apps/web/.next/standalone/apps/web/ && \
+    echo "=== Looking for server.js ===" && \
+    find apps/web/.next/standalone -name "server.js" -type f
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -57,10 +73,14 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
 # Debug: Verify files were copied correctly
-RUN ls -la /app/ || true
-RUN ls -la /app/apps/ || true
-RUN ls -la /app/apps/web/ || true
-RUN test -f /app/apps/web/server.js && echo "✓ server.js exists at /app/apps/web/server.js" || echo "✗ server.js NOT found at /app/apps/web/server.js"
+RUN echo "=== Listing /app ===" && \
+    ls -la /app/ && \
+    echo "=== Listing /app/apps ===" && \
+    ls -la /app/apps/ && \
+    echo "=== Listing /app/apps/web ===" && \
+    ls -la /app/apps/web/ && \
+    echo "=== Finding all server.js files ===" && \
+    find /app -name "server.js" -type f 2>/dev/null || echo "No server.js found"
 
 USER nextjs
 

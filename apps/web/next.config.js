@@ -35,7 +35,7 @@ const nextConfig = {
       },
     ];
   },
-  output: 'standalone',
+  // output: 'standalone', // Disabled for simpler Docker build
 };
 
 module.exports = nextConfig;
