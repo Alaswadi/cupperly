@@ -10,7 +10,7 @@ interface SessionData {
   status: string;
   startedAt?: string;
   completedAt?: string;
-  creator: {
+  creator?: {
     firstName: string;
     lastName: string;
   };
@@ -23,6 +23,7 @@ interface SessionData {
   }>;
   samples: Array<{
     id: string;
+    sampleId?: string;
     sample: {
       id: string;
       name: string;
@@ -32,7 +33,7 @@ interface SessionData {
       roastLevel?: string;
       producer?: string;
       farm?: string;
-      altitude?: string;
+      altitude?: number | string;
     };
     aiSummary?: string;
     aiGeneratedAt?: string;
@@ -60,7 +61,7 @@ interface ScoreData {
   overall?: number;
   notes?: string;
   privateNotes?: string;
-  createdAt: string;
+  createdAt?: string;
   flavorDescriptors?: Array<{
     flavorDescriptor: {
       name: string;
@@ -364,7 +365,9 @@ export class EnhancedPDFExporter {
     // Session Details
     this.addSubtitle('Session Details');
     this.addKeyValue('Status', session.status);
-    this.addKeyValue('Created by', `${session.creator.firstName} ${session.creator.lastName}`);
+    if (session.creator) {
+      this.addKeyValue('Created by', `${session.creator.firstName} ${session.creator.lastName}`);
+    }
     this.addKeyValue('Participants', session.participants.length.toString());
     this.addKeyValue('Samples', session.samples.length.toString());
     
@@ -407,7 +410,7 @@ export class EnhancedPDFExporter {
       if (sessionSample.sample.roastLevel) this.addKeyValue('Roast Level', sessionSample.sample.roastLevel);
       if (sessionSample.sample.producer) this.addKeyValue('Producer', sessionSample.sample.producer);
       if (sessionSample.sample.farm) this.addKeyValue('Farm', sessionSample.sample.farm);
-      if (sessionSample.sample.altitude) this.addKeyValue('Altitude', sessionSample.sample.altitude);
+      if (sessionSample.sample.altitude) this.addKeyValue('Altitude', String(sessionSample.sample.altitude));
       
       this.currentY += 5;
       

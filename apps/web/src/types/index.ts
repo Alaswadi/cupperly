@@ -10,6 +10,7 @@ export interface User {
   avatar?: string;
   bio?: string;
   preferences?: Record<string, any>;
+  lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
 }

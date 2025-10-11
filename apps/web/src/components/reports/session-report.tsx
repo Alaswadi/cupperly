@@ -23,7 +23,7 @@ interface SessionReportProps {
     status: string;
     startedAt?: string;
     completedAt?: string;
-    creator: {
+    creator?: {
       firstName: string;
       lastName: string;
     };
@@ -72,6 +72,8 @@ interface SessionReportProps {
     uniformity?: number;
     overall?: number;
     notes?: string;
+    privateNotes?: string;
+    createdAt?: string;
     flavorDescriptors?: Array<{
       flavorDescriptor: {
         name: string;
@@ -224,7 +226,7 @@ export function SessionReport({ session, scores }: SessionReportProps) {
         ? sampleScoreData.reduce((sum, s) => sum + s.totalScore, 0) / sampleScoreData.length
         : 85 + Math.random() * 10; // Demo score between 85-95
 
-      const sampleName = sessionSample.sample?.name || sessionSample.name || `Sample ${index + 1}`;
+      const sampleName = sessionSample.sample?.name || `Sample ${index + 1}`;
 
       return {
         name: sampleName,
@@ -306,7 +308,7 @@ export function SessionReport({ session, scores }: SessionReportProps) {
 
   const handleExportExcel = () => {
     // TODO: Implement Excel export functionality
-    toast.info('Excel export feature coming soon!');
+    toast('Excel export feature coming soon!');
   };
 
   return (
@@ -627,9 +629,11 @@ export function SessionReport({ session, scores }: SessionReportProps) {
                             <span className="text-sm font-semibold text-gray-800">
                               {score.user.firstName} {score.user.lastName}
                             </span>
-                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                              {format(new Date(score.createdAt), 'MMM d, yyyy')}
-                            </span>
+                            {score.createdAt && (
+                              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                {format(new Date(score.createdAt), 'MMM d, yyyy')}
+                              </span>
+                            )}
                           </div>
                           {score.notes && (
                             <div className="mb-3">

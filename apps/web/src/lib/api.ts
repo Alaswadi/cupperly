@@ -12,7 +12,9 @@ import {
   CreateSampleForm,
   CreateSessionForm,
   GreenBeanGrading,
-  CreateGreenBeanGradingForm
+  CreateGreenBeanGradingForm,
+  FlavorDescriptor,
+  CreateFlavorDescriptorForm
 } from '@/types';
 
 class ApiClient {
@@ -130,7 +132,7 @@ class ApiClient {
     );
   }
 
-  private async request<T>(
+  async request<T>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
     url: string,
     data?: any

@@ -45,11 +45,10 @@ export function ScoreDistributionChart({ data }: ScoreDistributionChartProps) {
             tickLine={false}
             tick={{ fontSize: 12, fill: '#6b7280' }}
           />
-          <YAxis 
+          <YAxis
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#6b7280' }}
-            gridLines={{ stroke: '#f3f4f6' }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Bar

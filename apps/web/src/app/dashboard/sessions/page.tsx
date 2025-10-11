@@ -556,7 +556,7 @@ export default function SessionsPage() {
                         {(() => {
                           if (!session.samples || session.samples.length === 0) return 'No samples';
                           if (session.samples.length === 1) return session.samples[0].sample?.origin || 'Unknown origin';
-                          const uniqueOrigins = [...new Set(session.samples.map(s => s.sample?.origin).filter(Boolean))];
+                          const uniqueOrigins = Array.from(new Set(session.samples.map(s => s.sample?.origin).filter(Boolean)));
                           return uniqueOrigins.length === 1 ? uniqueOrigins[0] : 'Multiple origins';
                         })()}
                       </td>

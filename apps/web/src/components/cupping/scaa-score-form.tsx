@@ -139,7 +139,9 @@ export function ScaaScoreForm({
     id: string;
     intensity: number;
     flavorDescriptor?: any;
-  }>>(initialScore?.flavorDescriptors || []);
+  }>>(initialScore?.flavorDescriptors?.filter((fd): fd is { id: string; intensity: number; flavorDescriptor?: any } =>
+    typeof fd.id === 'string' && typeof fd.intensity === 'number'
+  ) || []);
 
   const {
     register,
@@ -230,7 +232,8 @@ export function ScaaScoreForm({
           {/* Enhanced Scoring Categories */}
           <div className="space-y-6">
             {SCAA_CATEGORIES.map((category) => {
-              const currentValue = watch(category.name as keyof ScaaScoreForm) || 0;
+              const watchedValue = watch(category.name as keyof ScaaScoreForm);
+              const currentValue = typeof watchedValue === 'number' ? watchedValue : 0;
 
               return (
                 <div key={category.name} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-200">

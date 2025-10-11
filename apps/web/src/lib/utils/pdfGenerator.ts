@@ -39,7 +39,7 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
 
   // Helper function to draw a horizontal line
   const drawLine = (y: number, color: number[] = lightGray) => {
-    pdf.setDrawColor(...color);
+    pdf.setDrawColor(color[0], color[1], color[2]);
     pdf.setLineWidth(0.5);
     pdf.line(margin, y, pageWidth - margin, y);
   };
@@ -49,7 +49,7 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
   // ============================================================================
   
   // Logo/Title Area
-  pdf.setFillColor(...primaryColor);
+  pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
   pdf.rect(margin, yPosition, contentWidth, 15, 'F');
   
   pdf.setTextColor(255, 255, 255);
@@ -71,10 +71,10 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
 
   pdf.setFillColor(249, 250, 251); // Gray-50
   pdf.rect(margin, yPosition, contentWidth, infoBoxHeight, 'F');
-  pdf.setDrawColor(...lightGray);
+  pdf.setDrawColor(lightGray[0], lightGray[1], lightGray[2]);
   pdf.rect(margin, yPosition, contentWidth, infoBoxHeight, 'S');
 
-  pdf.setTextColor(...darkGray);
+  pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
 
@@ -148,7 +148,7 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
                      grading.classification === 'EXCHANGE_GRADE' ? [251, 146, 60] :
                      [239, 68, 68];
 
-  pdf.setFillColor(...gradeColor);
+  pdf.setFillColor(gradeColor[0], gradeColor[1], gradeColor[2]);
   pdf.roundedRect(margin, yPosition, contentWidth, 20, 3, 3, 'F');
   
   pdf.setTextColor(255, 255, 255);
@@ -168,8 +168,8 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
   // ============================================================================
   
   checkNewPage(30);
-  
-  pdf.setTextColor(...darkGray);
+
+  pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
   pdf.setFontSize(14);
   pdf.setFont('helvetica', 'bold');
   pdf.text('Overall Quality Score', margin, yPosition);
@@ -180,28 +180,28 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
                      (grading.qualityScore || 0) >= 70 ? [251, 146, 60] :
                      [239, 68, 68];
 
-  pdf.setFillColor(...scoreColor);
+  pdf.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
   pdf.rect(margin, yPosition, 60, 18, 'F');
   
   pdf.setTextColor(255, 255, 255);
   pdf.setFontSize(24);
   pdf.setFont('helvetica', 'bold');
   pdf.text(`${grading.qualityScore?.toFixed(1) || 'N/A'}`, margin + 30, yPosition + 12, { align: 'center' });
-  
-  pdf.setTextColor(...mediumGray);
+
+  pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
   pdf.setFontSize(9);
   pdf.setFont('helvetica', 'normal');
   pdf.text('Based on defects, moisture, water activity, density, and uniformity', margin + 65, yPosition + 10);
-  
+
   yPosition += 25;
 
   // ============================================================================
   // DEFECT ANALYSIS
   // ============================================================================
-  
+
   checkNewPage(60);
-  
-  pdf.setTextColor(...darkGray);
+
+  pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
   pdf.setFontSize(14);
   pdf.setFont('helvetica', 'bold');
   pdf.text('Defect Analysis', margin, yPosition);
@@ -239,10 +239,10 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
   // Full Defect Equivalents
   pdf.setFillColor(243, 244, 246); // Gray-100
   pdf.rect(margin + (boxWidth + 5) * 2, yPosition, boxWidth, 20, 'F');
-  pdf.setDrawColor(...lightGray);
+  pdf.setDrawColor(lightGray[0], lightGray[1], lightGray[2]);
   pdf.rect(margin + (boxWidth + 5) * 2, yPosition, boxWidth, 20, 'S');
-  
-  pdf.setTextColor(...darkGray);
+
+  pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
   pdf.setFontSize(9);
   pdf.setFont('helvetica', 'bold');
   pdf.text('Full Defect Equivalents', margin + (boxWidth + 5) * 2 + boxWidth / 2, yPosition + 6, { align: 'center' });
@@ -261,16 +261,16 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
     yPosition += 7;
 
     // Table header
-    pdf.setFillColor(...lightGray);
+    pdf.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
     pdf.rect(margin, yPosition, contentWidth, 8, 'F');
-    
-    pdf.setTextColor(...darkGray);
+
+    pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     pdf.setFontSize(9);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Defect Type', margin + 3, yPosition + 5.5);
     pdf.text('Category', margin + contentWidth - 50, yPosition + 5.5);
     pdf.text('Count', margin + contentWidth - 15, yPosition + 5.5, { align: 'right' });
-    
+
     yPosition += 8;
 
     // Table rows
@@ -280,15 +280,15 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
         pdf.setFillColor(249, 250, 251);
         pdf.rect(margin, yPosition, contentWidth, 7, 'F');
       }
-      
-      pdf.setTextColor(...darkGray);
+
+      pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
       pdf.text(formatDefectType(defect.type), margin + 3, yPosition + 5);
-      
+
       const catColor = defect.category === 1 ? [220, 38, 38] : [202, 138, 4];
-      pdf.setTextColor(...catColor);
+      pdf.setTextColor(catColor[0], catColor[1], catColor[2]);
       pdf.text(`Cat ${defect.category}`, margin + contentWidth - 50, yPosition + 5);
-      
-      pdf.setTextColor(...darkGray);
+
+      pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
       pdf.text(String(defect.count), margin + contentWidth - 15, yPosition + 5, { align: 'right' });
       
       yPosition += 7;
@@ -302,8 +302,8 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
   // ============================================================================
   
   checkNewPage(50);
-  
-  pdf.setTextColor(...darkGray);
+
+  pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
   pdf.setFontSize(14);
   pdf.setFont('helvetica', 'bold');
   pdf.text('Physical & Chemical Properties', margin, yPosition);
@@ -321,22 +321,22 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
       checkNewPage(22);
     }
 
-    pdf.setFillColor(...color);
+    pdf.setFillColor(color[0], color[1], color[2]);
     pdf.rect(propertyX, propertyY, propertyBoxWidth, 20, 'F');
-    pdf.setDrawColor(...lightGray);
+    pdf.setDrawColor(lightGray[0], lightGray[1], lightGray[2]);
     pdf.rect(propertyX, propertyY, propertyBoxWidth, 20, 'S');
-    
-    pdf.setTextColor(...darkGray);
+
+    pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     pdf.setFontSize(9);
     pdf.setFont('helvetica', 'bold');
     pdf.text(label, propertyX + 3, propertyY + 6);
-    
+
     pdf.setFontSize(14);
     pdf.text(value, propertyX + 3, propertyY + 14);
-    
+
     pdf.setFontSize(7);
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(...mediumGray);
+    pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
     pdf.text(ideal, propertyX + 3, propertyY + 18);
     
     propertyX += propertyBoxWidth + 5;
@@ -375,8 +375,8 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
     
     if (hasDistribution) {
       checkNewPage(60);
-      
-      pdf.setTextColor(...darkGray);
+
+      pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Screen Size Distribution', margin, yPosition);
@@ -386,20 +386,20 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
         const percentage = (grading.screenSizeDistribution as any)?.[`size${size}`] || 0;
         if (percentage > 0) {
           checkNewPage(10);
-          
+
           pdf.setFontSize(9);
           pdf.setFont('helvetica', 'normal');
-          pdf.setTextColor(...darkGray);
+          pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
           pdf.text(`Screen ${size} (${size}/64 inch)`, margin, yPosition);
           pdf.text(`${percentage.toFixed(1)}%`, pageWidth - margin, yPosition, { align: 'right' });
-          
+
           yPosition += 3;
-          
+
           // Progress bar
-          pdf.setFillColor(...lightGray);
+          pdf.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
           pdf.rect(margin, yPosition, contentWidth, 4, 'F');
-          
-          pdf.setFillColor(...primaryColor);
+
+          pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
           const barWidth = (percentage / 100) * contentWidth;
           pdf.rect(margin, yPosition, barWidth, 4, 'F');
           
@@ -411,7 +411,7 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
         yPosition += 2;
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'bold');
-        pdf.setTextColor(...darkGray);
+        pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
         pdf.text(`Average Screen Size: ${grading.averageScreenSize.toFixed(1)}`, margin, yPosition);
         yPosition += 10;
       }
@@ -421,11 +421,11 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
   // ============================================================================
   // NOTES
   // ============================================================================
-  
+
   if (grading.notes) {
     checkNewPage(30);
-    
-    pdf.setTextColor(...darkGray);
+
+    pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Additional Notes', margin, yPosition);
@@ -450,8 +450,8 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
 
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(...darkGray);
-    
+    pdf.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+
     if (grading.gradedBy) {
       pdf.text('Graded By:', margin, yPosition);
       pdf.setFont('helvetica', 'normal');
@@ -469,7 +469,7 @@ export async function generateGradingPDF(options: PDFReportOptions): Promise<voi
       yPosition += 6;
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8);
-      pdf.setTextColor(...mediumGray);
+      pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
       pdf.text(`Certification Date: ${new Date(grading.certificationDate).toLocaleDateString()}`, pageWidth - margin, yPosition, { align: 'right' });
     }
   }
