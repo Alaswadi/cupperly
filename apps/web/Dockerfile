@@ -47,10 +47,6 @@ RUN echo "=== Checking build output ===" && \
     ls -la apps/web/.next/ && \
     echo "=== Checking standalone folder ===" && \
     ls -la apps/web/.next/standalone/ && \
-    echo "=== Checking apps folder in standalone ===" && \
-    ls -la apps/web/.next/standalone/apps/ && \
-    echo "=== Checking web folder in standalone ===" && \
-    ls -la apps/web/.next/standalone/apps/web/ && \
     echo "=== Looking for server.js ===" && \
     find apps/web/.next/standalone -name "server.js" -type f
 
@@ -68,19 +64,9 @@ RUN adduser --system --uid 1001 nextjs
 # Copy the standalone output which includes everything needed to run
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 # Copy static files
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./.next/static
 # Copy public folder
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
-
-# Debug: Verify files were copied correctly
-RUN echo "=== Listing /app ===" && \
-    ls -la /app/ && \
-    echo "=== Listing /app/apps ===" && \
-    ls -la /app/apps/ && \
-    echo "=== Listing /app/apps/web ===" && \
-    ls -la /app/apps/web/ && \
-    echo "=== Finding all server.js files ===" && \
-    find /app -name "server.js" -type f 2>/dev/null || echo "No server.js found"
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./public
 
 USER nextjs
 
@@ -91,8 +77,7 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
 # server.js is created by next build from the standalone output
-# The standalone output preserves the monorepo structure
-CMD ["node", "apps/web/server.js"]
+CMD ["node", "server.js"]
 
 # Development stage
 FROM base AS development

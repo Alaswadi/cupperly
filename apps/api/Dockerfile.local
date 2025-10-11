@@ -1,0 +1,46 @@
+# Simplified Dockerfile for local production builds
+# Uses existing node_modules from host to avoid network issues
+FROM node:18-alpine AS base
+
+# Production builder stage
+FROM base AS builder
+WORKDIR /app
+
+# Copy everything including node_modules
+COPY package.json package-lock.json* ./
+COPY apps/api ./apps/api
+COPY packages ./packages
+COPY node_modules ./node_modules
+
+# Generate Prisma Client
+WORKDIR /app/apps/api
+RUN npx prisma generate
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM base AS production
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nodejs
+
+# Copy built application
+COPY --from=builder --chown=nodejs:nodejs /app/apps/api/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/apps/api/package.json ./package.json
+COPY --from=builder --chown=nodejs:nodejs /app/apps/api/schema.prisma ./schema.prisma
+
+# Copy production dependencies (includes Prisma client)
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+
+USER nodejs
+
+EXPOSE 3001
+
+ENV NODE_ENV=production
+ENV PORT=3001
+
+CMD ["node", "dist/index.js"]
+

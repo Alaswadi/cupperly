@@ -35,7 +35,7 @@ const nextConfig = {
       },
     ];
   },
-  // output: 'standalone', // Disabled for simpler Docker build
+  output: 'standalone', // Required for Docker production builds
 };
 
 module.exports = nextConfig;

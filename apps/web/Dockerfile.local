@@ -1,0 +1,46 @@
+# Simplified Dockerfile for local production builds
+# Uses existing node_modules from host to avoid network issues
+FROM node:18-alpine AS base
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+
+# Copy everything including node_modules
+COPY package.json package-lock.json* ./
+COPY apps/web ./apps/web
+COPY packages ./packages
+COPY node_modules ./node_modules
+
+# Verify next.config.js exists
+RUN test -f apps/web/next.config.js || (echo "ERROR: next.config.js not found!" && exit 1)
+
+# Build from root to maintain monorepo structure
+RUN npm run build --workspace=apps/web
+
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy the standalone output which includes everything needed to run
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+# Copy static files
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+# Copy public folder
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+# server.js is created by next build from the standalone output
+CMD ["node", "apps/web/server.js"]
+
