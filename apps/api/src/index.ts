@@ -6,6 +6,19 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import path from 'path';
+
+// Load environment variables
+// Try to load from multiple locations to support different run contexts
+dotenv.config({ path: path.resolve(__dirname, '../.env') }); // apps/api/.env
+dotenv.config({ path: path.resolve(__dirname, '../../.env') }); // root .env
+dotenv.config(); // current directory .env
+
+// Log database connection for debugging
+console.log('🔍 Database URL:', process.env.DATABASE_URL ? 'Loaded ✓' : 'NOT FOUND ✗');
+if (process.env.NODE_ENV === 'development') {
+  console.log('🔍 Database Host:', process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'unknown');
+}
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -22,9 +35,6 @@ import flavorDescriptorsRoutes from './routes/flavorDescriptors';
 import settingsRoutes from './routes/settings';
 import aiRoutes from './routes/ai';
 import greenBeanGradingRoutes from './routes/greenBeanGrading';
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
