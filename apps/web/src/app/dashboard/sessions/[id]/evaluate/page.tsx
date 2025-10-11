@@ -79,21 +79,21 @@ export default function SessionEvaluatePage() {
         scoresApi.getSessionScores(sessionId)
       ]);
 
-      if (sessionResponse.success) {
+      if (sessionResponse.success && sessionResponse.data) {
         const sessionData = sessionResponse.data;
-        
+
         // Check if session is active
         if (sessionData.status !== 'ACTIVE') {
           setError('This session is not active for evaluation');
           return;
         }
-        
+
         setSession(sessionData);
       } else {
         setError('Failed to load session');
       }
 
-      if (scoresResponse.success) {
+      if (scoresResponse.success && scoresResponse.data) {
         setScores(scoresResponse.data || []);
       }
     } catch (error) {
