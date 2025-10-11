@@ -47,8 +47,13 @@ RUN echo "=== Checking build output ===" && \
     ls -la apps/web/.next/ && \
     echo "=== Checking standalone folder ===" && \
     ls -la apps/web/.next/standalone/ && \
+    echo "=== Checking standalone .next folder ===" && \
+    ls -la apps/web/.next/standalone/.next/ 2>/dev/null || echo "No .next in standalone" && \
     echo "=== Looking for server.js ===" && \
     find apps/web/.next/standalone -name "server.js" -type f
+
+# Manually copy node_modules to standalone since monorepo standalone doesn't include them
+RUN cp -r node_modules apps/web/.next/standalone/node_modules
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -63,10 +68,18 @@ RUN adduser --system --uid 1001 nextjs
 
 # Copy the standalone output which includes everything needed to run
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-# Copy static files
+# Copy static files to the correct location
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./.next/static
 # Copy public folder
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./public
+
+# Debug: Check what was copied
+RUN echo "=== Checking /app contents ===" && \
+    ls -la /app/ && \
+    echo "=== Checking for node_modules ===" && \
+    ls -la /app/node_modules/ 2>/dev/null || echo "No node_modules found" && \
+    echo "=== Checking for next module ===" && \
+    ls -la /app/node_modules/next 2>/dev/null || echo "Next module not found"
 
 USER nextjs
 
