@@ -35,11 +35,21 @@ interface SessionReportProps {
       };
     }>;
     samples: Array<{
-      id: string;
-      name: string;
-      origin?: string;
-      variety?: string;
-      processingMethod?: string;
+      id: string; // SessionSample ID
+      sampleId: string; // Actual Sample ID
+      sample: {
+        id: string;
+        name: string;
+        origin?: string;
+        variety?: string;
+        processingMethod?: string;
+        roastLevel?: string;
+        producer?: string;
+        farm?: string;
+        altitude?: number;
+      };
+      aiSummary?: string;
+      aiGeneratedAt?: string;
     }>;
   };
   scores: Array<{
@@ -239,26 +249,8 @@ export function SessionReport({ session, scores }: SessionReportProps) {
       setIsExportingPDF(true);
       toast.loading('Generating PDF report...', { id: 'pdf-export' });
 
-      // Transform session data to match the expected interface
-      const sessionData = {
-        ...session,
-        samples: session.samples.map(s => ({
-          id: s.id,
-          sample: {
-            id: s.sample?.id || s.id,
-            name: s.sample?.name || s.name,
-            origin: s.sample?.origin || s.origin,
-            variety: s.sample?.variety || s.variety,
-            processingMethod: s.sample?.processingMethod || s.processingMethod,
-            roastLevel: s.sample?.roastLevel,
-            producer: s.sample?.producer,
-            farm: s.sample?.farm,
-            altitude: s.sample?.altitude,
-          },
-          aiSummary: s.aiSummary,
-          aiGeneratedAt: s.aiGeneratedAt,
-        }))
-      };
+      // Session data is already in the correct format
+      const sessionData = session;
 
       await exportSessionToPDF(sessionData, scores);
       toast.success('PDF report generated successfully!', { id: 'pdf-export' });
@@ -301,28 +293,8 @@ export function SessionReport({ session, scores }: SessionReportProps) {
 
       toast.loading('Generating professional PDF report...', { id: 'pdf-export' });
 
-      // Transform session data
-      const sessionData = {
-        ...session,
-        samples: session.samples.map(s => ({
-          id: s.id,
-          sample: {
-            id: s.sample?.id || s.id,
-            name: s.sample?.name || s.name,
-            origin: s.sample?.origin || s.origin,
-            variety: s.sample?.variety || s.variety,
-            processingMethod: s.sample?.processingMethod || s.processingMethod,
-            roastLevel: s.sample?.roastLevel,
-            producer: s.sample?.producer,
-            farm: s.sample?.farm,
-            altitude: s.sample?.altitude,
-          },
-          aiSummary: s.aiSummary,
-          aiGeneratedAt: s.aiGeneratedAt,
-        }))
-      };
-
-      await exportSessionToPDFWithCharts(sessionData, scores);
+      // Session data is already in the correct format
+      await exportSessionToPDFWithCharts(session, scores);
       toast.success('Professional PDF report generated successfully!', { id: 'pdf-export' });
     } catch (error: any) {
       console.error('Failed to export PDF with charts:', error);

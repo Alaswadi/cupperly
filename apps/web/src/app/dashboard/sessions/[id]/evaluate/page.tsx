@@ -25,13 +25,17 @@ interface Session {
     description?: string;
   };
   samples: Array<{
-    id: string;
-    name: string;
-    origin?: string;
-    variety?: string;
+    id: string; // SessionSample ID
+    sampleId: string; // Actual Sample ID
     position: number;
     isBlind: boolean;
     blindCode?: string;
+    sample: {
+      id: string;
+      name: string;
+      origin?: string;
+      variety?: string;
+    };
   }>;
 }
 
@@ -179,9 +183,9 @@ export default function SessionEvaluatePage() {
 
   const currentSample = session.samples[currentSampleIndex];
   const currentScore = getCurrentSampleScore();
-  const sampleDisplayName = session.blindTasting && currentSample.blindCode 
-    ? currentSample.blindCode 
-    : currentSample.name;
+  const sampleDisplayName = session.blindTasting && currentSample.blindCode
+    ? currentSample.blindCode
+    : currentSample.sample.name;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -273,7 +277,7 @@ export default function SessionEvaluatePage() {
                 const sampleScore = scores.find(s => s.sampleId === sample.sampleId);
                 const isCompleted = sampleScore?.isSubmitted;
                 const isCurrent = index === currentSampleIndex;
-                const sampleDisplayName = session.blindTasting && sample.blindCode ? sample.blindCode : sample.name;
+                const sampleDisplayName = session.blindTasting && sample.blindCode ? sample.blindCode : sample.sample.name;
 
                 return (
                   <button
@@ -353,14 +357,14 @@ export default function SessionEvaluatePage() {
                     {sampleDisplayName || `Sample ${currentSampleIndex + 1}`}
                   </h2>
                   <div className="flex items-center space-x-4">
-                    {!session.blindTasting && currentSample.origin && (
+                    {!session.blindTasting && currentSample.sample.origin && (
                       <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 shadow-sm">
-                        📍 {currentSample.origin}
+                        📍 {currentSample.sample.origin}
                       </span>
                     )}
-                    {!session.blindTasting && currentSample.variety && (
+                    {!session.blindTasting && currentSample.sample.variety && (
                       <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-green-100 text-green-700 shadow-sm">
-                        🌱 {currentSample.variety}
+                        🌱 {currentSample.sample.variety}
                       </span>
                     )}
                     <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-coffee-brown/10 text-coffee-brown shadow-sm">
