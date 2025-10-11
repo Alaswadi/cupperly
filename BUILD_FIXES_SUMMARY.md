@@ -60,13 +60,14 @@ Fixed the "Cannot find module 'next'" error in Coolify deployment.
 ### Docker Deployment Fix
 
 12. **apps/web/Dockerfile**
-    - Fixed standalone output paths
-    - Changed: `COPY --from=builder /app/apps/web/public ./public`
-    - To: `COPY --from=builder /app/apps/web/public ./apps/web/public`
-    - Changed: `COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./.next/static`
-    - To: `COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static`
-    - Changed: `CMD ["node", "server.js"]`
-    - To: `CMD ["node", "apps/web/server.js"]`
+    - Fixed standalone output paths for monorepo structure
+    - Changed `npm install` to `npm ci --legacy-peer-deps` for consistent builds
+    - Fixed COPY commands to preserve monorepo structure:
+      - `COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./`
+      - `COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static`
+      - `COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public`
+    - Fixed CMD to: `CMD ["node", "apps/web/server.js"]`
+    - The standalone output preserves the monorepo directory structure
 
 ---
 
@@ -132,18 +133,24 @@ The main issue was inconsistent type definitions for `SessionSample` objects. Th
 Many components were using a flattened structure, causing type errors.
 
 ### Docker Standalone Output
-Next.js standalone output creates a specific directory structure:
+Next.js standalone output in a monorepo preserves the workspace structure:
 ```
 .next/standalone/
 ├── apps/
 │   └── web/
-│       ├── server.js
+│       ├── server.js          ← Entry point
 │       ├── .next/
-│       └── public/
-└── node_modules/
+│       │   └── static/        ← Copied separately
+│       └── public/            ← Copied separately
+├── packages/                   ← Included automatically
+└── node_modules/              ← Minimal required deps
 ```
 
-The Dockerfile now correctly copies files to match this structure.
+The Dockerfile now correctly:
+1. Copies the entire standalone output to `/app`
+2. Copies static files to `/app/apps/web/.next/static`
+3. Copies public files to `/app/apps/web/public`
+4. Runs `node apps/web/server.js` to start the server
 
 ---
 

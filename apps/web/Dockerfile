@@ -15,29 +15,23 @@ COPY packages/types/package.json ./packages/types/
 COPY packages/database/package.json ./packages/database/
 
 # Install dependencies
-RUN npm install
+RUN npm ci --legacy-peer-deps
 
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json ./package.json
-COPY --from=deps /app/apps/web/package.json ./apps/web/package.json
 
 # Copy source code (web app and packages)
 COPY apps/web ./apps/web
 COPY packages ./packages
 
-# Set working directory to web app
-WORKDIR /app/apps/web
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN npm run build
+# Build from root to maintain monorepo structure
+RUN npm run build --workspace=apps/web
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -50,13 +44,12 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy public folder
-COPY --from=builder /app/apps/web/public ./apps/web/public
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# Copy the standalone output which includes everything needed to run
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+# Copy static files
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+# Copy public folder
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
 USER nextjs
 
@@ -67,7 +60,7 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
 # server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+# The standalone output preserves the monorepo structure
 CMD ["node", "apps/web/server.js"]
 
 # Development stage
