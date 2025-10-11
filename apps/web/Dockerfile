@@ -25,6 +25,7 @@ WORKDIR /app
 # Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/package.json ./package.json
+COPY --from=deps /app/apps/web/package.json ./apps/web/package.json
 
 # Copy source code (web app and packages)
 COPY apps/web ./apps/web
@@ -32,6 +33,10 @@ COPY packages ./packages
 
 # Build from root to maintain monorepo structure
 RUN npm run build --workspace=apps/web
+
+# Debug: Verify standalone output was created
+RUN ls -la apps/web/.next/standalone/apps/web/ || echo "ERROR: standalone output not found!"
+RUN test -f apps/web/.next/standalone/apps/web/server.js && echo "✓ server.js found" || echo "✗ server.js NOT found"
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -50,6 +55,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 # Copy public folder
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+
+# Debug: Verify files were copied correctly
+RUN ls -la /app/ || true
+RUN ls -la /app/apps/ || true
+RUN ls -la /app/apps/web/ || true
+RUN test -f /app/apps/web/server.js && echo "✓ server.js exists at /app/apps/web/server.js" || echo "✗ server.js NOT found at /app/apps/web/server.js"
 
 USER nextjs
 
