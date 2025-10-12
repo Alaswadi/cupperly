@@ -66,7 +66,13 @@ RUN adduser --system --uid 1001 nodejs
 # Copy built application
 COPY --from=builder --chown=nodejs:nodejs /app/apps/api/dist ./dist
 COPY --from=builder --chown=nodejs:nodejs /app/apps/api/package.json ./package.json
-COPY --from=builder --chown=nodejs:nodejs /app/apps/api/schema.prisma ./schema.prisma
+
+# Copy Prisma files from packages/database
+COPY --from=builder --chown=nodejs:nodejs /app/packages/database/schema.prisma ./prisma/schema.prisma
+COPY --from=builder --chown=nodejs:nodejs /app/packages/database/migrations ./prisma/migrations
+COPY --from=builder --chown=nodejs:nodejs /app/packages/database/seed.ts ./prisma/seed.ts
+COPY --from=builder --chown=nodejs:nodejs /app/packages/database/seed-flavors.ts ./prisma/seed-flavors.ts
+COPY --from=builder --chown=nodejs:nodejs /app/packages/database/package.json ./prisma/package.json
 
 # Copy production dependencies (includes Prisma client)
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules

@@ -9,15 +9,29 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // Load environment variables
-// Try to load from multiple locations to support different run contexts
-dotenv.config({ path: path.resolve(__dirname, '../.env') }); // apps/api/.env
-dotenv.config({ path: path.resolve(__dirname, '../../.env') }); // root .env
-dotenv.config(); // current directory .env
+// Only load .env files if DATABASE_URL is not already set (e.g., by Docker)
+if (!process.env.DATABASE_URL) {
+  console.log('📝 Loading environment from .env files...');
+  // Try to load from multiple locations to support different run contexts
+  dotenv.config({ path: path.resolve(__dirname, '../.env') }); // apps/api/.env
+  dotenv.config({ path: path.resolve(__dirname, '../../.env') }); // root .env
+  dotenv.config(); // current directory .env
+} else {
+  console.log('📝 Using environment variables from Docker/System');
+}
 
 // Log database connection for debugging
 console.log('🔍 Database URL:', process.env.DATABASE_URL ? 'Loaded ✓' : 'NOT FOUND ✗');
 if (process.env.NODE_ENV === 'development') {
-  console.log('🔍 Database Host:', process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'unknown');
+  const dbHost = process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'unknown';
+  console.log('🔍 Database Host:', dbHost);
+
+  // Warn if using localhost in what appears to be a Docker environment
+  if (dbHost.includes('localhost') && process.env.HOSTNAME) {
+    console.warn('⚠️  WARNING: Using localhost for database in Docker!');
+    console.warn('   This will not work. Use service name "postgres" instead.');
+    console.warn('   Make sure docker-compose is using --env-file .env.docker');
+  }
 }
 
 // Import middleware
@@ -39,20 +53,7 @@ import greenBeanGradingRoutes from './routes/greenBeanGrading';
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
 
-// Security middleware
-app.use(helmet({
-  crossOriginEmbedderPolicy: false,
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
-}));
-
-// CORS configuration
+// CORS configuration - MUST be before other middleware
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
       'https://demo.cupperly.com',
@@ -66,11 +67,60 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
       'http://127.0.0.1:3001'
     ];
 
+console.log('🔒 CORS Configuration:');
+console.log('   Environment:', process.env.NODE_ENV || 'development');
+console.log('   Allowed Origins:', allowedOrigins);
+
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, Postman, or same-origin)
+    if (!origin) {
+      console.log('✅ CORS: Allowing request with no origin');
+      return callback(null, true);
+    }
+
+    console.log('🔍 CORS: Checking origin:', origin);
+
+    // Check if origin is allowed
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (typeof allowed === 'string') {
+        return allowed === origin;
+      }
+      if (allowed instanceof RegExp) {
+        return allowed.test(origin);
+      }
+      return false;
+    });
+
+    if (isAllowed) {
+      console.log('✅ CORS: Origin allowed:', origin);
+      callback(null, true);
+    } else {
+      console.log('❌ CORS: Origin blocked:', origin);
+      // Don't throw error, just deny the request
+      callback(null, false);
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-ID'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-ID', 'Accept'],
+  exposedHeaders: ['Set-Cookie'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
+
+// Security middleware - AFTER CORS
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
 }));
 
 // Rate limiting

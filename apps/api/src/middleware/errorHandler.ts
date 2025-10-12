@@ -15,7 +15,17 @@ export const errorHandler = (
   error.message = err.message;
 
   // Log error
-  console.error('Error:', err);
+  console.error('❌ Error Handler:', err.message);
+  if (process.env.NODE_ENV === 'development') {
+    console.error('   Stack:', err.stack);
+  }
+
+  // Ensure CORS headers are set even for errors
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
 
   // Default error
   let statusCode = error.statusCode || 500;
