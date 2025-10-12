@@ -53,11 +53,22 @@ import greenBeanGradingRoutes from './routes/greenBeanGrading';
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
 
+// Enable trust proxy for Coolify/reverse proxy
+app.set('trust proxy', true);
+console.log('🔧 Trust proxy enabled for reverse proxy support');
+
+// Determine if we're in production
+const isProduction = process.env.NODE_ENV === 'production' ||
+                     process.env.NODE_ENV === 'prod' ||
+                     process.env.WEB_URL?.includes('cupperly.com');
+
 // CORS configuration - MUST be before other middleware
-const allowedOrigins = process.env.NODE_ENV === 'production'
+const allowedOrigins = isProduction
   ? [
       'https://demo.cupperly.com',
       'https://api.cupperly.com',
+      'http://demo.cupperly.com',
+      'http://api.cupperly.com',
       /\.cupperly\.com$/
     ]
   : [
@@ -69,6 +80,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
 
 console.log('🔒 CORS Configuration:');
 console.log('   Environment:', process.env.NODE_ENV || 'development');
+console.log('   Is Production:', isProduction);
 console.log('   Allowed Origins:', allowedOrigins);
 
 app.use(cors({
@@ -126,13 +138,13 @@ app.use(helmet({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 100 : 10000, // much higher limit for dev
+  max: isProduction ? 100 : 10000, // much higher limit for dev
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => {
     // Skip rate limiting for health checks in development
-    return process.env.NODE_ENV !== 'production' && req.path === '/api/health';
+    return !isProduction && req.path === '/api/health';
   },
 });
 app.use(limiter);

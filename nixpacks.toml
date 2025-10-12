@@ -1,0 +1,12 @@
+# Nixpacks configuration
+# This tells Nixpacks to use Dockerfile instead
+
+[phases.build]
+dependsOn = []
+
+[phases.install]
+dependsOn = []
+
+[start]
+cmd = "echo 'Please use Dockerfile build pack instead of Nixpacks'"
+
