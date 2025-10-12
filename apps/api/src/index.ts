@@ -21,17 +21,17 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Log database connection for debugging
+console.log('🔍 NODE_ENV:', process.env.NODE_ENV || 'NOT SET ❌');
+console.log('🔍 NODE_ENV type:', typeof process.env.NODE_ENV);
 console.log('🔍 Database URL:', process.env.DATABASE_URL ? 'Loaded ✓' : 'NOT FOUND ✗');
-if (process.env.NODE_ENV === 'development') {
-  const dbHost = process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'unknown';
-  console.log('🔍 Database Host:', dbHost);
+const dbHost = process.env.DATABASE_URL?.split('@')[1]?.split('/')[0] || 'unknown';
+console.log('🔍 Database Host:', dbHost);
 
-  // Warn if using localhost in what appears to be a Docker environment
-  if (dbHost.includes('localhost') && process.env.HOSTNAME) {
-    console.warn('⚠️  WARNING: Using localhost for database in Docker!');
-    console.warn('   This will not work. Use service name "postgres" instead.');
-    console.warn('   Make sure docker-compose is using --env-file .env.docker');
-  }
+// Warn if using localhost in what appears to be a Docker environment
+if (dbHost.includes('localhost') && process.env.HOSTNAME) {
+  console.warn('⚠️  WARNING: Using localhost for database in Docker!');
+  console.warn('   This will not work. Use service name "postgres" instead.');
+  console.warn('   Make sure docker-compose is using --env-file .env.docker');
 }
 
 // Import middleware
