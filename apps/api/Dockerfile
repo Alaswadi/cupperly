@@ -59,6 +59,9 @@ RUN npm run build
 FROM base AS production
 WORKDIR /app
 
+# Install tsx globally for seeding
+RUN npm install -g tsx
+
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
