@@ -54,13 +54,22 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
 
 // Enable trust proxy for Coolify/reverse proxy
-app.set('trust proxy', true);
+app.set('trust proxy', 1); // Trust first proxy (Coolify)
 console.log('🔧 Trust proxy enabled for reverse proxy support');
 
 // Determine if we're in production
+// Check multiple indicators since Coolify might not set NODE_ENV correctly
 const isProduction = process.env.NODE_ENV === 'production' ||
                      process.env.NODE_ENV === 'prod' ||
-                     process.env.WEB_URL?.includes('cupperly.com');
+                     process.env.WEB_URL?.includes('cupperly.com') ||
+                     process.env.API_URL?.includes('cupperly.com') ||
+                     process.env.DATABASE_URL?.includes('postgres:5432'); // Docker/Coolify uses service name
+
+console.log('🔍 Production Detection:');
+console.log('   NODE_ENV:', process.env.NODE_ENV);
+console.log('   WEB_URL:', process.env.WEB_URL || 'not set');
+console.log('   API_URL:', process.env.API_URL || 'not set');
+console.log('   DATABASE_URL contains postgres:5432:', process.env.DATABASE_URL?.includes('postgres:5432'));
 
 // CORS configuration - MUST be before other middleware
 const allowedOrigins = isProduction
@@ -142,6 +151,10 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  // Use X-Forwarded-For header when behind proxy
+  keyGenerator: (req) => {
+    return req.ip || req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || 'unknown';
+  },
   skip: (req) => {
     // Skip rate limiting for health checks in development
     return !isProduction && req.path === '/api/health';
