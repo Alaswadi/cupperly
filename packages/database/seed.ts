@@ -170,11 +170,13 @@ async function main() {
       id: 'sample-ethiopian-yirgacheffe',
       name: 'Ethiopian Yirgacheffe',
       origin: 'Ethiopia',
+      region: 'Yirgacheffe',
       variety: 'Heirloom',
-      process: 'Washed',
+      processingMethod: 'WASHED',
+      altitude: 1800,
       harvestDate: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
+      notes: 'Floral and citrus notes with a tea-like body',
       organizationId: demoOrg.id,
-      createdBy: adminUser1.id,
     },
   });
 
@@ -185,11 +187,13 @@ async function main() {
       id: 'sample-colombian-supremo',
       name: 'Colombian Supremo',
       origin: 'Colombia',
+      region: 'Huila',
       variety: 'Caturra',
-      process: 'Washed',
+      processingMethod: 'WASHED',
+      altitude: 1600,
       harvestDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
+      notes: 'Balanced with chocolate and caramel sweetness',
       organizationId: demoOrg.id,
-      createdBy: adminUser1.id,
     },
   });
 
