@@ -77,6 +77,10 @@ COPY --from=builder --chown=nodejs:nodejs /app/packages/database/package.json ./
 # Copy production dependencies (includes Prisma client)
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
 
+# Copy startup script
+COPY --chown=nodejs:nodejs apps/api/start.sh ./start.sh
+RUN chmod +x ./start.sh
+
 USER nodejs
 
 EXPOSE 3001
@@ -84,4 +88,5 @@ EXPOSE 3001
 ENV NODE_ENV=production
 ENV PORT=3001
 
-CMD ["node", "dist/index.js"]
+# Use startup script that runs migrations before starting
+CMD ["./start.sh"]
