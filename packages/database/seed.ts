@@ -5,11 +5,29 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Starting database seed...');
+  console.log('📊 Checking existing data...');
+
+  // Check if data already exists
+  const existingOrgs = await prisma.organization.count();
+  const existingUsers = await prisma.user.count();
+
+  if (existingOrgs > 0 && existingUsers > 0) {
+    console.log('✅ Database already seeded!');
+    console.log(`   - Organizations: ${existingOrgs}`);
+    console.log(`   - Users: ${existingUsers}`);
+    console.log('⏭️  Skipping seed...');
+    return;
+  }
+
+  console.log('📝 Creating initial data...');
 
   // Create demo organization
   const demoOrg = await prisma.organization.upsert({
     where: { slug: 'demo-roastery' },
-    update: {},
+    update: {
+      name: 'Demo Coffee Roastery',
+      description: 'A demonstration coffee roastery for Cupperly',
+    },
     create: {
       name: 'Demo Coffee Roastery',
       slug: 'demo-roastery',
@@ -23,11 +41,38 @@ async function main() {
 
   console.log('✅ Created demo organization:', demoOrg.name);
 
-  // Create demo admin user
+  // Create demo admin user with admin@demo.com
   const hashedPassword = await bcrypt.hash('demo123', 12);
-  const adminUser = await prisma.user.upsert({
+
+  const adminUser1 = await prisma.user.upsert({
+    where: { email: 'admin@demo.com' },
+    update: {
+      firstName: 'Admin',
+      lastName: 'User',
+      password: hashedPassword,
+    },
+    create: {
+      email: 'admin@demo.com',
+      password: hashedPassword,
+      firstName: 'Admin',
+      lastName: 'User',
+      organizationId: demoOrg.id,
+      role: 'ADMIN',
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
+    },
+  });
+
+  console.log('✅ Created admin user:', adminUser1.email);
+
+  // Create demo admin user with admin@demo.cupperly.com
+  const adminUser2 = await prisma.user.upsert({
     where: { email: 'admin@demo.cupperly.com' },
-    update: {},
+    update: {
+      firstName: 'Demo',
+      lastName: 'Admin',
+      password: hashedPassword,
+    },
     create: {
       email: 'admin@demo.cupperly.com',
       password: hashedPassword,
@@ -40,52 +85,60 @@ async function main() {
     },
   });
 
-  console.log('✅ Created admin user:', adminUser.email);
+  console.log('✅ Created admin user:', adminUser2.email);
 
   // Create demo cupper users
-  const cupperUsers = await Promise.all([
-    prisma.user.upsert({
-      where: { email: 'cupper1@demo.cupperly.com' },
-      update: {},
-      create: {
-        email: 'cupper1@demo.cupperly.com',
-        password: hashedPassword,
-        firstName: 'Alice',
-        lastName: 'Johnson',
-        organizationId: demoOrg.id,
-        role: 'CUPPER',
-        emailVerified: true,
-        emailVerifiedAt: new Date(),
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: 'cupper2@demo.cupperly.com' },
-      update: {},
-      create: {
-        email: 'cupper2@demo.cupperly.com',
-        password: hashedPassword,
-        firstName: 'Bob',
-        lastName: 'Smith',
-        organizationId: demoOrg.id,
-        role: 'CUPPER',
-        emailVerified: true,
-        emailVerifiedAt: new Date(),
-      },
-    }),
-  ]);
+  const cupper1 = await prisma.user.upsert({
+    where: { email: 'cupper1@demo.cupperly.com' },
+    update: {
+      firstName: 'Alice',
+      lastName: 'Johnson',
+    },
+    create: {
+      email: 'cupper1@demo.cupperly.com',
+      password: hashedPassword,
+      firstName: 'Alice',
+      lastName: 'Johnson',
+      organizationId: demoOrg.id,
+      role: 'CUPPER',
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
+    },
+  });
 
-  console.log('✅ Created cupper users:', cupperUsers.map(u => u.email));
+  const cupper2 = await prisma.user.upsert({
+    where: { email: 'cupper2@demo.cupperly.com' },
+    update: {
+      firstName: 'Bob',
+      lastName: 'Smith',
+    },
+    create: {
+      email: 'cupper2@demo.cupperly.com',
+      password: hashedPassword,
+      firstName: 'Bob',
+      lastName: 'Smith',
+      organizationId: demoOrg.id,
+      role: 'CUPPER',
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
+    },
+  });
+
+  console.log('✅ Created cupper users:', [cupper1.email, cupper2.email]);
 
   // Create default SCA cupping template
   const scaTemplate = await prisma.cuppingTemplate.upsert({
     where: { id: 'sca-default-template' },
-    update: {},
+    update: {
+      name: 'SCA Standard Cupping Form',
+      description: 'Standard Specialty Coffee Association cupping form',
+    },
     create: {
       id: 'sca-default-template',
       name: 'SCA Standard Cupping Form',
       description: 'Standard Specialty Coffee Association cupping form',
       organizationId: demoOrg.id,
-      createdBy: adminUser.id,
+      createdBy: adminUser1.id,
       isDefault: true,
       isPublic: true,
       scoringSystem: 'SCA',
@@ -109,7 +162,53 @@ async function main() {
 
   console.log('✅ Created SCA template:', scaTemplate.name);
 
+  // Create sample coffee data
+  const sample1 = await prisma.sample.upsert({
+    where: { id: 'sample-ethiopian-yirgacheffe' },
+    update: {},
+    create: {
+      id: 'sample-ethiopian-yirgacheffe',
+      name: 'Ethiopian Yirgacheffe',
+      origin: 'Ethiopia',
+      variety: 'Heirloom',
+      process: 'Washed',
+      harvestDate: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
+      organizationId: demoOrg.id,
+      createdBy: adminUser1.id,
+    },
+  });
+
+  const sample2 = await prisma.sample.upsert({
+    where: { id: 'sample-colombian-supremo' },
+    update: {},
+    create: {
+      id: 'sample-colombian-supremo',
+      name: 'Colombian Supremo',
+      origin: 'Colombia',
+      variety: 'Caturra',
+      process: 'Washed',
+      harvestDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
+      organizationId: demoOrg.id,
+      createdBy: adminUser1.id,
+    },
+  });
+
+  console.log('✅ Created sample coffees:', [sample1.name, sample2.name]);
+
+  console.log('');
   console.log('🎉 Database seed completed successfully!');
+  console.log('');
+  console.log('📊 Summary:');
+  console.log('   - Organization: Demo Coffee Roastery');
+  console.log('   - Users: 4 (2 admins, 2 cuppers)');
+  console.log('   - Templates: 1 (SCA Standard)');
+  console.log('   - Samples: 2 (Ethiopian, Colombian)');
+  console.log('');
+  console.log('🔑 Login Credentials:');
+  console.log('   Email: admin@demo.com');
+  console.log('   Email: admin@demo.cupperly.com');
+  console.log('   Password: demo123');
+  console.log('');
 }
 
 main()
