@@ -251,6 +251,13 @@ export default function RegisterOrganizationPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-sm text-coffee-dark/60">
+            made with <span className="text-red-500">❤️</span> in Mocha Hunters
+          </p>
+        </div>
       </div>
     </div>
   );
