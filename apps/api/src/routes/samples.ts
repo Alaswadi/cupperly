@@ -180,4 +180,54 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
+// Delete sample
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    console.log('📋 Delete sample route hit:', req.params.id);
+
+    const organizationId = (req as any).user?.organizationId;
+    if (!organizationId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Organization ID not found'
+      });
+    }
+
+    // Check if sample is used in any sessions
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+
+    const sessionSamples = await prisma.sessionSample.findMany({
+      where: { sampleId: req.params.id },
+    });
+
+    if (sessionSamples.length > 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Cannot delete sample that is used in cupping sessions'
+      });
+    }
+
+    const deleted = await sampleService.deleteSample(req.params.id, organizationId);
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        error: 'Sample not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Sample deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting sample:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to delete sample'
+    });
+  }
+});
+
 export default router;

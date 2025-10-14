@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { sessionsApi, templatesApi, samplesApi } from '@/lib/api';
 import { CuppingTemplate, Sample } from '@/types';
@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 export default function NewSessionPage() {
   const { user, organization } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [templates, setTemplates] = useState<CuppingTemplate[]>([]);
   const [samples, setSamples] = useState<Sample[]>([]);
@@ -67,6 +68,20 @@ export default function NewSessionPage() {
         // Handle different response structures - API returns data.samples
         const sampleList = response.data.samples || response.data || [];
         setSamples(Array.isArray(sampleList) ? sampleList : []);
+
+        // Check if there's a pre-selected sample from URL params
+        const preSelectedSampleId = searchParams.get('sampleId');
+        if (preSelectedSampleId) {
+          // Verify the sample exists in the loaded samples
+          const sampleExists = sampleList.some((s: Sample) => s.id === preSelectedSampleId);
+          if (sampleExists) {
+            setFormData(prev => ({
+              ...prev,
+              sampleIds: [preSelectedSampleId],
+            }));
+            toast.success('Sample pre-selected for this session');
+          }
+        }
       } else {
         console.error('Failed to load samples:', response);
         setSamples([]);

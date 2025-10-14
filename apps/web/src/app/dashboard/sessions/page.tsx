@@ -26,8 +26,10 @@ import {
   Archive,
   MoreHorizontal,
   Play,
-  Trophy
+  Trophy,
+  Trash2
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function SessionsPage() {
   const { user, organization } = useAuth();
@@ -40,6 +42,7 @@ export default function SessionsPage() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [bulkAction, setBulkAction] = useState<string>('');
   const [stats, setStats] = useState({
     totalSessions: 0,
     thisMonth: 0,
@@ -112,6 +115,67 @@ export default function SessionsPage() {
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const handleDeleteSession = async (sessionId: string) => {
+    if (!confirm('Are you sure you want to delete this session? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await sessionsApi.deleteSession(sessionId);
+      if (response.success) {
+        toast.success('Session deleted successfully');
+        loadSessions(); // Reload the sessions list
+      } else {
+        toast.error(response.error || 'Failed to delete session');
+      }
+    } catch (error: any) {
+      console.error('Failed to delete session:', error);
+      toast.error(error.response?.data?.error || 'Failed to delete session');
+    }
+  };
+
+  const handleArchiveSession = async (sessionId: string) => {
+    // For now, archive will just show a message
+    // In the future, you can add an 'archived' field to the Session model
+    toast.success('Archive functionality coming soon!');
+  };
+
+  const handleBulkAction = async () => {
+    if (!bulkAction) {
+      toast.error('Please select an action');
+      return;
+    }
+
+    if (selectedSessions.length === 0) {
+      toast.error('Please select at least one session');
+      return;
+    }
+
+    if (bulkAction === 'delete') {
+      if (!confirm(`Are you sure you want to delete ${selectedSessions.length} session(s)? This action cannot be undone.`)) {
+        return;
+      }
+
+      try {
+        const deletePromises = selectedSessions.map(id => sessionsApi.deleteSession(id));
+        await Promise.all(deletePromises);
+        toast.success(`${selectedSessions.length} session(s) deleted successfully`);
+        setSelectedSessions([]);
+        setBulkAction('');
+        loadSessions();
+      } catch (error: any) {
+        console.error('Failed to delete sessions:', error);
+        toast.error(error.response?.data?.error || 'Failed to delete some sessions');
+      }
+    } else if (bulkAction === 'archive') {
+      toast.success('Bulk archive functionality coming soon!');
+      setBulkAction('');
+    } else if (bulkAction === 'export') {
+      toast.success('Bulk export functionality coming soon!');
+      setBulkAction('');
     }
   };
 
@@ -274,17 +338,26 @@ export default function SessionsPage() {
               </div>
 
               {/* Bulk Actions */}
-              <div className="flex items-center space-x-2">
-                <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 pr-8">
-                  <option value="">Bulk Actions</option>
-                  <option value="export">Export Selected</option>
-                  <option value="archive">Archive Selected</option>
-                  <option value="delete">Delete Selected</option>
-                </select>
-                <button className="bg-coffee-brown text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm hover:bg-coffee-dark transition-colors">
-                  Apply
-                </button>
-              </div>
+              {selectedSessions.length > 0 && (
+                <div className="flex items-center space-x-2">
+                  <select
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 pr-8"
+                    value={bulkAction}
+                    onChange={(e) => setBulkAction(e.target.value)}
+                  >
+                    <option value="">Bulk Actions</option>
+                    <option value="export">Export Selected</option>
+                    <option value="archive">Archive Selected</option>
+                    <option value="delete">Delete Selected</option>
+                  </select>
+                  <button
+                    onClick={handleBulkAction}
+                    className="bg-coffee-brown text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm hover:bg-coffee-dark transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -620,13 +693,24 @@ export default function SessionsPage() {
                           </button>
                           {/* Only show archive if user is ADMIN or session creator */}
                           {(user?.role === 'ADMIN' || session.createdBy === user?.id) && (
-                            <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
+                            <button
+                              onClick={() => handleArchiveSession(session.id)}
+                              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600"
+                              title="Archive"
+                            >
                               <Archive className="h-4 w-4" />
                             </button>
                           )}
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </button>
+                          {/* Only show delete if user is ADMIN or session creator */}
+                          {(user?.role === 'ADMIN' || session.createdBy === user?.id) && (
+                            <button
+                              onClick={() => handleDeleteSession(session.id)}
+                              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600"
+                              title="Delete"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

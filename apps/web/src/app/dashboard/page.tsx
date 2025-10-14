@@ -44,12 +44,63 @@ export default function DashboardPage() {
     totalSamples: 0,
     avgScore: 0,
     monthlyGrowth: 12,
-    scoreDistribution: [12, 35, 89, 67, 28, 16],
+    scoreDistribution: [0, 0, 0, 0, 0, 0],
   });
 
   useEffect(() => {
     loadDashboardData();
   }, []);
+
+  useEffect(() => {
+    // Recalculate score distribution when date filter changes
+    if (sessions.length > 0) {
+      calculateScoreDistribution();
+    }
+  }, [dateFilter, sessions]);
+
+  const calculateScoreDistribution = () => {
+    // Filter sessions by date
+    const now = new Date();
+    const daysAgo = parseInt(dateFilter);
+    const cutoffDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+
+    // Calculate average score per session and count sessions in each bucket
+    const distribution = [0, 0, 0, 0, 0, 0];
+
+    sessions.forEach(session => {
+      const sessionDate = new Date(session.createdAt);
+      if (sessionDate >= cutoffDate && session.scores && session.scores.length > 0) {
+        // Calculate average score for this session
+        let totalScore = 0;
+        let scoreCount = 0;
+
+        session.scores.forEach(score => {
+          if (score.totalScore > 0) {
+            totalScore += score.totalScore;
+            scoreCount++;
+          }
+        });
+
+        // Only count sessions that have at least one score
+        if (scoreCount > 0) {
+          const avgScore = totalScore / scoreCount;
+
+          // Place session in appropriate bucket based on average score
+          if (avgScore >= 70 && avgScore < 75) distribution[0]++;
+          else if (avgScore >= 75 && avgScore < 80) distribution[1]++;
+          else if (avgScore >= 80 && avgScore < 85) distribution[2]++;
+          else if (avgScore >= 85 && avgScore < 90) distribution[3]++;
+          else if (avgScore >= 90 && avgScore < 95) distribution[4]++;
+          else if (avgScore >= 95 && avgScore <= 100) distribution[5]++;
+        }
+      }
+    });
+
+    setStats(prev => ({
+      ...prev,
+      scoreDistribution: distribution,
+    }));
+  };
 
   const loadDashboardData = async () => {
     try {
@@ -61,12 +112,12 @@ export default function DashboardPage() {
 
       if (sessionsResponse.success && sessionsResponse.data) {
         const sessionData = sessionsResponse.data.sessions;
-        setSessions(sessionData.slice(0, 5)); // Show latest 5 sessions
-        
+        setSessions(sessionData); // Store all sessions for filtering
+
         // Calculate stats
         const activeSessions = sessionData.filter(s => s.status === 'ACTIVE').length;
         const completedSessions = sessionData.filter(s => s.status === 'COMPLETED');
-        
+
         // Calculate average score from completed sessions
         let totalScores = 0;
         let scoreCount = 0;
@@ -78,7 +129,7 @@ export default function DashboardPage() {
             });
           }
         });
-        
+
         setStats(prev => ({
           ...prev,
           totalSessions: sessionData.length,
@@ -125,13 +176,21 @@ export default function DashboardPage() {
     );
   }
 
-  const filteredSessions = sessions.filter(session =>
-    session.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    session.samples?.some((sample) =>
-      sample.sample?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      sample.sample?.origin?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  // Filter sessions by date and search term
+  const now = new Date();
+  const daysAgo = parseInt(dateFilter);
+  const cutoffDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+
+  const filteredSessions = sessions.filter(session => {
+    const sessionDate = new Date(session.createdAt);
+    const matchesDate = sessionDate >= cutoffDate;
+    const matchesSearch = session.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      session.samples?.some((sample) =>
+        sample.sample?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        sample.sample?.origin?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    return matchesDate && matchesSearch;
+  });
 
   const sessionsPerPage = 5;
   const totalPages = Math.ceil(filteredSessions.length / sessionsPerPage);
@@ -393,20 +452,35 @@ export default function DashboardPage() {
                   </td>
                 </tr>
               ) : (
-                paginatedSessions.map((session) => (
-                  <tr key={session.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {formatDateTime(session.createdAt).split(' ')[0]}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {session.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {session.samples?.[0]?.sample?.origin || 'Multiple origins'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {stats.avgScore > 0 ? stats.avgScore.toFixed(1) : '--'}
-                    </td>
+                paginatedSessions.map((session) => {
+                  // Calculate average score for this specific session
+                  let sessionAvgScore = 0;
+                  if (session.scores && session.scores.length > 0) {
+                    let totalScore = 0;
+                    let scoreCount = 0;
+                    session.scores.forEach(score => {
+                      if (score.totalScore > 0) {
+                        totalScore += score.totalScore;
+                        scoreCount++;
+                      }
+                    });
+                    sessionAvgScore = scoreCount > 0 ? totalScore / scoreCount : 0;
+                  }
+
+                  return (
+                    <tr key={session.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {formatDateTime(session.createdAt).split(' ')[0]}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {session.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {session.samples?.[0]?.sample?.origin || 'Multiple origins'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {sessionAvgScore > 0 ? sessionAvgScore.toFixed(1) : '--'}
+                      </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(session.status)}`}>
                         {session.status === 'COMPLETED' ? 'Completed' : session.status === 'ACTIVE' ? 'In Progress' : session.status}
@@ -437,7 +511,8 @@ export default function DashboardPage() {
                       </div>
                     </td>
                   </tr>
-                ))
+                  );
+                })
               )}
             </tbody>
           </table>

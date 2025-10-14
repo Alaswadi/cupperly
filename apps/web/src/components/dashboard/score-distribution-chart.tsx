@@ -8,12 +8,12 @@ interface ScoreDistributionChartProps {
 
 export function ScoreDistributionChart({ data }: ScoreDistributionChartProps) {
   const chartData = [
-    { range: '70-75', count: data[0] || 12 },
-    { range: '75-80', count: data[1] || 35 },
-    { range: '80-85', count: data[2] || 89 },
-    { range: '85-90', count: data[3] || 67 },
-    { range: '90-95', count: data[4] || 28 },
-    { range: '95-100', count: data[5] || 16 },
+    { range: '70-75', count: data[0] || 0 },
+    { range: '75-80', count: data[1] || 0 },
+    { range: '80-85', count: data[2] || 0 },
+    { range: '85-90', count: data[3] || 0 },
+    { range: '90-95', count: data[4] || 0 },
+    { range: '95-100', count: data[5] || 0 },
   ];
 
   const CustomTooltip = ({ active, payload, label }: any) => {

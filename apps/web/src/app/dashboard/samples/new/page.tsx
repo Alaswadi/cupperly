@@ -43,6 +43,7 @@ export default function NewSamplePage() {
     roaster: '',
     roastDate: '',
   });
+  const [startSession, setStartSession] = useState(false);
 
   useEffect(() => {
     if (selectedCountry) {
@@ -63,7 +64,7 @@ export default function NewSamplePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.origin) {
       toast.error('Please fill in required fields');
       return;
@@ -72,10 +73,16 @@ export default function NewSamplePage() {
     try {
       setIsLoading(true);
       const response = await samplesApi.createSample(formData as any);
-      
+
       if (response.success) {
         toast.success('Sample created successfully!');
-        router.push('/dashboard/samples');
+
+        // If user wants to start a session, redirect to new session page with this sample pre-selected
+        if (startSession && response.data?.id) {
+          router.push(`/dashboard/sessions/new?sampleId=${response.data.id}`);
+        } else {
+          router.push('/dashboard/samples');
+        }
       } else {
         const errorMessage = typeof response.error === 'string'
           ? response.error
@@ -384,6 +391,37 @@ export default function NewSamplePage() {
           </div>
         </div>
 
+        {/* Start Session Option */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6">
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={startSession}
+                  onChange={(e) => setStartSession(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-5 h-5 border-2 border-gray-300 rounded peer-checked:border-coffee-brown peer-checked:bg-coffee-brown transition-all flex items-center justify-center">
+                  {startSession && (
+                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <div>
+                <span className="text-sm font-medium text-gray-900 group-hover:text-coffee-brown transition-colors">
+                  Start new cupping session with this sample
+                </span>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  After creating the sample, you'll be redirected to create a new session with this sample pre-selected
+                </p>
+              </div>
+            </label>
+          </div>
+        </div>
+
         {/* Actions */}
         <div className="flex items-center justify-end gap-4 pb-8">
           <Link href="/dashboard/samples">
@@ -404,7 +442,7 @@ export default function NewSamplePage() {
             ) : (
               <Save className="h-4 w-4" />
             )}
-            {isLoading ? 'Creating...' : 'Create Sample'}
+            {isLoading ? 'Creating...' : (startSession ? 'Create & Start Session' : 'Create Sample')}
           </button>
         </div>
       </form>

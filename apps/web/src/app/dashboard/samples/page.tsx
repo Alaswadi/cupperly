@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { samplesApi } from '@/lib/api';
+import { samplesApi, sessionsApi } from '@/lib/api';
 import { Sample } from '@/types';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import Link from 'next/link';
@@ -22,7 +22,11 @@ import {
   PlayCircle,
   Clock,
   Grid3X3,
-  List
+  List,
+  Globe,
+  Star,
+  TrendingUp,
+  Trash2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -38,11 +42,12 @@ export default function SamplesPage() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [selectedSamples, setSelectedSamples] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [bulkAction, setBulkAction] = useState<string>('');
   const [stats, setStats] = useState({
-    totalSamples: 342,
-    available: 287,
-    inUse: 31,
-    expired: 24,
+    totalSamples: 0,
+    uniqueOrigins: 0,
+    avgScore: 0,
+    thisMonth: 0,
   });
 
   useEffect(() => {
@@ -52,22 +57,59 @@ export default function SamplesPage() {
   const loadSamples = async () => {
     try {
       setIsLoading(true);
-      const response = await samplesApi.getSamples();
 
-      if (response.success && response.data) {
-        const sampleData = response.data.samples || response.data || [];
+      // Fetch both samples and sessions data in parallel
+      const [samplesResponse, sessionsResponse] = await Promise.all([
+        samplesApi.getSamples(),
+        sessionsApi.getSessions()
+      ]);
+
+      if (samplesResponse.success && samplesResponse.data) {
+        const sampleData = samplesResponse.data.samples || samplesResponse.data || [];
         setSamples(Array.isArray(sampleData) ? sampleData : []);
-        
-        // Calculate stats from actual data (using mock data for now)
-        const available = 287;
-        const inUse = 31;
-        const expired = 24;
-        
+
+        // Calculate stats from actual data
+        const totalSamples = sampleData.length;
+
+        // Count unique origins
+        const uniqueOrigins = new Set(
+          sampleData.map((s: Sample) => s.origin).filter(Boolean)
+        ).size;
+
+        // Calculate samples added this month
+        const now = new Date();
+        const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const thisMonth = sampleData.filter((s: Sample) => {
+          const createdAt = new Date(s.createdAt);
+          return createdAt >= thisMonthStart;
+        }).length;
+
+        // Calculate average score from sessions (same logic as sessions page)
+        let avgScore = 0;
+        if (sessionsResponse.success && sessionsResponse.data) {
+          const sessionData = sessionsResponse.data.sessions;
+          let totalScore = 0;
+          let scoreCount = 0;
+
+          sessionData.forEach((session: any) => {
+            if (session.scores && session.scores.length > 0) {
+              session.scores.forEach((score: any) => {
+                if (score.totalScore > 0) {
+                  totalScore += score.totalScore;
+                  scoreCount++;
+                }
+              });
+            }
+          });
+
+          avgScore = scoreCount > 0 ? Number((totalScore / scoreCount).toFixed(1)) : 0;
+        }
+
         setStats({
-          totalSamples: sampleData.length || 342,
-          available: available || 287,
-          inUse: inUse || 31,
-          expired: expired || 24,
+          totalSamples,
+          uniqueOrigins,
+          avgScore,
+          thisMonth,
         });
       }
     } catch (error) {
@@ -90,6 +132,67 @@ export default function SamplesPage() {
     setSelectedSamples(
       selectedSamples.length === filteredSamples.length ? [] : filteredSamples.map(s => s.id)
     );
+  };
+
+  const handleDeleteSample = async (sampleId: string) => {
+    if (!confirm('Are you sure you want to delete this sample? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await samplesApi.deleteSample(sampleId);
+      if (response.success) {
+        toast.success('Sample deleted successfully');
+        loadSamples(); // Reload the samples list
+      } else {
+        toast.error(response.error || 'Failed to delete sample');
+      }
+    } catch (error: any) {
+      console.error('Failed to delete sample:', error);
+      toast.error(error.response?.data?.error || 'Failed to delete sample');
+    }
+  };
+
+  const handleArchiveSample = async (sampleId: string) => {
+    // For now, archive will just show a message
+    // In the future, you can add an 'archived' field to the Sample model
+    toast.success('Archive functionality coming soon!');
+  };
+
+  const handleBulkAction = async () => {
+    if (!bulkAction) {
+      toast.error('Please select an action');
+      return;
+    }
+
+    if (selectedSamples.length === 0) {
+      toast.error('Please select at least one sample');
+      return;
+    }
+
+    if (bulkAction === 'delete') {
+      if (!confirm(`Are you sure you want to delete ${selectedSamples.length} sample(s)? This action cannot be undone.`)) {
+        return;
+      }
+
+      try {
+        const deletePromises = selectedSamples.map(id => samplesApi.deleteSample(id));
+        await Promise.all(deletePromises);
+        toast.success(`${selectedSamples.length} sample(s) deleted successfully`);
+        setSelectedSamples([]);
+        setBulkAction('');
+        loadSamples();
+      } catch (error: any) {
+        console.error('Failed to delete samples:', error);
+        toast.error(error.response?.data?.error || 'Failed to delete some samples');
+      }
+    } else if (bulkAction === 'archive') {
+      toast.success('Bulk archive functionality coming soon!');
+      setBulkAction('');
+    } else if (bulkAction === 'export') {
+      toast.success('Bulk export functionality coming soon!');
+      setBulkAction('');
+    }
   };
 
   const filteredSamples = samples.filter(sample => {
@@ -142,23 +245,11 @@ export default function SamplesPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Available</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.available}</p>
-            </div>
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="text-green-600 text-xl h-6 w-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">In Use</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.inUse}</p>
+              <p className="text-sm font-medium text-gray-600">Origins</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.uniqueOrigins}</p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <PlayCircle className="text-blue-600 text-xl h-6 w-6" />
+              <Globe className="text-blue-600 text-xl h-6 w-6" />
             </div>
           </div>
         </div>
@@ -166,11 +257,25 @@ export default function SamplesPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Expired</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.expired}</p>
+              <p className="text-sm font-medium text-gray-600">Avg. Score</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {stats.avgScore > 0 ? stats.avgScore.toFixed(1) : '—'}
+              </p>
             </div>
-            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-              <Clock className="text-red-600 text-xl h-6 w-6" />
+            <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+              <Star className="text-amber-600 text-xl h-6 w-6" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">This Month</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.thisMonth}</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <TrendingUp className="text-green-600 text-xl h-6 w-6" />
             </div>
           </div>
         </div>
@@ -216,6 +321,27 @@ export default function SamplesPage() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
+              {/* Bulk Actions */}
+              {selectedSamples.length > 0 && (
+                <div className="flex items-center space-x-2">
+                  <select
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 pr-8"
+                    value={bulkAction}
+                    onChange={(e) => setBulkAction(e.target.value)}
+                  >
+                    <option value="">Bulk Actions</option>
+                    <option value="export">Export Selected</option>
+                    <option value="archive">Archive Selected</option>
+                    <option value="delete">Delete Selected</option>
+                  </select>
+                  <button
+                    onClick={handleBulkAction}
+                    className="bg-coffee-brown text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm hover:bg-coffee-dark transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
               <Link href="/dashboard/samples/new">
                 <button className="flex items-center space-x-2 px-4 py-2 bg-coffee-brown text-white rounded-lg hover:bg-coffee-dark transition-colors">
                   <Plus className="h-4 w-4" />
@@ -401,8 +527,8 @@ export default function SamplesPage() {
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
                             <Archive className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600" title="Delete">
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
@@ -439,8 +565,8 @@ export default function SamplesPage() {
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
                             <Archive className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600" title="Delete">
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
@@ -494,11 +620,19 @@ export default function SamplesPage() {
                               <Edit className="h-4 w-4" />
                             </button>
                           </Link>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
+                          <button
+                            onClick={() => handleArchiveSample(sample.id)}
+                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600"
+                            title="Archive"
+                          >
                             <Archive className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <button
+                            onClick={() => handleDeleteSample(sample.id)}
+                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600"
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
