@@ -16,7 +16,6 @@ import {
   Package,
   Eye,
   Edit,
-  Archive,
   MoreHorizontal,
   CheckCircle,
   PlayCircle,
@@ -153,12 +152,6 @@ export default function SamplesPage() {
     }
   };
 
-  const handleArchiveSample = async (sampleId: string) => {
-    // For now, archive will just show a message
-    // In the future, you can add an 'archived' field to the Sample model
-    toast.success('Archive functionality coming soon!');
-  };
-
   const handleBulkAction = async () => {
     if (!bulkAction) {
       toast.error('Please select an action');
@@ -186,9 +179,6 @@ export default function SamplesPage() {
         console.error('Failed to delete samples:', error);
         toast.error(error.response?.data?.error || 'Failed to delete some samples');
       }
-    } else if (bulkAction === 'archive') {
-      toast.success('Bulk archive functionality coming soon!');
-      setBulkAction('');
     } else if (bulkAction === 'export') {
       toast.success('Bulk export functionality coming soon!');
       setBulkAction('');
@@ -331,7 +321,6 @@ export default function SamplesPage() {
                   >
                     <option value="">Bulk Actions</option>
                     <option value="export">Export Selected</option>
-                    <option value="archive">Archive Selected</option>
                     <option value="delete">Delete Selected</option>
                   </select>
                   <button
@@ -486,9 +475,6 @@ export default function SamplesPage() {
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600" title="Edit">
                             <Edit className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
-                            <Archive className="h-4 w-4" />
-                          </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
                             <MoreHorizontal className="h-4 w-4" />
                           </button>
@@ -524,9 +510,6 @@ export default function SamplesPage() {
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600" title="Edit">
                             <Edit className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
-                            <Archive className="h-4 w-4" />
-                          </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600" title="Delete">
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -561,9 +544,6 @@ export default function SamplesPage() {
                           </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600" title="Edit">
                             <Edit className="h-4 w-4" />
-                          </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
-                            <Archive className="h-4 w-4" />
                           </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600" title="Delete">
                             <Trash2 className="h-4 w-4" />
@@ -620,13 +600,6 @@ export default function SamplesPage() {
                               <Edit className="h-4 w-4" />
                             </button>
                           </Link>
-                          <button
-                            onClick={() => handleArchiveSample(sample.id)}
-                            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600"
-                            title="Archive"
-                          >
-                            <Archive className="h-4 w-4" />
-                          </button>
                           <button
                             onClick={() => handleDeleteSample(sample.id)}
                             className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600"

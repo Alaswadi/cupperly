@@ -158,9 +158,9 @@ export function ScaaScoreForm({
       acidity: initialScore?.acidity || 6,
       body: initialScore?.body || 6,
       balance: initialScore?.balance || 6,
-      sweetness: initialScore?.sweetness || 6,
-      cleanliness: initialScore?.cleanliness || 6,
-      uniformity: initialScore?.uniformity || 6,
+      sweetness: initialScore?.sweetness ?? 10, // Default to 10 (perfect score)
+      cleanliness: initialScore?.cleanliness ?? 10, // Default to 10 (perfect score)
+      uniformity: initialScore?.uniformity ?? 10, // Default to 10 (perfect score)
       overall: initialScore?.overall || 6,
       notes: initialScore?.notes || '',
       privateNotes: initialScore?.privateNotes || '',
@@ -199,65 +199,92 @@ export function ScaaScoreForm({
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      {/* Enhanced Header */}
-      <div className="bg-gradient-to-r from-coffee-brown/10 via-coffee-cream/20 to-coffee-brown/10 p-8 border-b border-gray-100">
+    <div className="w-full max-w-5xl mx-auto">
+      {/* Clean Header */}
+      <div className="bg-white border-b border-gray-200 p-6 sticky top-0 z-10 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-coffee-brown to-coffee-dark rounded-xl flex items-center justify-center shadow-lg">
-              <BarChart3 className="h-6 w-6 text-white" />
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-700 rounded-lg flex items-center justify-center shadow-md">
+              <BarChart3 className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-gray-900">SCAA Cupping Score</h3>
-              <p className="text-coffee-brown font-medium">{sampleName}</p>
+              <h3 className="text-lg font-bold text-gray-900">SCAA Cupping Score</h3>
+              <p className="text-sm text-gray-600">{sampleName}</p>
             </div>
           </div>
-          <div className="text-right bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/50 shadow-lg">
-            <div className="text-4xl font-bold mb-2">
+          <div className="text-right bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg px-6 py-3 border border-amber-200 shadow-sm">
+            <div className="text-3xl font-bold mb-1">
               <span className={getScoreColor(totalScore)}>{totalScore.toFixed(1)}</span>
-              <span className="text-gray-400 text-2xl">/100</span>
+              <span className="text-gray-400 text-xl">/100</span>
             </div>
-            <div className="text-lg font-semibold text-gray-700 mb-1">
+            <div className="text-sm font-semibold text-gray-700">
               {calculateScaaGrade(totalScore)}
-            </div>
-            <div className="text-xs text-gray-500">
-              Score each category from 0-10 according to SCAA standards
             </div>
           </div>
         </div>
       </div>
-      {/* Enhanced Content */}
-      <div className="p-8">
-        <form className="space-y-8">
+      {/* Clean Content */}
+      <div className="p-6 bg-gray-50">
+        <form className="space-y-6">
           {/* Enhanced Scoring Categories */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {SCAA_CATEGORIES.map((category) => {
               const watchedValue = watch(category.name as keyof ScaaScoreForm);
-              const currentValue = typeof watchedValue === 'number' ? watchedValue : 0;
+              const currentValue = typeof watchedValue === 'number' ? watchedValue : 6;
+
+              const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = parseFloat(e.target.value);
+                if (!isNaN(value) && value >= 6 && value <= 10) {
+                  // Round to nearest 0.25
+                  const rounded = Math.round(value * 4) / 4;
+                  setValue(category.name as keyof ScaaScoreForm, rounded);
+                }
+              };
 
               return (
-                <div key={category.name} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-200">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-coffee-brown/10 rounded-xl flex items-center justify-center">
-                        <span className="text-coffee-brown font-bold text-lg">
-                          {category.name.charAt(0).toUpperCase()}
+                <div key={category.name} className="bg-white p-6 rounded-xl border border-gray-200 hover:border-coffee-brown/30 transition-all duration-200 shadow-sm hover:shadow-md">
+                  {/* Header with Label and Score Input */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3 flex-1">
+                      <div className="w-9 h-9 bg-coffee-brown/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-coffee-brown font-bold text-base">
+                          {category.label.charAt(0)}
                         </span>
                       </div>
-                      <Label htmlFor={category.name} className="text-xl font-bold text-gray-900">
-                        {category.label}
-                      </Label>
+                      <div className="flex-1">
+                        <Label htmlFor={category.name} className="text-base font-semibold text-gray-900 block">
+                          {category.label}
+                        </Label>
+                        <p className="text-xs text-gray-500 mt-0.5">{category.description}</p>
+                      </div>
                     </div>
-                    <div className="bg-gradient-to-r from-coffee-brown/10 to-coffee-cream/20 px-6 py-3 rounded-xl border border-coffee-brown/20">
-                      <span className="text-2xl font-bold text-coffee-brown">
-                        {currentValue.toFixed(2)}
-                      </span>
-                      <span className="text-gray-500 text-lg ml-1">/10</span>
+
+                    {/* Score Input Box */}
+                    <div className="flex items-center space-x-2 ml-4">
+                      <input
+                        type="number"
+                        value={currentValue.toFixed(2)}
+                        onChange={handleInputChange}
+                        onBlur={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (isNaN(value) || value < 6) {
+                            setValue(category.name as keyof ScaaScoreForm, 6);
+                          } else if (value > 10) {
+                            setValue(category.name as keyof ScaaScoreForm, 10);
+                          }
+                        }}
+                        min={6}
+                        max={10}
+                        step={0.25}
+                        disabled={readOnly}
+                        className="w-20 px-3 py-2 text-center text-lg font-bold text-coffee-brown bg-coffee-brown/5 border-2 border-coffee-brown/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-brown focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      />
+                      <span className="text-gray-400 text-sm font-medium">/10</span>
                     </div>
                   </div>
-                  <p className="text-gray-600 mb-6 text-lg">{category.description}</p>
 
-                  <div className="space-y-4">
+                  {/* Slider */}
+                  <div className="space-y-3">
                     <Slider
                       value={[currentValue]}
                       onValueChange={(value) => {
@@ -269,16 +296,16 @@ export function ScaaScoreForm({
                       disabled={readOnly}
                       className="w-full"
                     />
-                    <div className="flex justify-between text-sm font-medium text-gray-500">
-                      <span className="bg-gray-100 px-3 py-2 rounded-lg shadow-sm">6 - Below Standard</span>
-                      <span className="bg-gray-100 px-3 py-2 rounded-lg shadow-sm">8 - Good</span>
-                      <span className="bg-gray-100 px-3 py-2 rounded-lg shadow-sm">10 - Outstanding</span>
+                    <div className="flex justify-between text-xs font-medium text-gray-400">
+                      <span>6 - Below Standard</span>
+                      <span>8 - Good</span>
+                      <span>10 - Outstanding</span>
                     </div>
                   </div>
 
                   {errors[category.name as keyof ScaaScoreForm] && (
-                    <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
-                      <p className="text-sm text-red-600 font-medium">
+                    <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-xs text-red-600 font-medium">
                         {errors[category.name as keyof ScaaScoreForm]?.message ||
                          "Score must be between 6 and 10 in quarter-point increments"}
                       </p>

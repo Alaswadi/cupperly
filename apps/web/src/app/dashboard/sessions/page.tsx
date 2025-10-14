@@ -22,8 +22,6 @@ import {
   Grid3X3,
   Eye,
   Edit,
-  Copy,
-  Archive,
   MoreHorizontal,
   Play,
   Trophy,
@@ -137,12 +135,6 @@ export default function SessionsPage() {
     }
   };
 
-  const handleArchiveSession = async (sessionId: string) => {
-    // For now, archive will just show a message
-    // In the future, you can add an 'archived' field to the Session model
-    toast.success('Archive functionality coming soon!');
-  };
-
   const handleBulkAction = async () => {
     if (!bulkAction) {
       toast.error('Please select an action');
@@ -170,9 +162,6 @@ export default function SessionsPage() {
         console.error('Failed to delete sessions:', error);
         toast.error(error.response?.data?.error || 'Failed to delete some sessions');
       }
-    } else if (bulkAction === 'archive') {
-      toast.success('Bulk archive functionality coming soon!');
-      setBulkAction('');
     } else if (bulkAction === 'export') {
       toast.success('Bulk export functionality coming soon!');
       setBulkAction('');
@@ -347,7 +336,6 @@ export default function SessionsPage() {
                   >
                     <option value="">Bulk Actions</option>
                     <option value="export">Export Selected</option>
-                    <option value="archive">Archive Selected</option>
                     <option value="delete">Delete Selected</option>
                   </select>
                   <button
@@ -501,12 +489,6 @@ export default function SessionsPage() {
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600" title="Edit">
                             <Edit className="h-4 w-4" />
                           </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-600" title="Duplicate">
-                            <Copy className="h-4 w-4" />
-                          </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
-                            <Archive className="h-4 w-4" />
-                          </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
                             <MoreHorizontal className="h-4 w-4" />
                           </button>
@@ -543,12 +525,6 @@ export default function SessionsPage() {
                           </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600" title="Edit">
                             <Edit className="h-4 w-4" />
-                          </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-600" title="Duplicate">
-                            <Copy className="h-4 w-4" />
-                          </button>
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600" title="Archive">
-                            <Archive className="h-4 w-4" />
                           </button>
                           <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600" title="More">
                             <MoreHorizontal className="h-4 w-4" />
@@ -687,19 +663,6 @@ export default function SessionsPage() {
                                 <Edit className="h-4 w-4" />
                               </button>
                             </Link>
-                          )}
-                          <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-600" title="Duplicate">
-                            <Copy className="h-4 w-4" />
-                          </button>
-                          {/* Only show archive if user is ADMIN or session creator */}
-                          {(user?.role === 'ADMIN' || session.createdBy === user?.id) && (
-                            <button
-                              onClick={() => handleArchiveSession(session.id)}
-                              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-orange-600"
-                              title="Archive"
-                            >
-                              <Archive className="h-4 w-4" />
-                            </button>
                           )}
                           {/* Only show delete if user is ADMIN or session creator */}
                           {(user?.role === 'ADMIN' || session.createdBy === user?.id) && (
