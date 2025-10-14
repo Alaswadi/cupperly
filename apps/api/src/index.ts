@@ -59,16 +59,21 @@ console.log('🔧 Trust proxy enabled for reverse proxy support');
 
 // Determine if we're in production
 // Check multiple indicators since Coolify might not set NODE_ENV correctly
+// Priority: Explicit production URLs > NODE_ENV > Database host (only if URLs are set)
+const hasProductionUrls = process.env.WEB_URL?.includes('cupperly.com') ||
+                          process.env.API_URL?.includes('cupperly.com');
+const isDockerProduction = process.env.DATABASE_URL?.includes('postgres:5432') && hasProductionUrls;
+
 const isProduction = process.env.NODE_ENV === 'production' ||
                      process.env.NODE_ENV === 'prod' ||
-                     process.env.WEB_URL?.includes('cupperly.com') ||
-                     process.env.API_URL?.includes('cupperly.com') ||
-                     process.env.DATABASE_URL?.includes('postgres:5432'); // Docker/Coolify uses service name
+                     hasProductionUrls ||
+                     isDockerProduction;
 
 console.log('🔍 Production Detection:');
-console.log('   NODE_ENV:', process.env.NODE_ENV);
+console.log('   NODE_ENV:', process.env.NODE_ENV || 'not set');
 console.log('   WEB_URL:', process.env.WEB_URL || 'not set');
 console.log('   API_URL:', process.env.API_URL || 'not set');
+console.log('   Has Production URLs:', hasProductionUrls);
 console.log('   DATABASE_URL contains postgres:5432:', process.env.DATABASE_URL?.includes('postgres:5432'));
 
 // CORS configuration - MUST be before other middleware
